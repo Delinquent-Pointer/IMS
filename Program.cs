@@ -45,6 +45,7 @@ if(!app.Environment.IsDevelopment()) {
 }
 
 app.UseHttpsRedirection();
+app.UseDeveloperExceptionPage();  // Add this line to see detailed error messages
 app.UseRouting();
 app.UseAuthorization();
 
