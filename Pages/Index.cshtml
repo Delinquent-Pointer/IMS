@@ -10,11 +10,41 @@
 
   <nav style="margin: 20px 0;">
     <a href="#" style="margin: 10px; text-decoration: none; color: #0078d4; font-weight: bold;">Dashboard</a>
-    <a href="#" style="margin: 10px; text-decoration: none; color: #0078d4; font-weight: bold;">Products</a>
+    <a href="#products" style="margin: 10px; text-decoration: none; color: #0078d4; font-weight: bold;">Products</a>
     <a href="#" style="margin: 10px; text-decoration: none; color: #0078d4; font-weight: bold;">Orders</a>
     <a href="#" style="margin: 10px; text-decoration: none; color: #0078d4; font-weight: bold;">Reports</a>
     <a href="#" style="margin: 10px; text-decoration: none; color: #0078d4; font-weight: bold;">Settings</a>
   </nav>
 
   <p style="color: gray; font-style: italic;">Powered by Azure & .NET 9 🚀</p>
+</div>
+
+<div id="products" style="padding: 20px; text-align: center;">
+  <h2>Product List</h2>
+
+  <form method="get" style="margin-bottom: 20px;">
+    <input type="text" name="searchTerm" placeholder="Search for a product..." style="padding: 8px; width: 250px;" />
+    <button type="submit"
+      style="padding: 8px 16px; background-color: #0078d4; color: white; border: none; cursor: pointer;">Search</button>
+  </form>
+
+  <table style="width: 80%; margin: 0 auto; border-collapse: collapse;">
+    <thead>
+      <tr style="background-color: #0078d4; color: white;">
+        <th style="padding: 10px; border: 1px solid #ddd;">Name</th>
+        <th style="padding: 10px; border: 1px solid #ddd;">Description</th>
+        <th style="padding: 10px; border: 1px solid #ddd;">Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      @foreach (var product in Model.Products)
+      {
+        <tr style="border: 1px solid #ddd;">
+          <td style="padding: 10px;">@product.Name</td>
+          <td style="padding: 10px;">@product.Description</td>
+          <td style="padding: 10px;">@product.Price.ToString("C")</td>
+        </tr>
+      }
+    </tbody>
+  </table>
 </div>

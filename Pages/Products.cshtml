@@ -1,0 +1,30 @@
+@page
+@model ProductsModel
+@{
+  ViewData["Title"] = "Products";
+}
+
+<h1>Product List</h1>
+
+<form method="get">
+    <input type="text" name="SearchTerm" value="@Model.SearchTerm" placeholder="Search for a product..." />
+    <button type="submit">Search</button>
+</form>
+
+@if (Model.Products.Count == 0)
+{
+      <p>No products found.</p>
+}
+else
+{
+      <ul>
+          @foreach (var product in Model.Products)
+          {
+                <li>
+                    <strong>@product.Name</strong> - $@product.Price
+                    <br />
+                    <em>@product.Description</em>
+                </li>
+          }
+      </ul>
+}
