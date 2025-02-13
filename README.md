@@ -1,4 +1,3 @@
-
 # 📦 Inventory Management System (IMS)
 
 Welcome to the **Inventory Management System (IMS)** project. IMS is a
@@ -108,7 +107,7 @@ merging into `main`.
 
 ## 🗃️ License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the [MIT License](LICENSE). (Not correct)
 
 ## 📬 Contact
 
@@ -116,4 +115,3 @@ For questions or support, please contact [Your Email] or open an issue on
 GitHub.
 
 > **Note:** This project is part of the CSCD 488 Senior Project at EWU.
->
