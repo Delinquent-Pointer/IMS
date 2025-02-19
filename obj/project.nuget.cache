@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "jsyIcbKiUoY=",
+  "dgSpecHash": "ygs5PJvZ9Bw=",
   "success": true,
   "projectFilePath": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS.csproj",
   "expectedPackageFiles": [
@@ -48,6 +48,8 @@
     "C:\\Users\\Jared\\.nuget\\packages\\microsoft.sqlserver.server\\1.0.0\\microsoft.sqlserver.server.1.0.0.nupkg.sha512",
     "C:\\Users\\Jared\\.nuget\\packages\\microsoft.win32.systemevents\\6.0.0\\microsoft.win32.systemevents.6.0.0.nupkg.sha512",
     "C:\\Users\\Jared\\.nuget\\packages\\mono.texttemplating\\3.0.0\\mono.texttemplating.3.0.0.nupkg.sha512",
+    "C:\\Users\\Jared\\.nuget\\packages\\mstest.analyzers\\3.8.0\\mstest.analyzers.3.8.0.nupkg.sha512",
+    "C:\\Users\\Jared\\.nuget\\packages\\mstest.testframework\\3.8.0\\mstest.testframework.3.8.0.nupkg.sha512",
     "C:\\Users\\Jared\\.nuget\\packages\\system.clientmodel\\1.0.0\\system.clientmodel.1.0.0.nupkg.sha512",
     "C:\\Users\\Jared\\.nuget\\packages\\system.codedom\\6.0.0\\system.codedom.6.0.0.nupkg.sha512",
     "C:\\Users\\Jared\\.nuget\\packages\\system.collections.immutable\\7.0.0\\system.collections.immutable.7.0.0.nupkg.sha512",

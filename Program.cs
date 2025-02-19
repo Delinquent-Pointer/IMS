@@ -25,7 +25,8 @@
 
 // app.Run();
 using Microsoft.EntityFrameworkCore;
-using IMS.Data;  // Correct namespace for AppDbContext
+using IMS.Data;
+using IMS.Pages;  // Correct namespace for AppDbContext
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,5 +52,11 @@ app.UseAuthorization();
 
 app.MapStaticAssets();
 app.MapRazorPages().WithStaticAssets();
+
+app.MapGet("/", context => {
+    context.Response.Redirect("/Login");
+    return Task.CompletedTask;
+});
+
 
 app.Run();
