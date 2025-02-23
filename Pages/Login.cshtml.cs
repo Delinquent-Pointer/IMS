@@ -48,7 +48,8 @@ namespace IMS.Pages {
 
       // TODO: Implement authentication logic
 
-      return Redirect("/Index");
+      // TODO: Implement Switch statement to redirect to different pages based on user role
+      return Redirect("/InventoryManagerLanding");
     }
 
     private static string HashPassword(string password) {
