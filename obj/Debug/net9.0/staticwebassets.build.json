@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "vPBdAEbYr/TmcVavIxAkVEOhgLaSt9hDOAac78fYnxc=",
+  "Hash": "nkivi0XR2jt3kW8jC8mN73aJixoA1SFLietiF/ZDu28=",
   "Source": "IMS",
   "BasePath": "_content/IMS",
   "Mode": "Default",
@@ -815,12 +815,12 @@
       "OriginalItemSpec": "C:\\Users\\apert\\Documents\\GitHub\\CSCD488-Senior-Project\\IMS\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css"
     },
     {
-      "Identity": "C:\\Users\\apert\\Documents\\GitHub\\CSCD488-Senior-Project\\IMS\\obj\\Debug\\net9.0\\compressed\\koejua73ml-ddklvkyzzc.gz",
+      "Identity": "C:\\Users\\apert\\Documents\\GitHub\\CSCD488-Senior-Project\\IMS\\obj\\Debug\\net9.0\\compressed\\koejua73ml-i31ma2kel3.gz",
       "SourceId": "IMS",
       "SourceType": "Computed",
       "ContentRoot": "C:\\Users\\apert\\Documents\\GitHub\\CSCD488-Senior-Project\\IMS\\obj\\Debug\\net9.0\\compressed\\",
       "BasePath": "_content/IMS",
-      "RelativePath": "IMS#[.{fingerprint=ddklvkyzzc}]!.bundle.scp.css.gz",
+      "RelativePath": "IMS#[.{fingerprint=i31ma2kel3}]!.bundle.scp.css.gz",
       "AssetKind": "All",
       "AssetMode": "Reference",
       "AssetRole": "Alternative",
@@ -829,8 +829,8 @@
       "RelatedAsset": "C:\\Users\\apert\\Documents\\GitHub\\CSCD488-Senior-Project\\IMS\\obj\\Debug\\net9.0\\scopedcss\\projectbundle\\IMS.bundle.scp.css",
       "AssetTraitName": "Content-Encoding",
       "AssetTraitValue": "gzip",
-      "Fingerprint": "z1g747niq2",
-      "Integrity": "+cLMJ5KJHEyrgPpJ+fK1t0iq03o3/Q5+SDe4PLyGuiQ=",
+      "Fingerprint": "ch2r8z2hgi",
+      "Integrity": "UBmNQUB3FX8zJ+7u0Ymll3sxzLYvAxDw3RZhmhSc8ZI=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\Users\\apert\\Documents\\GitHub\\CSCD488-Senior-Project\\IMS\\obj\\Debug\\net9.0\\scopedcss\\projectbundle\\IMS.bundle.scp.css"
@@ -941,12 +941,12 @@
       "OriginalItemSpec": "C:\\Users\\apert\\Documents\\GitHub\\CSCD488-Senior-Project\\IMS\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js"
     },
     {
-      "Identity": "C:\\Users\\apert\\Documents\\GitHub\\CSCD488-Senior-Project\\IMS\\obj\\Debug\\net9.0\\compressed\\olkpjwsh2w-ddklvkyzzc.gz",
+      "Identity": "C:\\Users\\apert\\Documents\\GitHub\\CSCD488-Senior-Project\\IMS\\obj\\Debug\\net9.0\\compressed\\olkpjwsh2w-i31ma2kel3.gz",
       "SourceId": "IMS",
       "SourceType": "Computed",
       "ContentRoot": "C:\\Users\\apert\\Documents\\GitHub\\CSCD488-Senior-Project\\IMS\\obj\\Debug\\net9.0\\compressed\\",
       "BasePath": "_content/IMS",
-      "RelativePath": "IMS#[.{fingerprint=ddklvkyzzc}]?.styles.css.gz",
+      "RelativePath": "IMS#[.{fingerprint=i31ma2kel3}]?.styles.css.gz",
       "AssetKind": "All",
       "AssetMode": "CurrentProject",
       "AssetRole": "Alternative",
@@ -955,8 +955,8 @@
       "RelatedAsset": "C:\\Users\\apert\\Documents\\GitHub\\CSCD488-Senior-Project\\IMS\\obj\\Debug\\net9.0\\scopedcss\\bundle\\IMS.styles.css",
       "AssetTraitName": "Content-Encoding",
       "AssetTraitValue": "gzip",
-      "Fingerprint": "z1g747niq2",
-      "Integrity": "+cLMJ5KJHEyrgPpJ+fK1t0iq03o3/Q5+SDe4PLyGuiQ=",
+      "Fingerprint": "ch2r8z2hgi",
+      "Integrity": "UBmNQUB3FX8zJ+7u0Ymll3sxzLYvAxDw3RZhmhSc8ZI=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\Users\\apert\\Documents\\GitHub\\CSCD488-Senior-Project\\IMS\\obj\\Debug\\net9.0\\scopedcss\\bundle\\IMS.styles.css"
@@ -1375,8 +1375,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "ScopedCss",
       "AssetTraitValue": "ApplicationBundle",
-      "Fingerprint": "ddklvkyzzc",
-      "Integrity": "n3araQqNRnzLA+4jlAmPFuSdsYHyM7tVtQDYB2ifTwo=",
+      "Fingerprint": "i31ma2kel3",
+      "Integrity": "8v5kFFZZxnqNg/b1krBozDI3fDCzUifrTWCrUUFuXzk=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\Users\\apert\\Documents\\GitHub\\CSCD488-Senior-Project\\IMS\\obj\\Debug\\net9.0\\scopedcss\\bundle\\IMS.styles.css"
@@ -1396,8 +1396,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "ScopedCss",
       "AssetTraitValue": "ProjectBundle",
-      "Fingerprint": "ddklvkyzzc",
-      "Integrity": "n3araQqNRnzLA+4jlAmPFuSdsYHyM7tVtQDYB2ifTwo=",
+      "Fingerprint": "i31ma2kel3",
+      "Integrity": "8v5kFFZZxnqNg/b1krBozDI3fDCzUifrTWCrUUFuXzk=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\Users\\apert\\Documents\\GitHub\\CSCD488-Senior-Project\\IMS\\obj\\Debug\\net9.0\\scopedcss\\projectbundle\\IMS.bundle.scp.css"
@@ -3325,12 +3325,12 @@
     },
     {
       "Route": "IMS.bundle.scp.css",
-      "AssetFile": "C:\\Users\\apert\\Documents\\GitHub\\CSCD488-Senior-Project\\IMS\\obj\\Debug\\net9.0\\compressed\\koejua73ml-ddklvkyzzc.gz",
+      "AssetFile": "C:\\Users\\apert\\Documents\\GitHub\\CSCD488-Senior-Project\\IMS\\obj\\Debug\\net9.0\\compressed\\koejua73ml-i31ma2kel3.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
           "Value": "gzip",
-          "Quality": "0.001865671642"
+          "Quality": "0.001886792453"
         }
       ],
       "ResponseHeaders": [
@@ -3340,15 +3340,15 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "535"
+          "Value": "529"
         },
         {
           "Name": "ETag",
-          "Value": "\"+cLMJ5KJHEyrgPpJ+fK1t0iq03o3/Q5+SDe4PLyGuiQ=\""
+          "Value": "\"UBmNQUB3FX8zJ+7u0Ymll3sxzLYvAxDw3RZhmhSc8ZI=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 23 Feb 2025 05:41:42 GMT"
+          "Value": "Sun, 23 Feb 2025 09:01:04 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -3368,13 +3368,13 @@
         },
         {
           "Name": "ETag",
-          "Value": "W/\"n3araQqNRnzLA+4jlAmPFuSdsYHyM7tVtQDYB2ifTwo=\""
+          "Value": "W/\"8v5kFFZZxnqNg/b1krBozDI3fDCzUifrTWCrUUFuXzk=\""
         }
       ],
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-n3araQqNRnzLA+4jlAmPFuSdsYHyM7tVtQDYB2ifTwo="
+          "Value": "sha256-8v5kFFZZxnqNg/b1krBozDI3fDCzUifrTWCrUUFuXzk="
         }
       ]
     },
@@ -3389,7 +3389,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "1121"
+          "Value": "1122"
         },
         {
           "Name": "Content-Type",
@@ -3397,11 +3397,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"n3araQqNRnzLA+4jlAmPFuSdsYHyM7tVtQDYB2ifTwo=\""
+          "Value": "\"8v5kFFZZxnqNg/b1krBozDI3fDCzUifrTWCrUUFuXzk=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 23 Feb 2025 05:41:42 GMT"
+          "Value": "Sun, 23 Feb 2025 09:01:04 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -3411,13 +3411,13 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-n3araQqNRnzLA+4jlAmPFuSdsYHyM7tVtQDYB2ifTwo="
+          "Value": "sha256-8v5kFFZZxnqNg/b1krBozDI3fDCzUifrTWCrUUFuXzk="
         }
       ]
     },
     {
       "Route": "IMS.bundle.scp.css.gz",
-      "AssetFile": "C:\\Users\\apert\\Documents\\GitHub\\CSCD488-Senior-Project\\IMS\\obj\\Debug\\net9.0\\compressed\\koejua73ml-ddklvkyzzc.gz",
+      "AssetFile": "C:\\Users\\apert\\Documents\\GitHub\\CSCD488-Senior-Project\\IMS\\obj\\Debug\\net9.0\\compressed\\koejua73ml-i31ma2kel3.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -3426,7 +3426,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "535"
+          "Value": "529"
         },
         {
           "Name": "Content-Type",
@@ -3434,11 +3434,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"+cLMJ5KJHEyrgPpJ+fK1t0iq03o3/Q5+SDe4PLyGuiQ=\""
+          "Value": "\"UBmNQUB3FX8zJ+7u0Ymll3sxzLYvAxDw3RZhmhSc8ZI=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 23 Feb 2025 05:41:42 GMT"
+          "Value": "Sun, 23 Feb 2025 09:01:04 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -3456,18 +3456,18 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-+cLMJ5KJHEyrgPpJ+fK1t0iq03o3/Q5+SDe4PLyGuiQ="
+          "Value": "sha256-UBmNQUB3FX8zJ+7u0Ymll3sxzLYvAxDw3RZhmhSc8ZI="
         }
       ]
     },
     {
-      "Route": "IMS.ddklvkyzzc.bundle.scp.css",
-      "AssetFile": "C:\\Users\\apert\\Documents\\GitHub\\CSCD488-Senior-Project\\IMS\\obj\\Debug\\net9.0\\compressed\\koejua73ml-ddklvkyzzc.gz",
+      "Route": "IMS.i31ma2kel3.bundle.scp.css",
+      "AssetFile": "C:\\Users\\apert\\Documents\\GitHub\\CSCD488-Senior-Project\\IMS\\obj\\Debug\\net9.0\\compressed\\koejua73ml-i31ma2kel3.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
           "Value": "gzip",
-          "Quality": "0.001865671642"
+          "Quality": "0.001886792453"
         }
       ],
       "ResponseHeaders": [
@@ -3477,15 +3477,15 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "535"
+          "Value": "529"
         },
         {
           "Name": "ETag",
-          "Value": "\"+cLMJ5KJHEyrgPpJ+fK1t0iq03o3/Q5+SDe4PLyGuiQ=\""
+          "Value": "\"UBmNQUB3FX8zJ+7u0Ymll3sxzLYvAxDw3RZhmhSc8ZI=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 23 Feb 2025 05:41:42 GMT"
+          "Value": "Sun, 23 Feb 2025 09:01:04 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -3505,13 +3505,13 @@
         },
         {
           "Name": "ETag",
-          "Value": "W/\"n3araQqNRnzLA+4jlAmPFuSdsYHyM7tVtQDYB2ifTwo=\""
+          "Value": "W/\"8v5kFFZZxnqNg/b1krBozDI3fDCzUifrTWCrUUFuXzk=\""
         }
       ],
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "ddklvkyzzc"
+          "Value": "i31ma2kel3"
         },
         {
           "Name": "label",
@@ -3519,12 +3519,12 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-n3araQqNRnzLA+4jlAmPFuSdsYHyM7tVtQDYB2ifTwo="
+          "Value": "sha256-8v5kFFZZxnqNg/b1krBozDI3fDCzUifrTWCrUUFuXzk="
         }
       ]
     },
     {
-      "Route": "IMS.ddklvkyzzc.bundle.scp.css",
+      "Route": "IMS.i31ma2kel3.bundle.scp.css",
       "AssetFile": "C:\\Users\\apert\\Documents\\GitHub\\CSCD488-Senior-Project\\IMS\\obj\\Debug\\net9.0\\scopedcss\\projectbundle\\IMS.bundle.scp.css",
       "Selectors": [],
       "ResponseHeaders": [
@@ -3534,7 +3534,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "1121"
+          "Value": "1122"
         },
         {
           "Name": "Content-Type",
@@ -3542,11 +3542,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"n3araQqNRnzLA+4jlAmPFuSdsYHyM7tVtQDYB2ifTwo=\""
+          "Value": "\"8v5kFFZZxnqNg/b1krBozDI3fDCzUifrTWCrUUFuXzk=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 23 Feb 2025 05:41:42 GMT"
+          "Value": "Sun, 23 Feb 2025 09:01:04 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -3556,7 +3556,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "ddklvkyzzc"
+          "Value": "i31ma2kel3"
         },
         {
           "Name": "label",
@@ -3564,13 +3564,13 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-n3araQqNRnzLA+4jlAmPFuSdsYHyM7tVtQDYB2ifTwo="
+          "Value": "sha256-8v5kFFZZxnqNg/b1krBozDI3fDCzUifrTWCrUUFuXzk="
         }
       ]
     },
     {
-      "Route": "IMS.ddklvkyzzc.bundle.scp.css.gz",
-      "AssetFile": "C:\\Users\\apert\\Documents\\GitHub\\CSCD488-Senior-Project\\IMS\\obj\\Debug\\net9.0\\compressed\\koejua73ml-ddklvkyzzc.gz",
+      "Route": "IMS.i31ma2kel3.bundle.scp.css.gz",
+      "AssetFile": "C:\\Users\\apert\\Documents\\GitHub\\CSCD488-Senior-Project\\IMS\\obj\\Debug\\net9.0\\compressed\\koejua73ml-i31ma2kel3.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -3579,7 +3579,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "535"
+          "Value": "529"
         },
         {
           "Name": "Content-Type",
@@ -3587,11 +3587,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"+cLMJ5KJHEyrgPpJ+fK1t0iq03o3/Q5+SDe4PLyGuiQ=\""
+          "Value": "\"UBmNQUB3FX8zJ+7u0Ymll3sxzLYvAxDw3RZhmhSc8ZI=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 23 Feb 2025 05:41:42 GMT"
+          "Value": "Sun, 23 Feb 2025 09:01:04 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -3609,7 +3609,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "ddklvkyzzc"
+          "Value": "i31ma2kel3"
         },
         {
           "Name": "label",
@@ -3617,18 +3617,18 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-+cLMJ5KJHEyrgPpJ+fK1t0iq03o3/Q5+SDe4PLyGuiQ="
+          "Value": "sha256-UBmNQUB3FX8zJ+7u0Ymll3sxzLYvAxDw3RZhmhSc8ZI="
         }
       ]
     },
     {
-      "Route": "IMS.ddklvkyzzc.styles.css",
-      "AssetFile": "C:\\Users\\apert\\Documents\\GitHub\\CSCD488-Senior-Project\\IMS\\obj\\Debug\\net9.0\\compressed\\olkpjwsh2w-ddklvkyzzc.gz",
+      "Route": "IMS.i31ma2kel3.styles.css",
+      "AssetFile": "C:\\Users\\apert\\Documents\\GitHub\\CSCD488-Senior-Project\\IMS\\obj\\Debug\\net9.0\\compressed\\olkpjwsh2w-i31ma2kel3.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
           "Value": "gzip",
-          "Quality": "0.001865671642"
+          "Quality": "0.001886792453"
         }
       ],
       "ResponseHeaders": [
@@ -3638,15 +3638,15 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "535"
+          "Value": "529"
         },
         {
           "Name": "ETag",
-          "Value": "\"+cLMJ5KJHEyrgPpJ+fK1t0iq03o3/Q5+SDe4PLyGuiQ=\""
+          "Value": "\"UBmNQUB3FX8zJ+7u0Ymll3sxzLYvAxDw3RZhmhSc8ZI=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 23 Feb 2025 05:41:42 GMT"
+          "Value": "Sun, 23 Feb 2025 09:01:04 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -3666,13 +3666,13 @@
         },
         {
           "Name": "ETag",
-          "Value": "W/\"n3araQqNRnzLA+4jlAmPFuSdsYHyM7tVtQDYB2ifTwo=\""
+          "Value": "W/\"8v5kFFZZxnqNg/b1krBozDI3fDCzUifrTWCrUUFuXzk=\""
         }
       ],
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "ddklvkyzzc"
+          "Value": "i31ma2kel3"
         },
         {
           "Name": "label",
@@ -3680,12 +3680,12 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-n3araQqNRnzLA+4jlAmPFuSdsYHyM7tVtQDYB2ifTwo="
+          "Value": "sha256-8v5kFFZZxnqNg/b1krBozDI3fDCzUifrTWCrUUFuXzk="
         }
       ]
     },
     {
-      "Route": "IMS.ddklvkyzzc.styles.css",
+      "Route": "IMS.i31ma2kel3.styles.css",
       "AssetFile": "C:\\Users\\apert\\Documents\\GitHub\\CSCD488-Senior-Project\\IMS\\obj\\Debug\\net9.0\\scopedcss\\bundle\\IMS.styles.css",
       "Selectors": [],
       "ResponseHeaders": [
@@ -3695,7 +3695,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "1121"
+          "Value": "1122"
         },
         {
           "Name": "Content-Type",
@@ -3703,11 +3703,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"n3araQqNRnzLA+4jlAmPFuSdsYHyM7tVtQDYB2ifTwo=\""
+          "Value": "\"8v5kFFZZxnqNg/b1krBozDI3fDCzUifrTWCrUUFuXzk=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 23 Feb 2025 05:41:42 GMT"
+          "Value": "Sun, 23 Feb 2025 09:01:04 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -3717,7 +3717,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "ddklvkyzzc"
+          "Value": "i31ma2kel3"
         },
         {
           "Name": "label",
@@ -3725,13 +3725,13 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-n3araQqNRnzLA+4jlAmPFuSdsYHyM7tVtQDYB2ifTwo="
+          "Value": "sha256-8v5kFFZZxnqNg/b1krBozDI3fDCzUifrTWCrUUFuXzk="
         }
       ]
     },
     {
-      "Route": "IMS.ddklvkyzzc.styles.css.gz",
-      "AssetFile": "C:\\Users\\apert\\Documents\\GitHub\\CSCD488-Senior-Project\\IMS\\obj\\Debug\\net9.0\\compressed\\olkpjwsh2w-ddklvkyzzc.gz",
+      "Route": "IMS.i31ma2kel3.styles.css.gz",
+      "AssetFile": "C:\\Users\\apert\\Documents\\GitHub\\CSCD488-Senior-Project\\IMS\\obj\\Debug\\net9.0\\compressed\\olkpjwsh2w-i31ma2kel3.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -3740,7 +3740,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "535"
+          "Value": "529"
         },
         {
           "Name": "Content-Type",
@@ -3748,11 +3748,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"+cLMJ5KJHEyrgPpJ+fK1t0iq03o3/Q5+SDe4PLyGuiQ=\""
+          "Value": "\"UBmNQUB3FX8zJ+7u0Ymll3sxzLYvAxDw3RZhmhSc8ZI=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 23 Feb 2025 05:41:42 GMT"
+          "Value": "Sun, 23 Feb 2025 09:01:04 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -3770,7 +3770,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "ddklvkyzzc"
+          "Value": "i31ma2kel3"
         },
         {
           "Name": "label",
@@ -3778,18 +3778,18 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-+cLMJ5KJHEyrgPpJ+fK1t0iq03o3/Q5+SDe4PLyGuiQ="
+          "Value": "sha256-UBmNQUB3FX8zJ+7u0Ymll3sxzLYvAxDw3RZhmhSc8ZI="
         }
       ]
     },
     {
       "Route": "IMS.styles.css",
-      "AssetFile": "C:\\Users\\apert\\Documents\\GitHub\\CSCD488-Senior-Project\\IMS\\obj\\Debug\\net9.0\\compressed\\olkpjwsh2w-ddklvkyzzc.gz",
+      "AssetFile": "C:\\Users\\apert\\Documents\\GitHub\\CSCD488-Senior-Project\\IMS\\obj\\Debug\\net9.0\\compressed\\olkpjwsh2w-i31ma2kel3.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
           "Value": "gzip",
-          "Quality": "0.001865671642"
+          "Quality": "0.001886792453"
         }
       ],
       "ResponseHeaders": [
@@ -3799,15 +3799,15 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "535"
+          "Value": "529"
         },
         {
           "Name": "ETag",
-          "Value": "\"+cLMJ5KJHEyrgPpJ+fK1t0iq03o3/Q5+SDe4PLyGuiQ=\""
+          "Value": "\"UBmNQUB3FX8zJ+7u0Ymll3sxzLYvAxDw3RZhmhSc8ZI=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 23 Feb 2025 05:41:42 GMT"
+          "Value": "Sun, 23 Feb 2025 09:01:04 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -3827,13 +3827,13 @@
         },
         {
           "Name": "ETag",
-          "Value": "W/\"n3araQqNRnzLA+4jlAmPFuSdsYHyM7tVtQDYB2ifTwo=\""
+          "Value": "W/\"8v5kFFZZxnqNg/b1krBozDI3fDCzUifrTWCrUUFuXzk=\""
         }
       ],
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-n3araQqNRnzLA+4jlAmPFuSdsYHyM7tVtQDYB2ifTwo="
+          "Value": "sha256-8v5kFFZZxnqNg/b1krBozDI3fDCzUifrTWCrUUFuXzk="
         }
       ]
     },
@@ -3848,7 +3848,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "1121"
+          "Value": "1122"
         },
         {
           "Name": "Content-Type",
@@ -3856,11 +3856,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"n3araQqNRnzLA+4jlAmPFuSdsYHyM7tVtQDYB2ifTwo=\""
+          "Value": "\"8v5kFFZZxnqNg/b1krBozDI3fDCzUifrTWCrUUFuXzk=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 23 Feb 2025 05:41:42 GMT"
+          "Value": "Sun, 23 Feb 2025 09:01:04 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -3870,13 +3870,13 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-n3araQqNRnzLA+4jlAmPFuSdsYHyM7tVtQDYB2ifTwo="
+          "Value": "sha256-8v5kFFZZxnqNg/b1krBozDI3fDCzUifrTWCrUUFuXzk="
         }
       ]
     },
     {
       "Route": "IMS.styles.css.gz",
-      "AssetFile": "C:\\Users\\apert\\Documents\\GitHub\\CSCD488-Senior-Project\\IMS\\obj\\Debug\\net9.0\\compressed\\olkpjwsh2w-ddklvkyzzc.gz",
+      "AssetFile": "C:\\Users\\apert\\Documents\\GitHub\\CSCD488-Senior-Project\\IMS\\obj\\Debug\\net9.0\\compressed\\olkpjwsh2w-i31ma2kel3.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -3885,7 +3885,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "535"
+          "Value": "529"
         },
         {
           "Name": "Content-Type",
@@ -3893,11 +3893,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"+cLMJ5KJHEyrgPpJ+fK1t0iq03o3/Q5+SDe4PLyGuiQ=\""
+          "Value": "\"UBmNQUB3FX8zJ+7u0Ymll3sxzLYvAxDw3RZhmhSc8ZI=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 23 Feb 2025 05:41:42 GMT"
+          "Value": "Sun, 23 Feb 2025 09:01:04 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -3915,7 +3915,7 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-+cLMJ5KJHEyrgPpJ+fK1t0iq03o3/Q5+SDe4PLyGuiQ="
+          "Value": "sha256-UBmNQUB3FX8zJ+7u0Ymll3sxzLYvAxDw3RZhmhSc8ZI="
         }
       ]
     },

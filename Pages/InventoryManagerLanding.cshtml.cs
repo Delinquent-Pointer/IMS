@@ -27,6 +27,7 @@ namespace IMS.Pages {
     public string? NewNote { get; set; }
 
     // In-memory list for notes (for demo purposes; in production, persist these to a database)
+    // TODO: Implement database persistence for notes
     public IList<Note> Notes { get; set; } = new List<Note>();
 
     public async Task OnGetAsync() {
@@ -39,6 +40,7 @@ namespace IMS.Pages {
       Products = await query.ToListAsync();
 
       // Load dummy notes if none exist (for demonstration)
+      // TODO: Implement database persistence for notes
       if(Notes.Count == 0) {
         Notes.Add(new Note { Content = "Dashboard initialized.",Timestamp = DateTime.Now.AddMinutes(-30) });
         Notes.Add(new Note { Content = "Inventory levels checked.",Timestamp = DateTime.Now.AddMinutes(-10) });

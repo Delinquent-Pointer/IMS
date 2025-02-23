@@ -3,7 +3,7 @@
 @{
   ViewData["Title"] = "Inventory Management System (IMS)";
 }
-
+@* add a create account button next to log-in button that will redirect to CreateAccount page  *@
 <div class="container d-flex flex-column justify-content-center align-items-center" style="min-height: 100vh;">
   <div class="w-100" style="max-width: 400px;">
     <div class="text-center mb-4">
@@ -22,6 +22,7 @@
         <span asp-validation-for="Input.Password" class="text-danger"></span>
       </div>
       <button type="submit" class="btn btn-primary btn-block mt-3">Login</button>
+      <a href="/CreateAccount" class="btn btn-secondary btn-block mt-3">Create Account</a>
     </form>
   </div>
 </div>
