@@ -1,0 +1,113 @@
+@page
+@model IMS.Pages.InventoryManagerLandingModel
+@{
+  ViewData["Title"] = "Inventory Manager Dashboard";
+}
+
+<h1>Inventory Manager Dashboard</h1>
+
+<!-- Top Quick Info Bar -->
+<div class="row mb-4">
+  <div class="col-md-6">
+    <h4>Weather</h4>
+    <div id="weather-widget" class="border p-3">
+      <!-- Placeholder for weather info; integrate with an API for real data -->
+      <p>Current: 72°F, Sunny</p>
+    </div>
+  </div>
+  <div class="col-md-6 text-right">
+    <h4>Quick Order</h4>
+    <div id="quick-order" class="border p-3">
+      <!-- Quick order bar; add buttons or order form as needed -->
+      <button class="btn btn-success">Order Products</button>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content Grid -->
+<div class="row">
+  <!-- Left Panel: Product Search & List -->
+  <div class="col-md-6">
+    <div class="card mb-4">
+      <div class="card-header">Product Search</div>
+      <div class="card-body">
+        <form method="get" class="mb-3">
+          <div class="form-group">
+            <input type="text" name="SearchTerm" value="@Model.SearchTerm" class="form-control"
+              placeholder="Search for a product by name or description..." />
+          </div>
+          <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+        @if (Model.Products != null && Model.Products.Count > 0)
+        {
+          <ul class="list-group">
+            @foreach (var product in Model.Products)
+            {
+              <li class="list-group-item">
+                <strong>@product.Name</strong> - $@product.Price, Qty: @product.Quantity
+              </li>
+            }
+          </ul>
+        }
+        else
+        {
+          <p>No products found.</p>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Panel: Notes & Calendar -->
+  <div class="col-md-6">
+    <div class="card mb-4">
+      <div class="card-header">Notes</div>
+      <div class="card-body">
+        <form method="post">
+          <div class="form-group">
+            <textarea name="NewNote" class="form-control" placeholder="Enter note here..." rows="3"></textarea>
+          </div>
+          <button type="submit" class="btn btn-secondary mt-2">Save Note</button>
+        </form>
+        <hr />
+        <h6>Recent Notes</h6>
+        @if (Model.Notes != null && Model.Notes.Count > 0)
+        {
+          <ul class="list-group">
+            @foreach (var note in Model.Notes)
+            {
+              <li class="list-group-item">
+                <small>@note.Timestamp.ToString("g")</small> - @note.Content
+              </li>
+            }
+          </ul>
+        }
+        else
+        {
+          <p>No notes yet.</p>
+        }
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">Calendar</div>
+      <div class="card-body">
+        <div id="calendar" style="max-width: 100%; margin: 0 auto; min-height: 300px;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+@section Scripts {
+  <!-- FullCalendar CSS & JS -->
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var calendarEl = document.getElementById('calendar');
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        events: [] // Add events or integrate with your data source
+      });
+      calendar.render();
+    });
+  </script>
+}
