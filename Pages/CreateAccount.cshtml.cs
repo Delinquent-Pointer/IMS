@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography;
 using System.Text;
@@ -9,23 +8,32 @@ using IMS.Data;
 using IMS.Models;
 
 namespace IMS.Pages {
-  public class LoginModel:PageModel {
+  public class CreateAccountModel:PageModel {
     private readonly AppDbContext _context;
 
-    public LoginModel(AppDbContext context) {
+    public CreateAccountModel(AppDbContext context) {
       _context = context;
     }
 
     [BindProperty]
-    public LoginInputModel Input { get; set; }
+    public CreateAccountInputModel Input { get; set; }
 
-    public class LoginInputModel {
+    public class CreateAccountInputModel {
       [Required]
       public required string Username { get; set; }
 
       [Required]
       [DataType(DataType.Password)]
       public required string Password { get; set; }
+
+      [Required]
+      [DataType(DataType.Password)]
+      [Compare("Password",ErrorMessage = "The password and confirmation password do not match.")]
+      public required string ConfirmPassword { get; set; }
+
+      public bool Is_IT_User { get; set; }
+
+      public string? AdminKey { get; set; }
     }
 
     public void OnGet() {
@@ -36,20 +44,23 @@ namespace IMS.Pages {
         return Page();
       }
 
-      var hashedPassword = HashPassword(Input.Password);
-      var user = await _context.UserAccounts
-          .FirstOrDefaultAsync(u => u.Username == Input.Username && u.Password_Hash == hashedPassword);
-
-      if(user == null) {
-        ModelState.AddModelError(string.Empty,"Login Failed, Account info not recognised.");
-        ViewData["LoginFailed"] = true;
+      // TODO: Implement company admin key validation might require a separate table in the database
+      if(Input.Is_IT_User && Input.AdminKey != "YourCompanyAdminKey") {
+        ModelState.AddModelError(string.Empty,"Invalid Company Admin Key.");
         return Page();
       }
 
-      // TODO: Implement authentication logic
+      var hashedPassword = HashPassword(Input.Password);
+      var user = new UserAccount {
+        Username = Input.Username,
+        Password_Hash = hashedPassword,
+        Is_IT_User = Input.Is_IT_User
+      };
 
-      // TODO: Implement Switch statement to redirect to different pages based on user role
-      return Redirect("/InventoryManagerLanding");
+      _context.UserAccounts.Add(user);
+      await _context.SaveChangesAsync();
+
+      return RedirectToPage("/Login");
     }
 
     private static string HashPassword(string password) {

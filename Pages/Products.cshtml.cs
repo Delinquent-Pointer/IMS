@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-public class ProductsModel : PageModel {
+public class ProductsModel:PageModel {
   private readonly AppDbContext _appDbContext;
 
   public ProductsModel(AppDbContext appDbContext) {
