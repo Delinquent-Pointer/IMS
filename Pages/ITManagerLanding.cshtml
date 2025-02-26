@@ -1,0 +1,50 @@
+@page
+@model IMS.Pages.ITManagerLandingModel
+@{
+  ViewData["Title"] = "IT Manager Dashboard";
+}
+
+<div class="container mt-5">
+  <h1>IT Manager Dashboard</h1>
+  <div class="d-flex justify-content-end mb-3">
+    <a href="/Login" class="btn btn-danger">Logout</a>
+  </div>
+
+  <h2>Unverified Accounts</h2>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Username</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @if (Model.UnverifiedAccounts != null && Model.UnverifiedAccounts.Any())
+      {
+        @foreach (var account in Model.UnverifiedAccounts)
+        {
+          <tr>
+            <td>@account.Username</td>
+            <td>
+              <form method="post" asp-page-handler="Verify" asp-route-id="@account.Account_Id" class="d-inline">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-success">Verify</button>
+              </form>
+              <form method="post" asp-page-handler="Delete" asp-route-id="@account.Account_Id" class="d-inline">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-danger">Delete</button>
+              </form>
+            </td>
+          </tr>
+        }
+      }
+      else
+      {
+        <tr>
+          <td colspan="2" class="text-center">No unverified accounts.</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
