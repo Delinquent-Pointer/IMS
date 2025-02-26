@@ -1,11 +1,20 @@
 using Microsoft.EntityFrameworkCore;
 using IMS.Data;
 using IMS.Pages;  // Correct namespace for AppDbContext
+using IMS.Filters;  // Correct namespace for LoginAuthorizationFilter
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Services.AddSession();  // Add session support for session variables
+
+builder.Services.AddHttpContextAccessor(); //Context accessor for authorization
+builder.Services.AddControllersWithViews(options => {
+  options.Filters.Add(new ITAuthorizationFilter());  // Add the IT authorization filter globally
+  options.Filters.Add(new LoginAuthorizationFilter());  // Add the login authorization filter globally
+});
+
 
 // Add Database Context for Azure SQL
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -22,7 +31,10 @@ if(!app.Environment.IsDevelopment()) {
 app.UseHttpsRedirection();
 // app.UseDeveloperExceptionPage();  // Add this line to see detailed error messages
 app.UseRouting();
+
 app.UseAuthorization();
+app.UseAuthentication(); 
+app.UseSession();  
 
 app.MapStaticAssets();
 app.MapRazorPages().WithStaticAssets();
