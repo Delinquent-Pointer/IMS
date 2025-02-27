@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace IMS.Pages;
-[RequireITPerms]
 public class PrivacyModel:PageModel {
   private readonly ILogger<PrivacyModel> _logger;
 

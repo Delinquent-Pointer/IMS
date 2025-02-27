@@ -3,11 +3,13 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using IMS.Data;
 using IMS.Models;
+using IMS.Attributes;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace IMS.Pages {
+  [RequireITPerms]
   public class ITManagerLandingModel:PageModel {
     private readonly AppDbContext _context;
 

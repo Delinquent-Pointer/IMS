@@ -79,7 +79,7 @@ namespace IMS.Pages{
       HttpContext.Session.SetInt32("ITPerms", user.Is_IT_User ? 1 : 0);
 
       if(user.Is_IT_User){
-        return Redirect("/Index");
+        return Redirect("/ITManagerLanding");
       }
 
       return Redirect("/InventoryManagerLanding");
