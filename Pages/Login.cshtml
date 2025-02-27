@@ -10,6 +10,13 @@
       <h1>Inventory Management System (IMS)</h1>
       <p class="lead">Please login to continue</p>
     </div>
+    @if (ViewData.ModelState[""] != null){
+    <div class="alert @(Model.LoginErrorType.Equals(LoginModel.LoginErrorTypes.Redirect) 
+    ? "alert-warning" 
+    : "alert-danger")">
+      @ViewData.ModelState[""].Errors[0].ErrorMessage
+      </div>
+    }
     <form method="post">
       <div class="form-group">
         <label asp-for="Input.Username"></label>
@@ -26,7 +33,7 @@
     </form>
   </div>
 </div>
-
+@* 
 @section Scripts {
   <partial name="_ValidationScriptsPartial" />
   <script>
@@ -38,3 +45,4 @@
     });
   </script>
 }
+*@

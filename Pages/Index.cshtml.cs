@@ -5,7 +5,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using IMS.Data;
 using IMS.Models;
+using Microsoft.AspNetCore.Authorization;
+using IMS.Attributes;
 
+[RequireITPerms]
 public class IndexModel:PageModel {
   private readonly AppDbContext _context;
 

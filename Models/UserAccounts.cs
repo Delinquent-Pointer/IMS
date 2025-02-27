@@ -11,5 +11,6 @@ namespace IMS.Models {
     [Required]
     public string Password_Hash { get; set; }
     public bool Is_IT_User { get; set; } = false;
+    public bool Verified { get; set; } = false;
   }
 }
