@@ -1,3 +1,3 @@
 ﻿<Project>
-  <Import Project="..\build\IMS.props" />
+  <Import Project="../build/IMS.props" />
 </Project>

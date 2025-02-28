@@ -7,7 +7,9 @@
 <!-- Header with Log Out Button -->
 <div class="d-flex justify-content-between align-items-center mb-4">
   <h1>Inventory Manager Dashboard</h1>
-  <a href="/Login" class="btn btn-danger">Log Out</a>
+  <form method="post">
+    <button type="submit" asp-page-handler="Logout" class="btn btn-danger">Log Out</button>
+  </form>
 </div>
 
 <!-- Top Quick Info Bar -->
