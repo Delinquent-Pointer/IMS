@@ -21,9 +21,45 @@ else
     @foreach (var product in Model.Products)
     {
       <li>
-        <strong>@product.Name</strong> - $@product.Price
+        <button type="button" onclick="showPopup('@product.Name', '@product.Description', '@product.Price', this)">
+        <strong>@product.Name</strong>
         <br />
-        <em>@product.Description</em>
+        </button>
+        <script>
+          function showPopup(name, description, price, button) {
+            var popup = document.createElement("div");
+            popup.style.position = "absolute";
+            popup.style.backgroundColor = "white";
+            popup.style.border = "1px solid black";
+            popup.style.padding = "10px";
+            popup.style.zIndex = "1000";
+
+            var rect = button.getBoundingClientRect();
+            popup.style.left = rect.left + "px";
+            popup.style.top = rect.bottom + "px";
+
+            var nameText = document.createElement("p");
+            nameText.innerHTML = "<strong>Name:</strong> " + name;
+            popup.appendChild(nameText);
+
+            var descriptionText = document.createElement("p");
+            descriptionText.innerHTML = "<strong>Description:</strong> " + description;
+            popup.appendChild(descriptionText);
+
+            var priceText = document.createElement("p");
+            priceText.innerHTML = "<strong>Price:</strong> $" + price;
+            popup.appendChild(priceText);
+
+            var closeButton = document.createElement("button");
+            closeButton.innerText = "Close";
+            closeButton.onclick = function() {
+              document.body.removeChild(popup);
+            };
+            popup.appendChild(closeButton);
+
+            document.body.appendChild(popup);
+          }
+        </script>
       </li>
     }
   </ul>
