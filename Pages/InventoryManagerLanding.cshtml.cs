@@ -32,6 +32,13 @@ namespace IMS.Pages {
     public IList<Note> Notes { get; set; } = new List<Note>();
 
     public async Task OnGetAsync() {
+      String? error = HttpContext.Session.GetString("ITRedirectError");
+      if(error != null) {
+        ModelState.AddModelError(string.Empty, error);
+        HttpContext.Session.Remove("ITRedirectError");
+      }
+
+
       // Product search
       var query = _context.Products.AsQueryable();
       if(!string.IsNullOrEmpty(SearchTerm)) {

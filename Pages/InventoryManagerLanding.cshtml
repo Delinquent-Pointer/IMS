@@ -11,7 +11,11 @@
     <button type="submit" asp-page-handler="Logout" class="btn btn-danger">Log Out</button>
   </form>
 </div>
-
+@if (ViewData.ModelState[""] != null){
+    <div class= "alert @("alert-warning")">
+      @ViewData.ModelState[""].Errors[0].ErrorMessage
+      </div>
+    }
 <!-- Top Quick Info Bar -->
 <div class="row mb-4">
   <div class="col-md-6">

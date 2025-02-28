@@ -20,15 +20,15 @@ namespace IMS.Filters{
 
             string? prevPage = context.HttpContext.Request.Headers["Referer"].ToString();
              
-            //if user doesn't have IT permissions, redirect to the previous page
+            //if user doesn't have IT permissions, redirect to the previous page, or login if the referer field is blank
             if (perms == null || !perms.Value){
                 if (prevPage.IsNullOrEmpty()){
-                    prevPage = "Login";
+                    prevPage = "InventoryManagerLanding";
                 }
+                session.SetString("ITRedirectError", "An IT account is needed to access that page.");
                 context.Result = new RedirectResult(prevPage);
             }
         }
-
-        
+   
     }
 }
