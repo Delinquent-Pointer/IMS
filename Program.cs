@@ -11,8 +11,8 @@ builder.Services.AddSession();  // Add session support for session variables
 
 builder.Services.AddHttpContextAccessor(); //Context accessor for authorization
 builder.Services.AddControllersWithViews(options => {
+  options.Filters.Add(new LoginAuthorizationFilter());// Add the login authorization filter globally
   options.Filters.Add(new ITAuthorizationFilter());  // Add the IT authorization filter globally
-  options.Filters.Add(new LoginAuthorizationFilter());  // Add the login authorization filter globally
 });
 
 
