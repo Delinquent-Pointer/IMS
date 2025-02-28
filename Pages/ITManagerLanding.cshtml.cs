@@ -30,7 +30,11 @@ namespace IMS.Pages {
 
       return Page();
     }
-
+    public async Task<IActionResult> OnPostLogout()
+    {
+        HttpContext.Session.Clear(); // This clears the session
+        return RedirectToPage("/Login"); // Redirect to login page
+    }
     public async Task<IActionResult> OnPostDeleteAsync(int? id) {
       if(id == null) {
         return BadRequest("Invalid user ID.");

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using IMS.Data;
 using IMS.Models;
@@ -52,6 +53,12 @@ namespace IMS.Pages {
         Notes.Add(new Note { Content = "Dashboard initialized.",Timestamp = DateTime.Now.AddMinutes(-30) });
         Notes.Add(new Note { Content = "Inventory levels checked.",Timestamp = DateTime.Now.AddMinutes(-10) });
       }
+    }
+
+    public async Task<IActionResult> OnPostLogout()
+    {
+        HttpContext.Session.Clear(); // This clears the session
+        return RedirectToPage("/Login"); // Redirect to login page
     }
 
     public async Task<IActionResult> OnPostAsync() {
