@@ -7,40 +7,105 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace IMS.Migrations {
-  [DbContext(typeof(AppDbContext))]
-  partial class AppDbContextModelSnapshot:ModelSnapshot {
-    protected override void BuildModel(ModelBuilder modelBuilder) {
+namespace IMS.Migrations
+{
+    [DbContext(typeof(AppDbContext))]
+    partial class AppDbContextModelSnapshot : ModelSnapshot
+    {
+        protected override void BuildModel(ModelBuilder modelBuilder)
+        {
 #pragma warning disable 612, 618
-      modelBuilder
-          .HasAnnotation("ProductVersion","9.0.2")
-          .HasAnnotation("Relational:MaxIdentifierLength",128);
+            modelBuilder
+                .HasAnnotation("ProductVersion", "9.0.2")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-      SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-      modelBuilder.Entity("IMS.Models.Product",b => {
-        b.Property<int>("Id")
-            .ValueGeneratedOnAdd()
-            .HasColumnType("int");
+            modelBuilder.Entity("IMS.Models.AdminKeys", b =>
+                {
+                    b.Property<int>("It_Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-        SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("It_Id"));
 
-        b.Property<string>("Description")
-            .IsRequired()
-            .HasColumnType("nvarchar(max)");
+                    b.Property<string>("Account_Id")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-        b.Property<string>("Name")
-            .IsRequired()
-            .HasColumnType("nvarchar(max)");
+                    b.Property<string>("AdminKey")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-        b.Property<decimal>("Price")
-            .HasColumnType("decimal(18,2)");
+                    b.HasKey("It_Id");
 
-        b.HasKey("Id");
+                    b.ToTable("AdminKeys");
+                });
 
-        b.ToTable("Products");
-      });
+            modelBuilder.Entity("IMS.Models.Product", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Category")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Location")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ReorderLevel")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SKU")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("IMS.Models.UserAccount", b =>
+                {
+                    b.Property<int>("Account_Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Account_Id"));
+
+                    b.Property<bool>("Is_IT_User")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Password_Hash")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Verified")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Account_Id");
+
+                    b.ToTable("UserAccounts");
+                });
 #pragma warning restore 612, 618
+        }
     }
-  }
 }

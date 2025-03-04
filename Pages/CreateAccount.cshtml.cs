@@ -1,14 +1,18 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using IMS.Data;
 using IMS.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace IMS.Pages {
-  public class CreateAccountModel:PageModel {
+    [AllowAnonymous]
+    
+    public class CreateAccountModel:PageModel {
     private readonly AppDbContext _context;
 
     public CreateAccountModel(AppDbContext context) {
@@ -44,11 +48,6 @@ namespace IMS.Pages {
         return Page();
       }
 
-      // TODO: Implement company admin key validation might require a separate table in the database
-      if(Input.Is_IT_User && Input.AdminKey != "YourCompanyAdminKey") {
-        ModelState.AddModelError(string.Empty,"Invalid Company Admin Key.");
-        return Page();
-      }
 
       var hashedPassword = HashPassword(Input.Password);
       var user = new UserAccount {
@@ -57,9 +56,37 @@ namespace IMS.Pages {
         Is_IT_User = Input.Is_IT_User
       };
 
-      _context.UserAccounts.Add(user);
-      await _context.SaveChangesAsync();
+      if(Input.Is_IT_User) {
+        
+        if(Input.AdminKey == null){
+        ModelState.AddModelError(string.Empty,"Company Admin Key is required for IT Users.");
+        return Page();
+        }
 
+
+        AdminKeys? adminKey = await _context.AdminKeys.FirstOrDefaultAsync(a => a.AdminKey == Input.AdminKey);
+        if(adminKey == null) {
+          ModelState.AddModelError(string.Empty,"Invalid Admin Key.");
+          return Page();
+        }
+
+
+        _context.UserAccounts.Add(user);
+        await _context.SaveChangesAsync(); //have to do this to set the internal id
+        
+
+        AdminKeys newKey = new AdminKeys{
+        Account_Id = user.Account_Id
+        };
+
+        _context.AdminKeys.Add(newKey);
+        await _context.SaveChangesAsync();
+      }
+      else{
+        _context.UserAccounts.Add(user);
+        await _context.SaveChangesAsync();
+      }
+      
       return RedirectToPage("/Login");
     }
 

@@ -9,6 +9,11 @@
       <h1>Create Account</h1>
       <p class="lead">Please fill in the details to create an account</p>
     </div>
+    @if (ViewData.ModelState[""] != null){
+    <div class= "alert @("alert-danger")">
+      @ViewData.ModelState[""].Errors[0].ErrorMessage
+      </div>
+    }
     <form method="post">
       <div class="form-group">
         <label asp-for="Input.Username"></label>
