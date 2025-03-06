@@ -11,32 +11,42 @@
     <button type="submit" asp-page-handler="Logout" class="btn btn-danger">Log Out</button>
   </form>
 </div>
-@if (ViewData.ModelState[""] != null){
-    <div class= "alert @("alert-warning")">
-      @ViewData.ModelState[""].Errors[0].ErrorMessage
-      </div>
-    }
+
+@if (!ViewData.ModelState.IsValid)
+{
+  <div class="alert alert-warning">
+    @ViewData.ModelState[""]?.Errors.FirstOrDefault()?.ErrorMessage
+  </div>
+}
+
 <!-- Top Quick Info Bar -->
 <div class="row mb-4">
+  <!-- Weather Widget -->
   <div class="col-md-6">
     <h4>Weather</h4>
     <div id="weather-widget" class="border p-3">
-      <!-- Placeholder for weather info; integrate with an API for real data -->
-      <p>TODO: Integrate weather API Current: 72°F, Sunny</p>
+      @if (!string.IsNullOrEmpty(Model.WeatherInfo))
+      {
+        <p><strong>@Model.WeatherInfo</strong></p>
+      }
+      else
+      {
+        <p><strong>Loading Weather...</strong></p>
+      }
     </div>
   </div>
+
+  <!-- Time Widget -->
   <div class="col-md-6 text-right">
-    <h4>Quick Order</h4>
-    <div id="quick-order" class="border p-3">
-      <!-- Quick order bar; add buttons or order form as needed -->
-      <button class="btn btn-success">Order Products</button>
+    <h4>Current Time</h4>
+    <div id="time-widget" class="border p-3">
+      <p><strong>Loading Time...</strong></p>
     </div>
   </div>
 </div>
 
 <!-- Main Content Grid -->
 <div class="row">
-  <!-- Left Panel: Product Search & List -->
   <div class="col-md-6">
     <div class="card mb-4">
       <div class="card-header">Product Search</div>
@@ -48,7 +58,7 @@
           </div>
           <button type="submit" class="btn btn-primary">Search</button>
         </form>
-        @if (Model.Products != null && Model.Products.Count > 0)
+        @if (Model.Products.Any())
         {
           <ul class="list-group">
             @foreach (var product in Model.Products)
@@ -80,7 +90,7 @@
         </form>
         <hr />
         <h6>Recent Notes</h6>
-        @if (Model.Notes != null && Model.Notes.Count > 0)
+        @if (Model.Notes.Any())
         {
           <ul class="list-group">
             @foreach (var note in Model.Notes)
@@ -97,6 +107,7 @@
         }
       </div>
     </div>
+
     <div class="card">
       <div class="card-header">Calendar</div>
       <div class="card-body">
@@ -107,17 +118,46 @@
 </div>
 
 @section Scripts {
-  <!-- FullCalendar CSS & JS -->
+  <!-- FullCalendar CDN -->
   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js"></script>
+
   <script>
     document.addEventListener('DOMContentLoaded', function () {
+      // Load Local Time
+      setInterval(updateTime, 1000);
+      updateTime(); // Initial call
+
+      // Initialize Calendar
       var calendarEl = document.getElementById('calendar');
       var calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
-        events: [] // Add events or integrate with your data source
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        events: async function (fetchInfo, successCallback, failureCallback) {
+          try {
+            let response = await fetch('/api/events');
+            let events = await response.json();
+            successCallback(events);
+          } catch (error) {
+            console.error("Failed to load events", error);
+            failureCallback(error);
+          }
+        }
       });
+
       calendar.render();
     });
+
+    // Update Time
+    function updateTime() {
+      let timeWidget = document.getElementById("time-widget");
+      let now = new Date();
+      let options = { timeZone: "@Model.UserTimeZone", hour: "2-digit", minute: "2-digit", second: "2-digit" };
+      timeWidget.innerHTML = `<p><strong>Local Time:</strong> ${now.toLocaleTimeString("en-US", options)}</p>`;
+    }
   </script>
 }

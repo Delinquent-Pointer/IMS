@@ -1,23 +1,24 @@
 using Microsoft.EntityFrameworkCore;
 using IMS.Data;
-using IMS.Pages;  // Correct namespace for AppDbContext
-using IMS.Filters;  // Correct namespace for LoginAuthorizationFilter
+using IMS.Pages;
+using IMS.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-builder.Services.AddSession();  // Add session support for session variables
+builder.Services.AddSession();  // Add session support
 
-builder.Services.AddHttpContextAccessor(); //Context accessor for authorization
+builder.Services.AddHttpContextAccessor(); // Context accessor for authorization
+builder.Services.AddHttpClient(); // Ensure HttpClientFactory is available
+
 builder.Services.AddControllersWithViews(options => {
-  options.Filters.Add(new LoginAuthorizationFilter());// Add the login authorization filter globally
+  options.Filters.Add(new LoginAuthorizationFilter()); // Add the login authorization filter globally
   options.Filters.Add(new ITAuthorizationFilter());  // Add the IT authorization filter globally
 });
 
-
-// Add Database Context for Azure SQL
-builder.Services.AddDbContext<AppDbContext>(options =>
+// ✅ Register DbContext as Factory (Fix for Concurrency Issues)
+builder.Services.AddDbContextFactory<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
@@ -25,19 +26,19 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if(!app.Environment.IsDevelopment()) {
   app.UseExceptionHandler("/Error");
-  app.UseHsts(); // The default HSTS value is 30 days
+  app.UseHsts();
 }
 
 app.UseHttpsRedirection();
-// app.UseDeveloperExceptionPage();  // Add this line to see detailed error messages
+app.UseStaticFiles();
 app.UseRouting();
 
+app.UseSession();
+app.UseAuthentication();
 app.UseAuthorization();
-app.UseAuthentication(); 
-app.UseSession();  
 
-app.MapStaticAssets();
-app.MapRazorPages().WithStaticAssets();
+app.MapControllers();
+app.MapRazorPages();
 
 app.MapGet("/",context => {
   context.Response.Redirect("/Login");

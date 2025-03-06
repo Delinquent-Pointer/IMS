@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using IMS.Data;
 using IMS.Models;
@@ -8,70 +7,146 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Net.Http;
+using System.Text.Json;
 
 namespace IMS.Pages {
   public class InventoryManagerLandingModel:PageModel {
-    private readonly AppDbContext _context;
-    public InventoryManagerLandingModel(AppDbContext context) {
-      _context = context;
+    private readonly IDbContextFactory<AppDbContext> _dbContextFactory;
+    private readonly HttpClient _httpClient;
+
+    public InventoryManagerLandingModel(IDbContextFactory<AppDbContext> dbContextFactory,IHttpClientFactory httpClientFactory) {
+      _dbContextFactory = dbContextFactory;
+      _httpClient = httpClientFactory.CreateClient();
     }
 
-    // List of products for the search section
     public IList<Product> Products { get; set; } = new List<Product>();
 
-    // Search term for filtering products
     [BindProperty(SupportsGet = true)]
     public string? SearchTerm { get; set; }
 
-    // Holds the new note text posted from the form
     [BindProperty]
     public string? NewNote { get; set; }
 
-    // In-memory list for notes (for demo purposes; in production, persist these to a database)
-    // TODO: Implement database persistence for notes
     public IList<Note> Notes { get; set; } = new List<Note>();
+    public IList<CalendarEvent> Events { get; set; } = new List<CalendarEvent>();
+
+    // Weather & Timezone Data
+    public string? WeatherInfo { get; set; }
+    public string? UserTimeZone { get; set; }
 
     public async Task OnGetAsync() {
-      String? error = HttpContext.Session.GetString("ITRedirectError");
-      if(error != null) {
-        ModelState.AddModelError(string.Empty, error);
+      HandleRedirectErrors();
+
+      // Execute methods sequentially to avoid concurrency issues
+      await LoadProductsAsync();
+      LoadDefaultNotes();
+      await LoadCalendarEventsAsync();
+      await LoadUserLocationAsync();
+    }
+
+    public async Task<IActionResult> OnPostLogout() {
+      HttpContext.Session.Clear();
+      return RedirectToPage("/Login");
+    }
+
+    public async Task<IActionResult> OnPostAsync() {
+      if(!string.IsNullOrEmpty(NewNote)) {
+        Notes.Add(new Note { Content = NewNote,Timestamp = DateTime.Now });
+      }
+      return RedirectToPage();
+    }
+
+    private void HandleRedirectErrors() {
+      string? error = HttpContext.Session.GetString("ITRedirectError");
+      if(!string.IsNullOrEmpty(error)) {
+        ModelState.AddModelError(string.Empty,error);
         HttpContext.Session.Remove("ITRedirectError");
       }
+    }
 
-
-      // Product search
-      var query = _context.Products.AsQueryable();
+    private async Task LoadProductsAsync() {
+      await using var context = await _dbContextFactory.CreateDbContextAsync();
+      var query = context.Products.AsQueryable();
       if(!string.IsNullOrEmpty(SearchTerm)) {
         query = query.Where(p => EF.Functions.Like(p.Name,$"%{SearchTerm}%") ||
                                  EF.Functions.Like(p.Description,$"%{SearchTerm}%"));
       }
       Products = await query.ToListAsync();
+    }
 
-      // Load dummy notes if none exist (for demonstration)
-      // TODO: Implement database persistence for notes
+    private void LoadDefaultNotes() {
       if(Notes.Count == 0) {
         Notes.Add(new Note { Content = "Dashboard initialized.",Timestamp = DateTime.Now.AddMinutes(-30) });
         Notes.Add(new Note { Content = "Inventory levels checked.",Timestamp = DateTime.Now.AddMinutes(-10) });
       }
     }
 
-    public async Task<IActionResult> OnPostLogout()
-    {
-        HttpContext.Session.Clear(); // This clears the session
-        return RedirectToPage("/Login"); // Redirect to login page
+    private async Task LoadCalendarEventsAsync() {
+      await using var context = await _dbContextFactory.CreateDbContextAsync();
+      Events = await context.CalendarEvents.ToListAsync();
     }
 
-    public async Task<IActionResult> OnPostAsync() {
-      // Save the note (for demonstration, we're only using an in-memory list)
-      if(!string.IsNullOrEmpty(NewNote)) {
-        Notes.Add(new Note { Content = NewNote,Timestamp = DateTime.Now });
+    private async Task LoadUserLocationAsync() {
+      await using var context = await _dbContextFactory.CreateDbContextAsync();
+      var userId = GetCurrentUserId();
+      var userProfile = await context.UserProfile
+                                      .Where(u => u.Account_Id == userId)
+                                      .FirstOrDefaultAsync();
+
+      if(userProfile != null) {
+        string location = $"{userProfile.City}, {userProfile.State}";
+        UserTimeZone = userProfile.TimeZone;
+
+        await FetchWeatherData(location);
       }
-      // Redirect to GET to refresh the page data
-      return RedirectToPage();
+    }
+
+    private async Task FetchWeatherData(string location) {
+      try {
+        var response = await _httpClient.GetAsync($"https://api.weather.gov/points/{GetWeatherCoordinates(location)}");
+        if(response.IsSuccessStatusCode) {
+          var jsonResponse = await response.Content.ReadAsStringAsync();
+          using JsonDocument doc = JsonDocument.Parse(jsonResponse);
+          if(doc.RootElement.TryGetProperty("properties",out var properties) &&
+              properties.TryGetProperty("forecast",out var forecastUrlElement)) {
+
+            var forecastUrl = forecastUrlElement.GetString();
+            var forecastResponse = await _httpClient.GetAsync(forecastUrl);
+            if(forecastResponse.IsSuccessStatusCode) {
+              var forecastJson = await forecastResponse.Content.ReadAsStringAsync();
+              using JsonDocument forecastDoc = JsonDocument.Parse(forecastJson);
+              if(forecastDoc.RootElement.TryGetProperty("properties",out var forecastProps) &&
+                  forecastProps.TryGetProperty("periods",out var periods) &&
+                  periods.GetArrayLength() > 0) {
+
+                var forecast = periods[0];
+                WeatherInfo = $"{forecast.GetProperty("name").GetString()}: " +
+                              $"{forecast.GetProperty("temperature").GetInt32()}°F, " +
+                              $"{forecast.GetProperty("shortForecast").GetString()}";
+              }
+            }
+          }
+        }
+      } catch(Exception ex) {
+        WeatherInfo = "Weather data unavailable.";
+      }
+    }
+
+    private string GetWeatherCoordinates(string location) {
+      return location switch {
+        "Spokane, WA" => "47.6588,-117.4260",
+        "Seattle, WA" => "47.6062,-122.3321",
+        _ => "47.6588,-117.4260" // Default to Spokane, WA
+      };
+    }
+
+    private int GetCurrentUserId() {
+      // Dummy Implementation – Replace with actual user authentication logic
+      return 1;
     }
   }
 
-  // Simple note model for demo purposes
   public class Note {
     public string? Content { get; set; }
     public DateTime Timestamp { get; set; }
