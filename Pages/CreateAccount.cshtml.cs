@@ -56,9 +56,29 @@ namespace IMS.Pages {
         Is_IT_User = Input.Is_IT_User
       };
 
+      if(await UsernameExists(user.Username)) {
+        ModelState.AddModelError(string.Empty,"This Username is taken, try another.");
+        return Page();
+      }
+
       if(Input.Is_IT_User) {
-        
-        if(Input.AdminKey == null){
+        return await HandleITUser(user);
+       
+      }
+      else{
+        _context.UserAccounts.Add(user);
+        await _context.SaveChangesAsync();
+        return RedirectToPage("/Login");
+      }
+
+    }
+
+    private async Task<bool> UsernameExists(string username) {
+      return await _context.UserAccounts.AnyAsync(u => u.Username == username);
+    }
+
+    private async Task<IActionResult> HandleITUser(UserAccount user){
+       if(Input.AdminKey == null){
         ModelState.AddModelError(string.Empty,"Company Admin Key is required for IT Users.");
         return Page();
         }
@@ -81,13 +101,7 @@ namespace IMS.Pages {
 
         _context.AdminKeys.Add(newKey);
         await _context.SaveChangesAsync();
-      }
-      else{
-        _context.UserAccounts.Add(user);
-        await _context.SaveChangesAsync();
-      }
-      
-      return RedirectToPage("/Login");
+        return RedirectToPage("/Login");
     }
 
     private static string HashPassword(string password) {
