@@ -479,9 +479,4 @@ C:\Users\Jared\Documents\school\CSCD 488\SeniorProject\IMS\bin\Debug\net9.0\Micr
 C:\Users\Jared\Documents\school\CSCD 488\SeniorProject\IMS\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.Abstractions.dll
 C:\Users\Jared\Documents\school\CSCD 488\SeniorProject\IMS\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.Relational.dll
 C:\Users\Jared\Documents\school\CSCD 488\SeniorProject\IMS\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.SqlServer.dll
-C:\Users\Jared\Documents\school\CSCD 488\SeniorProject\IMS\bin\Debug\net9.0\Microsoft.Identity.Client.dll
 C:\Users\Jared\Documents\school\CSCD 488\SeniorProject\IMS\bin\Debug\net9.0\Microsoft.IdentityModel.Tokens.dll
-C:\Users\Jared\Documents\school\CSCD 488\SeniorProject\IMS\bin\Debug\net9.0\Microsoft.SqlServer.Server.dll
-C:\Users\Jared\Documents\school\CSCD 488\SeniorProject\IMS\bin\Debug\net9.0\System.Configuration.ConfigurationManager.dll
-C:\Users\Jared\Documents\school\CSCD 488\SeniorProject\IMS\bin\Debug\net9.0\runtimes\win\lib\net6.0\Microsoft.Data.SqlClient.dll
-C:\Users\Jared\Documents\school\CSCD 488\SeniorProject\IMS\bin\Debug\net9.0\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.dll

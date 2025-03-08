@@ -90,10 +90,9 @@ namespace IMS.Pages {
           return Page();
         }
 
-
+        //have to do this to set the internal id, because it is required for the AdminKeys table
         _context.UserAccounts.Add(user);
-        await _context.SaveChangesAsync(); //have to do this to set the internal id
-        
+        await _context.SaveChangesAsync(); 
 
         AdminKeys newKey = new AdminKeys{
         Account_Id = user.Account_Id
