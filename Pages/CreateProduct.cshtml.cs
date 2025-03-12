@@ -49,7 +49,7 @@ namespace IMS.Pages {
         return Page();
       }
 
-      //Hanldes nulls to allow empty fields on the input form
+      //Handles nulls to allow empty fields on the input form
       var product = new Product {
         Name = Input.ProductName,
         Description = Input.Description ?? "",

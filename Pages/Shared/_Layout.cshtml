@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@{
+  string? user = Context.Session.GetString("User");
+  bool? perms = Context.Session.GetInt32("ITPerms") == 1;
+}
+
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -15,19 +20,36 @@
   <header>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
       <div class="container">
-        <a class="navbar-brand" asp-area="" asp-page="/Index">IMS</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
-          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
+        <span class="navbar-brand" asp-area="">IMS</span>
         <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
           <ul class="navbar-nav flex-grow-1">
-            <li class="nav-item">
-              <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
-            </li>
+            
+            @if(!string.IsNullOrEmpty(user))
+            {
+              <li class="nav_item nav-button">
+                  <a class="nav-link text-dark" asp-area="" asp-page="/InventoryManagerLanding">Home Page</a>
+                </li>
+              @if(perms != null && perms.Value)
+              {
+                <li class="nav_item nav-button">
+                  <a class="nav-link text-dark" asp-area="" asp-page="/ITManagerLanding">Validiate Accounts</a>
+                </li>
+              }
+              <li class="nav_item nav-button">
+                  <a class="nav-link text-dark" asp-area="" asp-page="/CreateProduct">Create New Product</a>
+                </li>
+              
+            }
+            else
+            {
+              <li class="nav_item nav-button">
+                <a class="nav-link text-dark" asp-area="" asp-page="/Login">Login</a>
+              </li>
+              <li class="nav_item nav-button">
+                <a class="nav-link text-dark" asp-area="" asp-page="/CreateAccount">Register</a>
+              </li>
+              
+            }
           </ul>
         </div>
       </div>

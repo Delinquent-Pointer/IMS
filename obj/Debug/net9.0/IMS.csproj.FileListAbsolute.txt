@@ -473,10 +473,3 @@ C:/Users/apert/Documents/GitHub/CSCD488-Senior-Project/IMS/obj/Debug/net9.0/ref/
 /Users/boronze/Documents/GitHub/IMS/obj/Debug/net9.0/IMS.pdb
 /Users/boronze/Documents/GitHub/IMS/obj/Debug/net9.0/IMS.genruntimeconfig.cache
 /Users/boronze/Documents/GitHub/IMS/obj/Debug/net9.0/ref/IMS.dll
-C:\Users\Jared\Documents\school\CSCD 488\SeniorProject\IMS\bin\Debug\net9.0\IMS.exe
-C:\Users\Jared\Documents\school\CSCD 488\SeniorProject\IMS\bin\Debug\net9.0\IMS.dll
-C:\Users\Jared\Documents\school\CSCD 488\SeniorProject\IMS\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.dll
-C:\Users\Jared\Documents\school\CSCD 488\SeniorProject\IMS\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.Abstractions.dll
-C:\Users\Jared\Documents\school\CSCD 488\SeniorProject\IMS\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.Relational.dll
-C:\Users\Jared\Documents\school\CSCD 488\SeniorProject\IMS\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.SqlServer.dll
-C:\Users\Jared\Documents\school\CSCD 488\SeniorProject\IMS\bin\Debug\net9.0\Microsoft.IdentityModel.Tokens.dll
