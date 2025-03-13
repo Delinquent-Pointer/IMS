@@ -11,25 +11,38 @@
     <button type="submit" asp-page-handler="Logout" class="btn btn-danger">Log Out</button>
   </form>
 </div>
-@if (ViewData.ModelState[""] != null){
-    <div class= "alert @("alert-warning")">
-      @ViewData.ModelState[""].Errors[0].ErrorMessage
-      </div>
+@if (ViewData.ModelState[""]?.Errors?.Count > 0)
+{
+  <div class="alert alert-warning">
+    @if (ViewData.ModelState[""]?.Errors?.Count > 0)
+    {
+        @(ViewData.ModelState[""]?.Errors?.FirstOrDefault()?.ErrorMessage)
     }
+  </div>
+}
+
 <!-- Top Quick Info Bar -->
 <div class="row mb-4">
   <div class="col-md-6">
     <h4>Weather</h4>
     <div id="weather-widget" class="border p-3">
-      <!-- Placeholder for weather info; integrate with an API for real data -->
       <p>TODO: Integrate weather API Current: 72°F, Sunny</p>
     </div>
   </div>
   <div class="col-md-6 text-right">
     <h4>Quick Order</h4>
     <div id="quick-order" class="border p-3">
-      <!-- Quick order bar; add buttons or order form as needed -->
       <button class="btn btn-success">Order Products</button>
+    </div>
+  </div>
+</div>
+
+<!-- Display Current Date and Time -->
+<div class="row mb-4">
+  <div class="col-md-12 text-center">
+    <h4>Current Date & Time</h4>
+    <div class="border p-3">
+      <p>@Model.CurrentTime.ToString("f")</p>
     </div>
   </div>
 </div>
@@ -86,7 +99,7 @@
             @foreach (var note in Model.Notes)
             {
               <li class="list-group-item">
-                <small>@note.Timestamp.ToString("g")</small> - @note.Content
+                <small>@note.Timestamp.ToString("f")</small> - @note.Content
               </li>
             }
           </ul>
@@ -107,7 +120,6 @@
 </div>
 
 @section Scripts {
-  <!-- FullCalendar CSS & JS -->
   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js"></script>
   <script>
@@ -115,7 +127,7 @@
       var calendarEl = document.getElementById('calendar');
       var calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
-        events: [] // Add events or integrate with your data source
+        events: []
       });
       calendar.render();
     });
