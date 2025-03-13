@@ -30,7 +30,6 @@ namespace IMS.Pages {
 
     public DateTime CurrentTime { get; private set; }
     public IList<Note> Notes { get; set; } = new List<Note>();
-
     public List<CalendarEvent> CalendarEvents { get; set; } = new List<CalendarEvent>();
 
     public async Task OnGetAsync() {
@@ -50,23 +49,32 @@ namespace IMS.Pages {
       }
 
       Products = await query.ToListAsync();
-
+      Notes = await _context.Notes.OrderByDescending(n => n.Timestamp).ToListAsync();
       CalendarEvents = await _context.CalendarEvents.ToListAsync();
     }
 
     public JsonResult OnGetCalendarEvents() {
       var events = _context.CalendarEvents
           .Select(e => new {
+            id = e.Id,
             title = e.Title,
-            start = e.StartDate.ToString("yyyy-MM-ddTHH:mm:ss"),
-            end = e.EndDate.HasValue ? e.EndDate.Value.ToString("yyyy-MM-ddTHH:mm:ss") : null,
+            date = e.StartDate.ToString("yyyy-MM-dd"),
             description = e.Description
           }).ToList();
 
       return new JsonResult(events);
     }
 
-    public async Task<IActionResult> OnPostLogoutAsync() {
+    public async Task<IActionResult> OnPostAddNoteAsync() {
+      if(!string.IsNullOrEmpty(NewNote)) {
+        var note = new Note { Content = NewNote,Timestamp = DateTime.Now };
+        _context.Notes.Add(note);
+        await _context.SaveChangesAsync();
+      }
+      return RedirectToPage();
+    }
+
+    public IActionResult OnPostLogout() {
       HttpContext.Session.Clear();
       return RedirectToPage("/Login");
     }

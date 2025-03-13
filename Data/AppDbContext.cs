@@ -9,12 +9,13 @@ namespace IMS.Data {
     public DbSet<UserAccount> UserAccounts { get; set; }
     public DbSet<AdminKeys> AdminKeys { get; set; }
     public DbSet<CalendarEvent> CalendarEvents { get; set; }
+    public DbSet<Note> Notes { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
       modelBuilder.Entity<Product>()
           .Property(p => p.Price)
           .HasColumnType("decimal(18,2)"); // Explicitly defining precision
-      
+
       modelBuilder.Entity<UserAccount>()
           .Property(u => u.Password_Hash)
           .IsRequired();
@@ -28,9 +29,12 @@ namespace IMS.Data {
 
       modelBuilder.Entity<AdminKeys>()
           .HasKey(u => u.It_Id);
-      
+
       modelBuilder.Entity<CalendarEvent>()
           .HasKey(e => e.Id);
+
+      modelBuilder.Entity<Note>()
+          .HasKey(n => n.Id);
     }
   }
 }
