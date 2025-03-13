@@ -22,6 +22,9 @@ namespace IMS.Pages {
     [BindProperty]
     public CreateProductInputModel Input { get; set; }
 
+    public List<string?> Categories { get; set; }
+    public List<string?> Locations { get; set; }
+
     public class CreateProductInputModel {
      
       [Required]
@@ -41,7 +44,9 @@ namespace IMS.Pages {
 
       public string? Location { get; set; }
     }
-    public void OnGet() {
+    public async Task OnGetAsync() {
+      Categories = await _context.Products.Select(p => p.Category).Distinct().ToListAsync(); 
+      Locations =  await _context.Products.Select(p => p.Location).Distinct().ToListAsync(); 
     }
 
     public async Task<IActionResult> OnPostAsync() {
