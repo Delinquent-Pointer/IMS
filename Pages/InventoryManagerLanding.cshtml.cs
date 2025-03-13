@@ -1,6 +1,6 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using IMS.Data;
 using IMS.Models;
@@ -12,68 +12,71 @@ using System.Threading.Tasks;
 namespace IMS.Pages {
   public class InventoryManagerLandingModel:PageModel {
     private readonly AppDbContext _context;
+
     public InventoryManagerLandingModel(AppDbContext context) {
       _context = context;
     }
 
-    // List of products for the search section
     public IList<Product> Products { get; set; } = new List<Product>();
 
-    // Search term for filtering products
     [BindProperty(SupportsGet = true)]
     public string? SearchTerm { get; set; }
 
-    // Holds the new note text posted from the form
     [BindProperty]
     public string? NewNote { get; set; }
 
-    // In-memory list for notes (for demo purposes; in production, persist these to a database)
-    // TODO: Implement database persistence for notes
+    [BindProperty]
+    public string? SelectedDate { get; set; }
+
+    public DateTime CurrentTime { get; private set; }
     public IList<Note> Notes { get; set; } = new List<Note>();
+    public List<CalendarEvent> CalendarEvents { get; set; } = new List<CalendarEvent>();
 
     public async Task OnGetAsync() {
-      String? error = HttpContext.Session.GetString("ITRedirectError");
-      if(error != null) {
-        ModelState.AddModelError(string.Empty, error);
-        HttpContext.Session.Remove("ITRedirectError");
-      }
+      CurrentTime = DateTime.Now;
 
-
-      // Product search
       var query = _context.Products.AsQueryable();
+
       if(!string.IsNullOrEmpty(SearchTerm)) {
         query = query.Where(p => EF.Functions.Like(p.Name,$"%{SearchTerm}%") ||
-                                 EF.Functions.Like(p.Description,$"%{SearchTerm}%"));
+                                 EF.Functions.Like(p.Description,$"%{SearchTerm}%") ||
+                                 EF.Functions.Like(p.Category,$"%{SearchTerm}%") ||
+                                 EF.Functions.Like(p.SKU,$"%{SearchTerm}%") ||
+                                 EF.Functions.Like(p.Location,$"%{SearchTerm}%") ||
+                                 p.ReorderLevel.ToString().Contains(SearchTerm) ||
+                                 p.Quantity.ToString().Contains(SearchTerm) ||
+                                 p.Price.ToString().Contains(SearchTerm));
       }
+
       Products = await query.ToListAsync();
-
-      // Load dummy notes if none exist (for demonstration)
-      // TODO: Implement database persistence for notes
-      if(Notes.Count == 0) {
-        Notes.Add(new Note { Content = "Dashboard initialized.",Timestamp = DateTime.Now.AddMinutes(-30) });
-        Notes.Add(new Note { Content = "Inventory levels checked.",Timestamp = DateTime.Now.AddMinutes(-10) });
-      }
+      Notes = await _context.Notes.OrderByDescending(n => n.Timestamp).ToListAsync();
+      CalendarEvents = await _context.CalendarEvents.ToListAsync();
     }
 
-    public async Task<IActionResult> OnPostLogout()
-    {
-        HttpContext.Session.Clear(); // This clears the session
-        return RedirectToPage("/Login"); // Redirect to login page
+    public JsonResult OnGetCalendarEvents() {
+      var events = _context.CalendarEvents
+          .Select(e => new {
+            id = e.Id,
+            title = e.Title,
+            date = e.StartDate.ToString("yyyy-MM-dd"),
+            description = e.Description
+          }).ToList();
+
+      return new JsonResult(events);
     }
 
-    public async Task<IActionResult> OnPostAsync() {
-      // Save the note (for demonstration, we're only using an in-memory list)
+    public async Task<IActionResult> OnPostAddNoteAsync() {
       if(!string.IsNullOrEmpty(NewNote)) {
-        Notes.Add(new Note { Content = NewNote,Timestamp = DateTime.Now });
+        var note = new Note { Content = NewNote,Timestamp = DateTime.Now };
+        _context.Notes.Add(note);
+        await _context.SaveChangesAsync();
       }
-      // Redirect to GET to refresh the page data
       return RedirectToPage();
     }
-  }
 
-  // Simple note model for demo purposes
-  public class Note {
-    public string? Content { get; set; }
-    public DateTime Timestamp { get; set; }
+    public IActionResult OnPostLogout() {
+      HttpContext.Session.Clear();
+      return RedirectToPage("/Login");
+    }
   }
 }

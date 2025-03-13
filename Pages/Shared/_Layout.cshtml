@@ -23,24 +23,29 @@
         <span class="navbar-brand" asp-area="">IMS</span>
         <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
           <ul class="navbar-nav flex-grow-1">
-            
-            @if(!string.IsNullOrEmpty(user))
+
+            @if (!string.IsNullOrEmpty(user))
             {
               <!-- these are only displayed If user is logged in -->
               <li class="nav_item">
-                  <a class="nav-link text-dark" asp-area="" asp-page="/InventoryManagerLanding">Home Page</a>
-                </li>
-              @if(perms != null && perms.Value)
+                <a class="nav-link text-dark" asp-area="" asp-page="/InventoryManagerLanding">Home Page</a>
+              </li>
+
+              <li class="nav_item">
+                <a class="nav-link text-dark" asp-area="" asp-page="/Products">Inventory</a> <!-- ✅ New Inventory Page -->
+              </li>
+
+              @if (perms != null && perms.Value)
               {
                 <!-- these are only displayed If user is logged in and has IT perms-->
                 <li class="nav_item">
-                  <a class="nav-link text-dark" asp-area="" asp-page="/ITManagerLanding">Validiate Accounts</a>
+                  <a class="nav-link text-dark" asp-area="" asp-page="/ITManagerLanding">Validate Accounts</a>
                 </li>
               }
+
               <li class="nav_item">
-                  <a class="nav-link text-dark" asp-area="" asp-page="/CreateProduct">Create New Product</a>
-                </li>
-              
+                <a class="nav-link text-dark" asp-area="" asp-page="/CreateProduct">Create New Product</a>
+              </li>
             }
             else
             {
@@ -50,15 +55,16 @@
               </li>
               <li class="nav_item">
                 <a class="nav-link text-dark" asp-area="" asp-page="/CreateAccount">Register</a>
-              </li> 
+              </li>
             }
-            <!--anything that's displayed REGARDLESS of login status should be added outside of if-else block-->
+            <!-- anything that's displayed REGARDLESS of login status should be added outside of the if-else block -->
 
           </ul>
         </div>
       </div>
     </nav>
   </header>
+
   <div class="container">
     <main role="main" class="pb-3">
       @RenderBody()
