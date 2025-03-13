@@ -26,30 +26,34 @@
             
             @if(!string.IsNullOrEmpty(user))
             {
-              <li class="nav_item nav-button">
+              <!-- these are only displayed If user is logged in -->
+              <li class="nav_item">
                   <a class="nav-link text-dark" asp-area="" asp-page="/InventoryManagerLanding">Home Page</a>
                 </li>
               @if(perms != null && perms.Value)
               {
-                <li class="nav_item nav-button">
+                <!-- these are only displayed If user is logged in and has IT perms-->
+                <li class="nav_item">
                   <a class="nav-link text-dark" asp-area="" asp-page="/ITManagerLanding">Validiate Accounts</a>
                 </li>
               }
-              <li class="nav_item nav-button">
+              <li class="nav_item">
                   <a class="nav-link text-dark" asp-area="" asp-page="/CreateProduct">Create New Product</a>
                 </li>
               
             }
             else
             {
-              <li class="nav_item nav-button">
+              <!-- these are only displayed If user is NOT logged in-->
+              <li class="nav_item">
                 <a class="nav-link text-dark" asp-area="" asp-page="/Login">Login</a>
               </li>
-              <li class="nav_item nav-button">
+              <li class="nav_item">
                 <a class="nav-link text-dark" asp-area="" asp-page="/CreateAccount">Register</a>
-              </li>
-              
+              </li> 
             }
+            <!--anything that's displayed REGARDLESS of login status should be added outside of if-else block-->
+
           </ul>
         </div>
       </div>
