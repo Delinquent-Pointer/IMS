@@ -39,22 +39,22 @@ namespace IMS.Pages {
         ModelState.AddModelError(string.Empty,error);
         HttpContext.Session.Remove("ITRedirectError");
       }
-      
+
       CurrentTime = DateTime.Now;
 
-      // Product search
       var query = _context.Products.AsQueryable();
       if(!string.IsNullOrEmpty(SearchTerm)) {
         query = query.Where(p => EF.Functions.Like(p.Name,$"%{SearchTerm}%") ||
-                                 EF.Functions.Like(p.Description,$"%{SearchTerm}%"));
+                                 EF.Functions.Like(p.Description,$"%{SearchTerm}%") ||
+                                 EF.Functions.Like(p.Category,$"%{SearchTerm}%") ||
+                                 EF.Functions.Like(p.SKU,$"%{SearchTerm}%") ||
+                                 EF.Functions.Like(p.Location,$"%{SearchTerm}%") ||
+                                 EF.Functions.Like(p.ReorderLevel.ToString(),$"%{SearchTerm}%") ||
+                                 EF.Functions.Like(p.Quantity.ToString(),$"%{SearchTerm}%") ||
+                                 EF.Functions.Like(p.Price.ToString(),$"%{SearchTerm}%"));
       }
-      Products = await query.ToListAsync();
 
-      // Load dummy notes if none exist (for demonstration)
-      if(Notes.Count == 0) {
-        Notes.Add(new Note { Content = "Dashboard initialized.",Timestamp = DateTime.Now.AddMinutes(-30) });
-        Notes.Add(new Note { Content = "Inventory levels checked.",Timestamp = DateTime.Now.AddMinutes(-10) });
-      }
+      Products = await query.ToListAsync();
     }
 
     public async Task<IActionResult> OnPostLogout() {
@@ -68,11 +68,5 @@ namespace IMS.Pages {
       }
       return RedirectToPage();
     }
-  }
-
-  // Simple note model for demo purposes
-  public class Note {
-    public string? Content { get; set; }
-    public DateTime Timestamp { get; set; }
   }
 }
