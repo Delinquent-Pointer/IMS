@@ -1,14 +1,18 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using IMS.Data;
 using IMS.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace IMS.Pages {
-  public class CreateAccountModel:PageModel {
+    [AllowAnonymous]
+    
+    public class CreateAccountModel:PageModel {
     private readonly AppDbContext _context;
 
     public CreateAccountModel(AppDbContext context) {
@@ -44,11 +48,6 @@ namespace IMS.Pages {
         return Page();
       }
 
-      // TODO: Implement company admin key validation might require a separate table in the database
-      if(Input.Is_IT_User && Input.AdminKey != "YourCompanyAdminKey") {
-        ModelState.AddModelError(string.Empty,"Invalid Company Admin Key.");
-        return Page();
-      }
 
       var hashedPassword = HashPassword(Input.Password);
       var user = new UserAccount {
@@ -57,10 +56,51 @@ namespace IMS.Pages {
         Is_IT_User = Input.Is_IT_User
       };
 
-      _context.UserAccounts.Add(user);
-      await _context.SaveChangesAsync();
+      if(await UsernameExists(user.Username)) {
+        ModelState.AddModelError(string.Empty,"This Username is taken, try another.");
+        return Page();
+      }
 
-      return RedirectToPage("/Login");
+      if(Input.Is_IT_User) {
+        return await HandleITUser(user);
+       
+      }
+      else{
+        _context.UserAccounts.Add(user);
+        await _context.SaveChangesAsync();
+        return RedirectToPage("/Login");
+      }
+
+    }
+
+    private async Task<bool> UsernameExists(string username) {
+      return await _context.UserAccounts.AnyAsync(u => u.Username == username);
+    }
+
+    private async Task<IActionResult> HandleITUser(UserAccount user){
+       if(Input.AdminKey == null){
+        ModelState.AddModelError(string.Empty,"Company Admin Key is required for IT Users.");
+        return Page();
+        }
+
+
+        AdminKeys? adminKey = await _context.AdminKeys.FirstOrDefaultAsync(a => a.AdminKey == Input.AdminKey);
+        if(adminKey == null) {
+          ModelState.AddModelError(string.Empty,"Invalid Admin Key.");
+          return Page();
+        }
+
+        //have to do this to set the internal id, because it is required for the AdminKeys table
+        _context.UserAccounts.Add(user);
+        await _context.SaveChangesAsync(); 
+
+        AdminKeys newKey = new AdminKeys{
+        Account_Id = user.Account_Id
+        };
+
+        _context.AdminKeys.Add(newKey);
+        await _context.SaveChangesAsync();
+        return RedirectToPage("/Login");
     }
 
     private static string HashPassword(string password) {

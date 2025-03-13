@@ -1,0 +1,64 @@
+@page
+@model IMS.Pages.CreateProductModel
+@{
+  ViewData["Title"] = "Create Product";
+}
+<div class="container d-flex flex-column justify-content-center align-items-center" style="min-height: 100vh;">
+  <div class="w-100" style="max-width: 400px;">
+    <div class="text-center mb-4">
+      <h1>Create Product</h1>
+      <p class="lead">Please fill in the details to create a new product</p>
+    </div>
+    @if (ViewData.ModelState[""] != null){
+    <div class= "alert @("alert-danger")">
+      @ViewData.ModelState[""].Errors[0].ErrorMessage
+      </div>
+    }
+    <form method="post">
+      <div class="form-group">
+        <label asp-for="Input.ProductName">Product Name</label>
+        <input asp-for="Input.ProductName" class="form-control" required/>
+        <span asp-validation-for="Input.ProductName" class="text-danger"></span>
+      </div>
+      <div class="form-group">
+        <label asp-for="Input.Description"></label>
+        <textarea asp-for="Input.Description"class="form-control"></textarea>
+        <span asp-validation-for="Input.Description" class="text-danger"></span> 
+      </div>
+      <div class="form-group">
+        <label asp-for="Input.Price"></label>
+        <input type="text" placeholder="$0.00"  pattern="\d+(\.\d{0,2})?" asp-for="Input.Price" class="form-control" />
+        <span asp-validation-for="Input.Price" class="text-danger"></span>
+      </div>
+      <div class="form-group">
+        <label asp-for="Input.Quantity"></label>
+        <input type="text" placeholder="0"  pattern="\d+" asp-for="Input.Quantity" class="form-control" />
+        <span asp-validation-for="Input.Price" class="text-danger"></span>
+      </div>
+      <div class="form-group">
+        <label asp-for="Input.ReorderLevel">Set Low Quantity Alert</label>
+        <input type="text" placeholder="0" pattern="\d+" asp-for="Input.ReorderLevel" class="form-control" />
+        <span asp-validation-for="Input.Price" class="text-danger"></span>
+      </div>
+      <div class="form-group">
+        <label asp-for="Input.SKU"></label>
+        <input asp-for="Input.SKU"  class="form-control" />
+        <span asp-validation-for="Input.SKU" class="text-danger"></span>
+      </div>
+      <div class="form-group">
+        <label asp-for="Input.Category"></label>
+        <input asp-for="Input.Category"  class="form-control" />
+        <span asp-validation-for="Input.Category" class="text-danger"></span>
+      </div>
+      <div class="form-group">
+        <label asp-for="Input.Location"></label>
+        <input asp-for="Input.Location"  class="form-control" />
+        <span asp-validation-for="Input.Location" class="text-danger"></span>
+      </div>
+      <div class="d-flex justify-content-between mt-3">
+        <button type="submit" class="btn btn-primary">Create Product</button>
+        <a href="/InventoryManagerLanding" class="btn btn-secondary">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>

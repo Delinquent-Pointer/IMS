@@ -7,6 +7,7 @@ namespace IMS.Data {
 
     public DbSet<Product> Products { get; set; }
     public DbSet<UserAccount> UserAccounts { get; set; }
+    public DbSet<AdminKeys> AdminKeys { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
       modelBuilder.Entity<Product>()
           .Property(p => p.Price)
@@ -16,9 +17,17 @@ namespace IMS.Data {
           .Property(u => u.Password_Hash)
           .IsRequired();
 
-      // Ensure the primary key is recognized
       modelBuilder.Entity<UserAccount>()
           .HasKey(u => u.Account_Id);
+
+    
+      modelBuilder.Entity<AdminKeys>()
+          .Property(u => u.AdminKey)
+          .IsRequired();
+
+      
+      modelBuilder.Entity<AdminKeys>()
+          .HasKey(u => u.It_Id);
     }
   }
 }

@@ -39,7 +39,7 @@ app.UseSession();
 app.MapStaticAssets();
 app.MapRazorPages().WithStaticAssets();
 
-app.MapGet("/",context => {
+app.MapGet("/",context => { //otherwise the login page has to be named "Index"
   context.Response.Redirect("/Login");
   return Task.CompletedTask;
 });
