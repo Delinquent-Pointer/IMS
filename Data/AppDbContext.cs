@@ -2,12 +2,14 @@ using Microsoft.EntityFrameworkCore;
 using IMS.Models;
 
 namespace IMS.Data {
-  public class AppDbContext:DbContext {
+  public class AppDbContext : DbContext {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
     public DbSet<Product> Products { get; set; }
     public DbSet<UserAccount> UserAccounts { get; set; }
     public DbSet<AdminKeys> AdminKeys { get; set; }
+    public DbSet<CalendarEvent> CalendarEvents { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
       modelBuilder.Entity<Product>()
           .Property(p => p.Price)
@@ -20,14 +22,15 @@ namespace IMS.Data {
       modelBuilder.Entity<UserAccount>()
           .HasKey(u => u.Account_Id);
 
-    
       modelBuilder.Entity<AdminKeys>()
           .Property(u => u.AdminKey)
           .IsRequired();
 
-      
       modelBuilder.Entity<AdminKeys>()
           .HasKey(u => u.It_Id);
+      
+      modelBuilder.Entity<CalendarEvent>()
+          .HasKey(e => e.Id);
     }
   }
 }
