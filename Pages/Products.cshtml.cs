@@ -7,25 +7,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-public class ProductsModel:PageModel {
-  private readonly AppDbContext _appDbContext;
+namespace IMS.Pages{
+  public class ProductsModel:PageModel {
+    private readonly AppDbContext _appDbContext;
 
-  public ProductsModel(AppDbContext appDbContext) {
-    _appDbContext = appDbContext;
-  }
-
-  public IList<Product> Products { get; set; } = new List<Product>();
-
-  [BindProperty(SupportsGet = true)]
-  public string? SearchTerm { get; set; }
-
-  public async Task OnGetAsync() {
-    var query = _appDbContext.Products.AsQueryable();
-
-    if(!string.IsNullOrEmpty(SearchTerm)) {
-      query = query.Where(p => EF.Functions.Like(p.Name,$"%{SearchTerm}%"));
+    public ProductsModel(AppDbContext appDbContext) {
+      _appDbContext = appDbContext;
     }
 
-    Products = await query.ToListAsync();
+    public IList<Product> Products { get; set; } = new List<Product>();
+
+    [BindProperty(SupportsGet = true)]
+    public string? SearchTerm { get; set; }
+
+    public async Task OnGetAsync() {
+      var query = _appDbContext.Products.AsQueryable();
+
+      if(!string.IsNullOrEmpty(SearchTerm)) {
+        query = query.Where(p => EF.Functions.Like(p.Name,$"%{SearchTerm}%"));
+      }
+
+      Products = await query.ToListAsync();
+    }
   }
 }
