@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS.csproj": {}
+    "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS.csproj": {}
   },
   "projects": {
-    "c:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS.csproj": {
+    "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS.csproj",
+        "projectUniqueName": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS.csproj",
         "projectName": "IMS",
-        "projectPath": "c:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS.csproj",
+        "projectPath": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS.csproj",
         "packagesPath": "C:\\Users\\Jared\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\obj\\",
+        "outputPath": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Jared\\AppData\\Roaming\\NuGet\\NuGet.Config"

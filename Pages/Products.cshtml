@@ -4,27 +4,104 @@
   ViewData["Title"] = "Products";
 }
 
-<h1>Product List</h1>
+
+<h1>Product Search Index</h1>
 
 <form method="get">
-  <input type="text" name="SearchTerm" value="@Model.SearchTerm" placeholder="Search for a product..." />
-  <button type="submit">Search</button>
+  <div class="row align-items-end g-2">  
+    <div class="col-md-3">
+      <label>Search Category:</label>
+      <select name="SearchType" id="SearchType" asp-for="SearchType" class="form-control">
+        <option value="Name" selected>Name</option>
+        <option value="Description">In Description</option>
+        <option value="Price">Price (matching "=", above "&gt;", below "&lt;")</option>
+        <option value="Quantity">Quantity (matching "=", above "&gt;", below "&lt;")</option>
+        <option value="SKU">SKU</option>
+        <option value="Category">Category</option>
+        <option value="Location">Location</option>
+        <option value="AdvQuery">Advanced Query</option><!-- not implemented yet -->
+      </select>
+    </div>
+
+    <!-- The operator select is hidden unless the user selects "Price", or "Quantity" -->
+    <div class="col-md-2" id="operatorDiv" style="display: none;">
+          <label for="Operator">Comparison Operator:</label>
+          <select name="Operator" id="Operator" asp-for="Operator" class="form-control">
+              <option value="=" selected>=</option>
+              <option value=">">&gt;</option>
+              <option value=">=">&ge;</option>
+              <option value="<">&lt;</option>
+              <option value="<=">&le;</option>
+          </select>
+      </div>
+
+    <div class="col-md-4">
+    <label for="SearchTerm">Search Term:</label>
+    <input type="text" name="SearchTerm" value="@Model.SearchTerm" class="form-control"
+      placeholder="enter search term" />
+    </div>
+    <div class="col-md-2 d-grid">
+      <button type="submit" class="btn btn-primary">Search</button>
+    </div>
+  </div>  
 </form>
 
-@if (Model.Products.Count == 0)
-{
-  <p>No products found.</p>
-}
-else
-{
-  <ul>
-    @foreach (var product in Model.Products)
-    {
-      <li>
-        <strong>@product.Name</strong> - $@product.Price
-        <br />
-        <em>@product.Description</em>
-      </li>
+<!--script to hide the operator select dropdown-->
+<script>
+  function toggleDropdown() {
+    var operatorDiv = document.getElementById('operatorDiv');
+    var searchType = document.getElementById('SearchType').value;
+    if (searchType === 'Price' || searchType === 'Quantity') {
+      operatorDiv.style.display = 'block';
+    } else {
+      operatorDiv.style.display = 'none';
     }
-  </ul>
-}
+  }
+  
+  //checks searchtype to see if it needs to show the operator dropdown
+  document.getElementById('SearchType').addEventListener('change', toggleDropdown);
+
+  //checks on page load
+  window.onload = toggleDropdown;
+</script>
+
+
+
+
+<div style="overflow-y: auto; max-height: 600px; border: 1px solid #ddd;">
+<table class="table table-striped mt-3">
+  <thead style="position: sticky; top: 0; z-index: 1;">
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Price</th>
+      <th>Quantity</th>
+      <th>SKU</th>
+      <th>Category</th>
+      <th>Location</th>
+    </tr>
+  </thead>
+  <tbody>
+    @if (Model.Products != null && Model.Products.Count > 0)
+    {
+      foreach (var product in Model.Products)
+      {
+        <tr>
+          <td>@product.Name</td>
+          <td>@product.Description</td>
+          <td>$@product.Price</td>
+          <td>@product.Quantity</td>
+          <td>@product.SKU</td>
+          <td>@product.Category</td>
+          <td>@product.Location</td>
+        </tr>
+      }
+    }
+    else
+    {
+      <tr><td colspan="7" class="text-center">No products found.</td></tr>
+    }
+  </tbody>
+</table>
+</div>
+
