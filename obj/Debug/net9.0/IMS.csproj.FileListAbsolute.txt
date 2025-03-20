@@ -236,10 +236,3 @@
 /Users/boronze/Documents/GitHub/IMS/obj/Debug/net9.0/IMS.pdb
 /Users/boronze/Documents/GitHub/IMS/obj/Debug/net9.0/IMS.genruntimeconfig.cache
 /Users/boronze/Documents/GitHub/IMS/obj/Debug/net9.0/ref/IMS.dll
-c:\Users\Jared\Documents\school\CSCD 488\SeniorProject\IMS\bin\Debug\net9.0\IMS.exe
-c:\Users\Jared\Documents\school\CSCD 488\SeniorProject\IMS\bin\Debug\net9.0\IMS.dll
-c:\Users\Jared\Documents\school\CSCD 488\SeniorProject\IMS\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.dll
-c:\Users\Jared\Documents\school\CSCD 488\SeniorProject\IMS\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.Abstractions.dll
-c:\Users\Jared\Documents\school\CSCD 488\SeniorProject\IMS\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.Relational.dll
-c:\Users\Jared\Documents\school\CSCD 488\SeniorProject\IMS\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.SqlServer.dll
-c:\Users\Jared\Documents\school\CSCD 488\SeniorProject\IMS\bin\Debug\net9.0\Microsoft.IdentityModel.Tokens.dll
