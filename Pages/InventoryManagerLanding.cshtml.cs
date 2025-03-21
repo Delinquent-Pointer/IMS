@@ -32,7 +32,8 @@ namespace IMS.Pages {
     public string? EditNoteContent { get; set; }
 
     public DateTime CurrentTime { get; private set; }
-    public IList<Note> Notes { get; set; } = new List<Note>();
+    // public IList<Note> Notes { get; set; } = new List<Note>();
+    public IList<NoteDTO> Notes { get; set; } = new List<NoteDTO>();
 
     public IList<CalendarEvent> CalendarEvents { get; set; } = new List<CalendarEvent>();
 
@@ -53,7 +54,15 @@ namespace IMS.Pages {
       }
 
       Products = await query.ToListAsync();
-      Notes = await _context.Notes.OrderByDescending(n => n.Timestamp).ToListAsync();
+
+      Notes = await _context.Notes
+          .OrderByDescending(n => n.Timestamp)
+          .Select(n => new NoteDTO {
+            Id = n.Id,
+            Content = n.Content,
+            Timestamp = n.Timestamp.ToString("yyyy-MM-ddTHH:mm:ss")
+          })
+          .ToListAsync();
     }
 
     public async Task<IActionResult> OnPostAddNoteAsync() {

@@ -77,12 +77,12 @@
         {
           <li class="list-group-item d-flex justify-content-between align-items-center">
             <div>
-              <small>@note.Timestamp.ToString("f")</small>
+              <small>@DateTime.Parse(note.Timestamp).ToString("f")</small>
               <p>@note.Content</p>
             </div>
             <div>
               <button class="btn btn-sm btn-warning" onclick="openEditModal(@note.Id, '@note.Content')">Edit</button>
-              <form method="post" asp-page-handler="DeleteNote" asp-route-id="@note.Id" class="d-inline">
+              <form method="post" asp-page-handler="DeleteNote" asp-route-id="@note.Id" class="d-inline-block">
                 <button type="submit" class="btn btn-sm btn-danger">Delete</button>
               </form>
             </div>
@@ -95,7 +95,12 @@
   <!-- Interactive Calendar -->
   <div class="row mb-5">
     <div class="col-md-12">
-      <h4>Interactive Calendar - <span id="current-month-year"></span></h4>
+      <h4>
+        Interactive Calendar -
+        <button id="prev-month" class="btn btn-sm btn-secondary">&lt;</button>
+        <span id="current-month-year"></span>
+        <button id="next-month" class="btn btn-sm btn-secondary">&gt;</button>
+      </h4>
       <table class="table table-bordered">
         <thead class="table-primary">
           <tr>
@@ -110,6 +115,23 @@
         </thead>
         <tbody id="calendar-body"></tbody>
       </table>
+    </div>
+  </div>
+
+  <!-- Note Viewing Modal -->
+  <div class="modal fade" id="calendarNoteModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-info text-white">
+          <h5 class="modal-title">Notes on <span id="modal-date"></span></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body" id="modal-notes-content">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -154,6 +176,15 @@
       document.addEventListener('DOMContentLoaded', function () {
         const calendarBody = document.getElementById('calendar-body');
         const currentMonthYear = document.getElementById('current-month-year');
+        const prevMonthBtn = document.getElementById('prev-month');
+        const nextMonthBtn = document.getElementById('next-month');
+        const modalDate = document.getElementById('modal-date');
+        const modalNotesContent = document.getElementById('modal-notes-content');
+
+        // Corrected safe serialization
+        const notes = @Html.Raw(Json.Serialize(Model.Notes));
+
+        let currentDate = new Date();
 
         function buildCalendar(year, month) {
           calendarBody.innerHTML = "";
@@ -170,19 +201,49 @@
             for (let day = 0; day < 7; day++, dateCounter++) {
               let cell = document.createElement('td');
               if (dateCounter > 0 && dateCounter <= lastDay.getDate()) {
-                cell.innerHTML = `<div>${dateCounter}</div>`;
+                let cellDate = new Date(year, month, dateCounter).toISOString().split('T')[0];
+                let notesForDay = notes.filter(note => note.timestamp.startsWith(cellDate));
+                let notesLink = notesForDay.length ? `<a href="#" class="calendar-note-link" data-date="${cellDate}">Notes (${notesForDay.length})</a>` : '';
+                cell.innerHTML = `<div>${dateCounter}</div>${notesLink}`;
               } else {
-                cell.innerHTML = ''; // Empty cells for days outside the current month
+                cell.innerHTML = '';
               }
               row.appendChild(cell);
             }
             calendarBody.appendChild(row);
           }
+
+          document.querySelectorAll('.calendar-note-link').forEach(link => {
+            link.addEventListener('click', function (e) {
+              e.preventDefault();
+              let selectedDate = this.getAttribute('data-date');
+              modalDate.textContent = selectedDate;
+              displayNotes(selectedDate);
+              new bootstrap.Modal(document.getElementById('calendarNoteModal')).show();
+            });
+          });
         }
 
-        // Initialize calendar with the current month
-        const today = new Date();
-        buildCalendar(today.getFullYear(), today.getMonth());
+        function displayNotes(date) {
+          modalNotesContent.innerHTML = '';
+          let dailyNotes = notes.filter(note => note.timestamp.startsWith(date));
+          dailyNotes.forEach(note => {
+            let noteElement = document.createElement('div');
+            noteElement.className = 'mb-2';
+            noteElement.innerHTML = `<small>${new Date(note.timestamp).toLocaleTimeString()}</small><p>${note.content}</p>`;
+            modalNotesContent.appendChild(noteElement);
+          });
+        }
+
+        function updateCalendar(monthOffset) {
+          currentDate.setMonth(currentDate.getMonth() + monthOffset);
+          buildCalendar(currentDate.getFullYear(), currentDate.getMonth());
+        }
+
+        prevMonthBtn.addEventListener('click', () => updateCalendar(-1));
+        nextMonthBtn.addEventListener('click', () => updateCalendar(1));
+
+        buildCalendar(currentDate.getFullYear(), currentDate.getMonth());
       });
 
       // Edit Note Modal
