@@ -26,6 +26,40 @@ namespace IMS.Pages{
     [BindProperty(SupportsGet = true)]
     public string? Operator { get; set; }
 
+    public async Task<IActionResult> OnPostEditProductAsync(Product updatedProduct)
+    {
+      if (!ModelState.IsValid)
+      {
+        return BadRequest(ModelState);
+      }
+
+      var product = await _appDbContext.Products.FindAsync(updatedProduct.Id);
+
+      if (product == null)
+      {
+        return NotFound();
+      }
+
+      product.Name = updatedProduct.Name;
+      product.Description = updatedProduct.Description;
+      product.Price = updatedProduct.Price;
+      product.Quantity = updatedProduct.Quantity;
+      product.SKU = updatedProduct.SKU;
+      product.Category = updatedProduct.Category;
+      product.Location = updatedProduct.Location;
+
+      try
+      {
+        await _appDbContext.SaveChangesAsync();
+      }
+      catch (DbUpdateException ex)
+      {
+        return StatusCode(500, new { success = false, message = "An error occurred while updating the product.", error = ex.Message });
+      }
+
+      return new JsonResult(new { success = true });
+    }
+
     public async Task OnGetAsync() {
       var query = _appDbContext.Products.AsQueryable();
 

@@ -4,7 +4,6 @@
   ViewData["Title"] = "Products";
 }
 
-
 <h1>Product Search Index</h1>
 
 <form method="get">
@@ -19,26 +18,25 @@
         <option value="SKU">SKU</option>
         <option value="Category">Category</option>
         <option value="Location">Location</option>
-        <option value="AdvQuery">Advanced Query</option><!-- not implemented yet -->
+        <option value="AdvQuery">Advanced Query</option>
       </select>
     </div>
 
-    <!-- The operator select is hidden unless the user selects "Price", or "Quantity" -->
     <div class="col-md-2" id="operatorDiv" style="display: none;">
-          <label for="Operator">Comparison Operator:</label>
-          <select name="Operator" id="Operator" asp-for="Operator" class="form-control">
-              <option value="=" selected>=</option>
-              <option value=">">&gt;</option>
-              <option value=">=">&ge;</option>
-              <option value="<">&lt;</option>
-              <option value="<=">&le;</option>
-          </select>
-      </div>
+      <label for="Operator">Comparison Operator:</label>
+      <select name="Operator" id="Operator" asp-for="Operator" class="form-control">
+        <option value="=" selected>=</option>
+        <option value=">">&gt;</option>
+        <option value=">=">&ge;</option>
+        <option value="<">&lt;</option>
+        <option value="<=">&le;</option>
+      </select>
+    </div>
 
     <div class="col-md-4">
-    <label for="SearchTerm">Search Term:</label>
-    <input type="text" name="SearchTerm" value="@Model.SearchTerm" class="form-control"
-      placeholder="enter search term" />
+      <label for="SearchTerm">Search Term:</label>
+      <input type="text" name="SearchTerm" value="@Model.SearchTerm" class="form-control"
+        placeholder="enter search term" />
     </div>
     <div class="col-md-2 d-grid">
       <button type="submit" class="btn btn-primary">Search</button>
@@ -46,62 +44,212 @@
   </div>  
 </form>
 
-<!--script to hide the operator select dropdown-->
+<!-- Style for hover effect -->
+<style>
+  /* Highlight row on hover */
+  .clickable-row:hover {
+    border: 2px solid #0d6efd !important; /* Bootstrap primary blue */
+    cursor: pointer; 
+  }
+</style>
+
+<!-- Script to handle dropdown visibility -->
 <script>
   function toggleDropdown() {
     var operatorDiv = document.getElementById('operatorDiv');
     var searchType = document.getElementById('SearchType').value;
-    if (searchType === 'Price' || searchType === 'Quantity') {
-      operatorDiv.style.display = 'block';
-    } else {
-      operatorDiv.style.display = 'none';
-    }
+    operatorDiv.style.display = (searchType === 'Price' || searchType === 'Quantity') ? 'block' : 'none';
   }
-  
-  //checks searchtype to see if it needs to show the operator dropdown
-  document.getElementById('SearchType').addEventListener('change', toggleDropdown);
 
-  //checks on page load
+  document.getElementById('SearchType').addEventListener('change', toggleDropdown);
   window.onload = toggleDropdown;
 </script>
 
-
-
-
 <div style="overflow-y: auto; max-height: 600px; border: 1px solid #ddd;">
-<table class="table table-striped mt-3">
-  <thead style="position: sticky; top: 0; z-index: 1;">
-    <tr>
-      <th>Name</th>
-      <th>Description</th>
-      <th>Price</th>
-      <th>Quantity</th>
-      <th>SKU</th>
-      <th>Category</th>
-      <th>Location</th>
-    </tr>
-  </thead>
-  <tbody>
-    @if (Model.Products != null && Model.Products.Count > 0)
-    {
-      foreach (var product in Model.Products)
+  <table class="table table-striped mt-3">
+    <thead style="position: sticky; top: 0; z-index: 1;">
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>SKU</th>
+        <th>Category</th>
+        <th>Location</th>
+      </tr>
+    </thead>
+    <tbody>
+      @if (Model.Products != null && Model.Products.Count > 0)
       {
-        <tr>
-          <td>@product.Name</td>
-          <td>@product.Description</td>
-          <td>$@product.Price</td>
-          <td>@product.Quantity</td>
-          <td>@product.SKU</td>
-          <td>@product.Category</td>
-          <td>@product.Location</td>
-        </tr>
+        foreach (var product in Model.Products)
+        {
+          <tr class="clickable-row" data-bs-toggle="modal" data-bs-target="#productModal"
+              data-name="@product.Name" data-description="@product.Description"
+              data-price="@product.Price" data-quantity="@product.Quantity"
+              data-sku="@product.SKU" data-category="@product.Category"
+              data-location="@product.Location">
+            <td>@product.Name</td>
+            <td>@product.Description</td>
+            <td>$@product.Price</td>
+            <td>@product.Quantity</td>
+            <td>@product.SKU</td>
+            <td>@product.Category</td>
+            <td>@product.Location</td>
+          </tr>
+        }
       }
-    }
-    else
-    {
-      <tr><td colspan="7" class="text-center">No products found.</td></tr>
-    }
-  </tbody>
-</table>
+      else
+      {
+        <tr><td colspan="7" class="text-center">No products found.</td></tr>
+      }
+    </tbody>
+  </table>
 </div>
+
+<div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="productModalLabel">Product Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="editProductForm">
+          <input type="hidden" id="modalProductId">
+
+          <div class="mb-2">
+            <label><strong>Name:</strong></label>
+            <input type="text" id="modalProductName" class="form-control" disabled>
+          </div>
+
+          <div class="mb-2">
+            <label><strong>Description:</strong></label>
+            <textarea id="modalProductDescription" class="form-control" disabled></textarea>
+          </div>
+
+          <div class="mb-2">
+            <label><strong>Price ($):</strong></label>
+            <input type="number" id="modalProductPrice" class="form-control" disabled>
+          </div>
+
+          <div class="mb-2">
+            <label><strong>Quantity:</strong></label>
+            <input type="number" id="modalProductQuantity" class="form-control" disabled>
+          </div>
+
+          <div class="mb-2">
+            <label><strong>SKU:</strong></label>
+            <input type="text" id="modalProductSKU" class="form-control" disabled>
+          </div>
+
+          <div class="mb-2">
+            <label><strong>Category:</strong></label>
+            <input type="text" id="modalProductCategory" class="form-control" disabled>
+          </div>
+
+          <div class="mb-2">
+            <label><strong>Location:</strong></label>
+            <input type="text" id="modalProductLocation" class="form-control" disabled>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" id="editButton" class="btn btn-warning">Edit</button>
+        <button type="button" id="saveButton" class="btn btn-success" style="display: none;">Save Changes</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var rows = document.querySelectorAll(".clickable-row");
+    var editButton = document.getElementById("editButton");
+    var saveButton = document.getElementById("saveButton");
+    var formInputs = document.querySelectorAll("#editProductForm input, #editProductForm textarea");
+
+    rows.forEach(row => {
+      row.addEventListener("click", function () {
+        document.getElementById("modalProductId").value = this.dataset.id || "";
+        document.getElementById("modalProductName").value = this.dataset.name || "";
+        document.getElementById("modalProductDescription").value = this.dataset.description || "";
+        document.getElementById("modalProductPrice").value = this.dataset.price || "";
+        document.getElementById("modalProductQuantity").value = this.dataset.quantity || "";
+        document.getElementById("modalProductSKU").value = this.dataset.sku || "";
+        document.getElementById("modalProductCategory").value = this.dataset.category || "";
+        document.getElementById("modalProductLocation").value = this.dataset.location || "";
+
+        formInputs.forEach(input => input.disabled = true);
+        saveButton.style.display = "none";
+        editButton.style.display = "inline-block";
+      });
+    });
+
+    editButton.addEventListener("click", function () {
+      formInputs.forEach(input => input.disabled = false);
+      editButton.style.display = "none";
+      saveButton.style.display = "inline-block";
+    });
+
+    saveButton.addEventListener("click", function () {
+      if (confirm("Are you sure you want to save changes?")) {
+        var updatedProduct = {
+          Id: document.getElementById("modalProductId").value,
+          Name: document.getElementById("modalProductName").value,
+          Description: document.getElementById("modalProductDescription").value,
+          Price: parseFloat(document.getElementById("modalProductPrice").value) || 0,
+          Quantity: parseInt(document.getElementById("modalProductQuantity").value) || 0,
+          SKU: document.getElementById("modalProductSKU").value,
+          Category: document.getElementById("modalProductCategory").value,
+          Location: document.getElementById("modalProductLocation").value
+        };
+
+        fetch("/Products?handler=EditProduct", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(updatedProduct)
+        })
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error("Failed to update product.");
+          }
+        })
+        .then(data => {
+          if (data.success) {
+            alert("Product updated successfully!");
+            window.location.reload();
+          } else {
+            alert("Error updating product: " + (data.message || "Unknown error."));
+          }
+        })
+        .catch(error => {
+          console.error("Error:", error);
+          alert("Something went wrong. Try again.");
+        });
+      }
+    });
+  });
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var rows = document.querySelectorAll(".clickable-row");
+
+    rows.forEach(row => {
+      row.addEventListener("click", function () {
+        document.getElementById("modalProductName").textContent = this.dataset.name;
+        document.getElementById("modalProductDescription").textContent = this.dataset.description;
+        document.getElementById("modalProductPrice").textContent = this.dataset.price;
+        document.getElementById("modalProductQuantity").textContent = this.dataset.quantity;
+        document.getElementById("modalProductSKU").textContent = this.dataset.sku;
+        document.getElementById("modalProductCategory").textContent = this.dataset.category;
+        document.getElementById("modalProductLocation").textContent = this.dataset.location;
+      });
+    });
+  });
+</script>
 
