@@ -26,11 +26,13 @@ namespace IMS.Pages {
     public string? NewNote { get; set; }
 
     [BindProperty]
-    public string? SelectedDate { get; set; }
+    public int EditNoteId { get; set; }
+
+    [BindProperty]
+    public string? EditNoteContent { get; set; }
 
     public DateTime CurrentTime { get; private set; }
     public IList<Note> Notes { get; set; } = new List<Note>();
-    public List<CalendarEvent> CalendarEvents { get; set; } = new List<CalendarEvent>();
 
     public async Task OnGetAsync() {
       CurrentTime = DateTime.Now;
@@ -50,26 +52,36 @@ namespace IMS.Pages {
 
       Products = await query.ToListAsync();
       Notes = await _context.Notes.OrderByDescending(n => n.Timestamp).ToListAsync();
-      CalendarEvents = await _context.CalendarEvents.ToListAsync();
-    }
-
-    public JsonResult OnGetCalendarEvents() {
-      var events = _context.CalendarEvents
-          .Select(e => new {
-            id = e.Id,
-            title = e.Title,
-            date = e.StartDate.ToString("yyyy-MM-dd"),
-            description = e.Description
-          }).ToList();
-
-      return new JsonResult(events);
     }
 
     public async Task<IActionResult> OnPostAddNoteAsync() {
       if(!string.IsNullOrEmpty(NewNote)) {
-        var note = new Note { Content = NewNote,Timestamp = DateTime.Now };
-        _context.Notes.Add(note);
+        _context.Notes.Add(new Note {
+          Content = NewNote,
+          Timestamp = DateTime.Now
+        });
         await _context.SaveChangesAsync();
+      }
+      return RedirectToPage();
+    }
+
+    public async Task<IActionResult> OnPostDeleteNoteAsync(int id) {
+      var note = await _context.Notes.FindAsync(id);
+      if(note != null) {
+        _context.Notes.Remove(note);
+        await _context.SaveChangesAsync();
+      }
+      return RedirectToPage();
+    }
+
+    public async Task<IActionResult> OnPostEditNoteAsync() {
+      if(!string.IsNullOrEmpty(EditNoteContent)) {
+        var note = await _context.Notes.FindAsync(EditNoteId);
+        if(note != null) {
+          note.Content = EditNoteContent;
+          note.Timestamp = DateTime.Now;
+          await _context.SaveChangesAsync();
+        }
       }
       return RedirectToPage();
     }
