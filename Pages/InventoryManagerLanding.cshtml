@@ -95,7 +95,7 @@
   <!-- Interactive Calendar -->
   <div class="row mb-5">
     <div class="col-md-12">
-      <h4>Interactive Calendar</h4>
+      <h4>Interactive Calendar - <span id="current-month-year"></span></h4>
       <table class="table table-bordered">
         <thead class="table-primary">
           <tr>
@@ -112,72 +112,84 @@
       </table>
     </div>
   </div>
-</div>
 
-<!-- Edit Note Modal -->
-<div class="modal fade" id="editNoteModal" tabindex="-1">
-  <div class="modal-dialog">
-    <form method="post" asp-page-handler="EditNote" class="modal-content">
-      <div class="modal-header bg-primary text-white">
-        <h5 class="modal-title">Edit Note</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        <input type="hidden" id="EditNoteId" name="EditNoteId" />
-        <textarea id="EditNoteContent" name="EditNoteContent" class="form-control" rows="4"></textarea>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button type="submit" class="btn btn-success">Save Changes</button>
-      </div>
-    </form>
+  <!-- Edit Note Modal -->
+  <div class="modal fade" id="editNoteModal" tabindex="-1">
+    <div class="modal-dialog">
+      <form method="post" asp-page-handler="EditNote" class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title">Edit Note</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="EditNoteId" name="EditNoteId" />
+          <textarea id="EditNoteContent" name="EditNoteContent" class="form-control" rows="4"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-success">Save Changes</button>
+        </div>
+      </form>
+    </div>
   </div>
-</div>
 
 @section Scripts {
-  <script>
-    // Clock
-    function updateClock() {
-      document.getElementById("live-clock").textContent = new Date().toLocaleString();
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
-
-    // Weather
-    fetch('https://api.weather.gov/gridpoints/SEW/124,67/forecast')
-      .then(res => res.json())
-      .then(data => {
-        document.getElementById("weather-widget").innerHTML = data.properties.periods[0].detailedForecast;
-      })
-      .catch(() => document.getElementById("weather-widget").innerHTML = "Weather unavailable.");
-
-    // Calendar
-    function buildCalendar() {
-      const today = new Date();
-      const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
-      const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-      let dayCount = 1 - firstDay.getDay();
-      calendarBody.innerHTML = "";
-
-      for (let i = 0; i < 6; i++) {
-        let row = document.createElement('tr');
-        for (let j = 0; j < 7; j++, dayCount++) {
-          let cell = document.createElement('td');
-          if (dayCount > 0 && dayCount <= lastDay.getDate()) {
-            cell.innerHTML = `<div>${dayCount}</div>`;
-          }
-          row.appendChild(cell);
-        }
-        calendarBody.appendChild(row);
+    <script>
+      // Clock
+      function updateClock() {
+        document.getElementById("live-clock").textContent = new Date().toLocaleString();
       }
-    }
-    buildCalendar();
+      setInterval(updateClock, 1000);
+      updateClock();
 
-    // Edit Note Modal
-    function openEditModal(noteId, noteContent) {
-      document.getElementById('EditNoteId').value = noteId;
-      document.getElementById('EditNoteContent').value = noteContent;
-      new bootstrap.Modal(document.getElementById('editNoteModal')).show();
-    }
-  </script>
+      // Weather
+      fetch('https://api.weather.gov/gridpoints/SEW/124,67/forecast')
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById("weather-widget").innerHTML = data.properties.periods[0].detailedForecast;
+        })
+        .catch(() => document.getElementById("weather-widget").innerHTML = "Weather unavailable.");
+
+      // Calendar
+      document.addEventListener('DOMContentLoaded', function () {
+        const calendarBody = document.getElementById('calendar-body');
+        const currentMonthYear = document.getElementById('current-month-year');
+
+        function buildCalendar(year, month) {
+          calendarBody.innerHTML = "";
+
+          const firstDay = new Date(year, month, 1);
+          const lastDay = new Date(year, month + 1, 0);
+          currentMonthYear.textContent = firstDay.toLocaleString('default', { month: 'long', year: 'numeric' });
+
+          let dateCounter = 1 - firstDay.getDay();
+
+          for (let week = 0; week < 6; week++) {
+            let row = document.createElement('tr');
+
+            for (let day = 0; day < 7; day++, dateCounter++) {
+              let cell = document.createElement('td');
+              if (dateCounter > 0 && dateCounter <= lastDay.getDate()) {
+                cell.innerHTML = `<div>${dateCounter}</div>`;
+              } else {
+                cell.innerHTML = ''; // Empty cells for days outside the current month
+              }
+              row.appendChild(cell);
+            }
+            calendarBody.appendChild(row);
+          }
+        }
+
+        // Initialize calendar with the current month
+        const today = new Date();
+        buildCalendar(today.getFullYear(), today.getMonth());
+      });
+
+      // Edit Note Modal
+      function openEditModal(noteId, noteContent) {
+        document.getElementById('EditNoteId').value = noteId;
+        document.getElementById('EditNoteContent').value = noteContent;
+        new bootstrap.Modal(document.getElementById('editNoteModal')).show();
+      }
+    </script>
 }
