@@ -4,57 +4,115 @@
   ViewData["Title"] = "Create Account";
 }
 
-<style> <!-- Allows for newline characters in the error message display -->
+<style>
+  body {
+    background-image: url('/images/login-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: brightness(60%);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding-top: 60px;
+    padding-bottom: 60px;
+  }
+
+  .account-card {
+    background-color: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(8px);
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 450px;
+    color: #333;
+  }
+
+  .form-control,
+  .btn {
+    border-radius: 8px;
+  }
+
+  .alert {
+    border-radius: 8px;
+  }
+
   .text-danger {
     white-space: pre-line;
   }
+
+  .navbar {
+    background-color: rgba(255, 255, 255, 0.85) !important;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  }
+
+  footer {
+    background-color: rgba(255, 255, 255, 0.75) !important;
+    backdrop-filter: blur(8px);
+    color: #333 !important;
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.3);
+    padding: 10px;
+    text-align: center;
+  }
+
+  footer a {
+    color: #333 !important;
+    text-decoration: none;
+  }
+
+  footer a:hover {
+    text-decoration: underline;
+  }
 </style>
 
-
-
-
-<div class="container d-flex flex-column justify-content-center align-items-center" style="min-height: 100vh;">
-  <div class="w-100" style="max-width: 400px;">
-    <div class="text-center mb-4">
-      <h1>Create Account</h1>
-      <p class="lead">Please fill in the details to create an account</p>
-    </div>
-    @if (ViewData.ModelState[""] != null){
-    <div class= "alert @("alert-danger")">
-      @ViewData.ModelState[""].Errors[0].ErrorMessage
-      </div>
-    }
-    <form method="post">
-      <div class="form-group">
-        <label asp-for="Input.Username"></label>
-        <input asp-for="Input.Username" class="form-control" />
-        <span asp-validation-for="Input.Username" class="text-danger"></span>
-      </div>
-      <div class="form-group">
-        <label asp-for="Input.Password"></label>
-        <input asp-for="Input.Password" type="password" class="form-control" />
-        <span asp-validation-for="Input.Password" class="text-danger"></span>
-      </div>
-      <div class="form-group">
-        <label asp-for="Input.ConfirmPassword"></label>
-        <input asp-for="Input.ConfirmPassword" type="password" class="form-control" />
-        <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-      </div>
-      <div class="form-group form-check">
-        <input asp-for="Input.Is_IT_User" class="form-check-input" id="isITUserCheck" />
-        <label asp-for="Input.Is_IT_User" class="form-check-label"></label>
-      </div>
-      <div class="form-group" id="adminKeyGroup" style="display: none;">
-        <label asp-for="Input.AdminKey"></label>
-        <input asp-for="Input.AdminKey" class="form-control" />
-        <span asp-validation-for="Input.AdminKey" class="text-danger"></span>
-      </div>
-      <div class="d-flex justify-content-between mt-3">
-        <button type="submit" class="btn btn-primary">Create Account</button>
-        <a href="/Login" class="btn btn-secondary">Cancel</a>
-      </div>
-    </form>
+<div class="account-card">
+  <div class="text-center mb-4">
+    <h1>Create Account</h1>
+    <p class="lead">Please fill in the details to create an account</p>
   </div>
+
+  @if (ViewData.ModelState[""] != null)
+  {
+    <div class="alert alert-danger">
+      @ViewData.ModelState[""].Errors[0].ErrorMessage
+    </div>
+  }
+
+  <form method="post">
+    <div class="form-group">
+      <label asp-for="Input.Username"></label>
+      <input asp-for="Input.Username" class="form-control" />
+      <span asp-validation-for="Input.Username" class="text-danger"></span>
+    </div>
+    <div class="form-group mt-2">
+      <label asp-for="Input.Password"></label>
+      <input asp-for="Input.Password" type="password" class="form-control" />
+      <span asp-validation-for="Input.Password" class="text-danger"></span>
+    </div>
+    <div class="form-group mt-2">
+      <label asp-for="Input.ConfirmPassword"></label>
+      <input asp-for="Input.ConfirmPassword" type="password" class="form-control" />
+      <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+    </div>
+    <div class="form-group form-check mt-2">
+      <input asp-for="Input.Is_IT_User" class="form-check-input" id="isITUserCheck" />
+      <label asp-for="Input.Is_IT_User" class="form-check-label"></label>
+    </div>
+    <div class="form-group mt-2" id="adminKeyGroup" style="display: none;">
+      <label asp-for="Input.AdminKey"></label>
+      <input asp-for="Input.AdminKey" class="form-control" />
+      <span asp-validation-for="Input.AdminKey" class="text-danger"></span>
+    </div>
+    <div class="d-flex justify-content-between mt-4">
+      <button type="submit" class="btn btn-primary">Create Account</button>
+      <a href="/Login" class="btn btn-secondary">Cancel</a>
+    </div>
+  </form>
 </div>
 
 @section Scripts {
@@ -62,11 +120,7 @@
   <script>
     $(document).ready(function () {
       $('#isITUserCheck').change(function () {
-        if ($(this).is(':checked')) {
-          $('#adminKeyGroup').show();
-        } else {
-          $('#adminKeyGroup').hide();
-        }
+        $('#adminKeyGroup').toggle($(this).is(':checked'));
       });
     });
   </script>
