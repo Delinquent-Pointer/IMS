@@ -4,149 +4,253 @@
   ViewData["Title"] = "Inventory Manager Dashboard";
 }
 
-<!-- Header with Log Out Button -->
-<div class="d-flex justify-content-between align-items-center mb-4">
-  <h1>Inventory Manager Dashboard</h1>
-  <form method="post">
-    <button type="submit" asp-page-handler="Logout" class="btn btn-danger">Log Out</button>
-  </form>
-</div>
+<div class="container-fluid py-4">
 
-@if (ViewData.ModelState[""]?.Errors?.Count > 0)
-{
-  <div class="alert alert-warning">
-    @ViewData.ModelState[""]?.Errors?.FirstOrDefault()?.ErrorMessage
+  <!-- Header with Log Out Button -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Inventory Manager Dashboard</h1>
+    <form method="post">
+      <button type="submit" asp-page-handler="Logout" class="btn btn-danger">Log Out</button>
+    </form>
   </div>
-}
 
-<!-- Top Quick Info Bar -->
-<div class="row mb-4">
-  <div class="col-md-4">
-    <h4>Weather</h4>
-    <div id="weather-widget" class="border p-3">
-      <p>Fetching Weather...</p>
+  <!-- Quick Info Bar -->
+  <div class="row mb-4">
+    <div class="col-md-4">
+      <h4>Weather</h4>
+      <div id="weather-widget" class="border p-3">
+        Fetching Weather...
+      </div>
     </div>
-  </div>
-  <div class="col-md-4 text-center">
-    <h4>Current Date & Time</h4>
-    <div class="border p-3">
-      <p id="live-clock"></p>
+    <div class="col-md-4 text-center">
+      <h4>Current Date & Time</h4>
+      <div class="border p-3">
+        <p id="live-clock"></p>
+      </div>
     </div>
-  </div>
-  <div class="col-md-4 text-right">
-    <h4>Quick Order</h4>
-    <div id="quick-order" class="border p-3">
+    <div class="col-md-4 text-end">
+      <h4>Quick Order</h4>
       <button class="btn btn-success">Order Products</button>
     </div>
   </div>
-</div>
 
-<!-- Quick Product Search -->
-<div class="row mb-4">
-  <div class="col-md-6">
-    <h4>Quick Product Search</h4>
-    <form method="get">
-      <input type="text" name="SearchTerm" value="@Model.SearchTerm" class="form-control"
-        placeholder="Search by name, description, category, SKU, etc..." />
-      <button type="submit" class="btn btn-primary mt-2">Search</button>
-    </form>
-    @if (!string.IsNullOrEmpty(Model.SearchTerm) && Model.Products.Count > 0)
-    {
-      <ul class="list-group">
-        @foreach (var product in Model.Products)
+  <!-- Quick Product Search -->
+  <div class="row mb-4">
+    <div class="col-md-6">
+      <h4>Quick Product Search</h4>
+      <form method="get">
+        <input type="text" name="SearchTerm" value="@Model.SearchTerm" class="form-control"
+          placeholder="Search products..." />
+        <button type="submit" class="btn btn-primary mt-2">Search</button>
+      </form>
+      @if (!string.IsNullOrEmpty(Model.SearchTerm))
+      {
+        if (Model.Products.Any())
         {
-          <li class="list-group-item">
-            <strong>@product.Name</strong> - $@product.Price, Qty: @product.Quantity
-          </li>
+          <ul class="list-group mt-2">
+            @foreach (var product in Model.Products)
+            {
+              <li class="list-group-item">
+                <strong>@product.Name</strong> - $@product.Price, Qty: @product.Quantity
+              </li>
+            }
+          </ul>
         }
-      </ul>
-    }
-    else if (!string.IsNullOrEmpty(Model.SearchTerm))
-    {
-      <p>No products found.</p>
-    }
+        else
+        {
+          <p>No products found.</p>
+        }
+      }
+    </div>
   </div>
-</div>
 
-<!-- Notes Section -->
-<div class="row mb-4">
-  <div class="col-md-6">
-    <h4>Notes</h4>
-    <form method="post" asp-page-handler="AddNote">
-      <textarea name="NewNote" class="form-control" placeholder="Enter note here..." rows="3"></textarea>
-      <button type="submit" class="btn btn-secondary mt-2">Save Note</button>
-    </form>
-    <hr />
-    <h6>Recent Notes</h6>
-    @if (Model.Notes.Count > 0)
-    {
-      <ul class="list-group">
+  <!-- Notes Section -->
+  <div class="row mb-4">
+    <div class="col-md-6">
+      <h4>Notes</h4>
+      <form method="post" asp-page-handler="AddNote">
+        <textarea name="NewNote" class="form-control" placeholder="Enter note..." rows="3"></textarea>
+        <button type="submit" class="btn btn-secondary mt-2">Save Note</button>
+      </form>
+      <ul class="list-group mt-3">
         @foreach (var note in Model.Notes)
         {
-          <li class="list-group-item">
-            <small>@note.Timestamp.ToString("f")</small> - @note.Content
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+              <small>@DateTime.Parse(note.Timestamp).ToString("f")</small>
+              <p>@note.Content</p>
+            </div>
+            <div>
+              <button class="btn btn-sm btn-warning" onclick="openEditModal(@note.Id, '@note.Content')">Edit</button>
+              <form method="post" asp-page-handler="DeleteNote" asp-route-id="@note.Id" class="d-inline-block">
+                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+              </form>
+            </div>
           </li>
         }
       </ul>
-    }
-    else
-    {
-      <p>No notes yet.</p>
-    }
+    </div>
   </div>
-</div>
 
-<!-- Interactive Calendar -->
-<div class="calendar-container">
-  <table class="calendar">
-    <thead>
-      <tr>
-        <th>Sun</th>
-        <th>Mon</th>
-        <th>Tue</th>
-        <th>Wed</th>
-        <th>Thu</th>
-        <th>Fri</th>
-        <th>Sat</th>
-      </tr>
-    </thead>
-    <tbody id="calendar-body"></tbody>
-  </table>
-</div>
+  <!-- Interactive Calendar -->
+  <div class="row mb-5">
+    <div class="col-md-12">
+      <h4>
+        Interactive Calendar -
+        <button id="prev-month" class="btn btn-sm btn-secondary">&lt;</button>
+        <span id="current-month-year"></span>
+        <button id="next-month" class="btn btn-sm btn-secondary">&gt;</button>
+      </h4>
+      <table class="table table-bordered">
+        <thead class="table-primary">
+          <tr>
+            <th>Sun</th>
+            <th>Mon</th>
+            <th>Tue</th>
+            <th>Wed</th>
+            <th>Thu</th>
+            <th>Fri</th>
+            <th>Sat</th>
+          </tr>
+        </thead>
+        <tbody id="calendar-body"></tbody>
+      </table>
+    </div>
+  </div>
 
-<!-- Bootstrap Modal for Adding Events -->
-<div class="modal fade" id="eventModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header bg-primary text-white">
-        <h5 class="modal-title">Add Event</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        <label>Event Title:</label>
-        <input type="text" id="event-title" class="form-control" placeholder="Enter event name">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button id="save-event" class="btn btn-success">Save Event</button>
+  <!-- Note Viewing Modal -->
+  <div class="modal fade" id="calendarNoteModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-info text-white">
+          <h5 class="modal-title">Notes on <span id="modal-date"></span></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body" id="modal-notes-content">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
+
+  <!-- Edit Note Modal -->
+  <div class="modal fade" id="editNoteModal" tabindex="-1">
+    <div class="modal-dialog">
+      <form method="post" asp-page-handler="EditNote" class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title">Edit Note</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="EditNoteId" name="EditNoteId" />
+          <textarea id="EditNoteContent" name="EditNoteContent" class="form-control" rows="4"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-success">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
 @section Scripts {
-  <script>
-    function updateClock() {
-      document.getElementById("live-clock").textContent = new Date().toLocaleString();
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
+    <script>
+      // Clock
+      function updateClock() {
+        document.getElementById("live-clock").textContent = new Date().toLocaleString();
+      }
+      setInterval(updateClock, 1000);
+      updateClock();
 
-    fetch('https://api.weather.gov/gridpoints/SEW/124,67/forecast')
-      .then(response => response.json())
-      .then(data => {
-        document.getElementById("weather-widget").innerHTML = `<p>${data.properties.periods[0].detailedForecast}</p>`;
-      })
-      .catch(() => document.getElementById("weather-widget").innerHTML = "<p>Weather not available.</p>");
-  </script>
+      // Weather
+      fetch('https://api.weather.gov/gridpoints/SEW/124,67/forecast')
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById("weather-widget").innerHTML = data.properties.periods[0].detailedForecast;
+        })
+        .catch(() => document.getElementById("weather-widget").innerHTML = "Weather unavailable.");
+
+      // Calendar
+      document.addEventListener('DOMContentLoaded', function () {
+        const calendarBody = document.getElementById('calendar-body');
+        const currentMonthYear = document.getElementById('current-month-year');
+        const prevMonthBtn = document.getElementById('prev-month');
+        const nextMonthBtn = document.getElementById('next-month');
+        const modalDate = document.getElementById('modal-date');
+        const modalNotesContent = document.getElementById('modal-notes-content');
+
+        // Corrected safe serialization
+        const notes = @Html.Raw(Json.Serialize(Model.Notes));
+
+        let currentDate = new Date();
+
+        function buildCalendar(year, month) {
+          calendarBody.innerHTML = "";
+
+          const firstDay = new Date(year, month, 1);
+          const lastDay = new Date(year, month + 1, 0);
+          currentMonthYear.textContent = firstDay.toLocaleString('default', { month: 'long', year: 'numeric' });
+
+          let dateCounter = 1 - firstDay.getDay();
+
+          for (let week = 0; week < 6; week++) {
+            let row = document.createElement('tr');
+
+            for (let day = 0; day < 7; day++, dateCounter++) {
+              let cell = document.createElement('td');
+              if (dateCounter > 0 && dateCounter <= lastDay.getDate()) {
+                let cellDate = new Date(year, month, dateCounter).toISOString().split('T')[0];
+                let notesForDay = notes.filter(note => note.timestamp.startsWith(cellDate));
+                let notesLink = notesForDay.length ? `<a href="#" class="calendar-note-link" data-date="${cellDate}">Notes (${notesForDay.length})</a>` : '';
+                cell.innerHTML = `<div>${dateCounter}</div>${notesLink}`;
+              } else {
+                cell.innerHTML = '';
+              }
+              row.appendChild(cell);
+            }
+            calendarBody.appendChild(row);
+          }
+
+          document.querySelectorAll('.calendar-note-link').forEach(link => {
+            link.addEventListener('click', function (e) {
+              e.preventDefault();
+              let selectedDate = this.getAttribute('data-date');
+              modalDate.textContent = selectedDate;
+              displayNotes(selectedDate);
+              new bootstrap.Modal(document.getElementById('calendarNoteModal')).show();
+            });
+          });
+        }
+
+        function displayNotes(date) {
+          modalNotesContent.innerHTML = '';
+          let dailyNotes = notes.filter(note => note.timestamp.startsWith(date));
+          dailyNotes.forEach(note => {
+            let noteElement = document.createElement('div');
+            noteElement.className = 'mb-2';
+            noteElement.innerHTML = `<small>${new Date(note.timestamp).toLocaleTimeString()}</small><p>${note.content}</p>`;
+            modalNotesContent.appendChild(noteElement);
+          });
+        }
+
+        function updateCalendar(monthOffset) {
+          currentDate.setMonth(currentDate.getMonth() + monthOffset);
+          buildCalendar(currentDate.getFullYear(), currentDate.getMonth());
+        }
+
+        prevMonthBtn.addEventListener('click', () => updateCalendar(-1));
+        nextMonthBtn.addEventListener('click', () => updateCalendar(1));
+
+        buildCalendar(currentDate.getFullYear(), currentDate.getMonth());
+      });
+
+      // Edit Note Modal
+      function openEditModal(noteId, noteContent) {
+        document.getElementById('EditNoteId').value = noteId;
+        document.getElementById('EditNoteContent').value = noteContent;
+        new bootstrap.Modal(document.getElementById('editNoteModal')).show();
+      }
+    </script>
 }

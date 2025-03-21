@@ -1,94 +1,92 @@
-﻿@{
-  string? user = Context.Session.GetString("User");
-  bool? perms = Context.Session.GetInt32("ITPerms") == 1;
-}
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>@ViewData["Title"] - IMS</title>
-  <script type="importmap"></script>
   <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-  <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-  <link rel="stylesheet" href="~/IMS.styles.css" asp-append-version="true" />
-</head>
+  <link rel="stylesheet" href="~/css/site.css" />
+  <link rel="stylesheet" href="~/IMS.styles.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding-top: 70px;
+      /* Space for navbar */
+      background-color: #f4f7fa;
+      margin: 0;
+    }
 
-<!-- Reloads the page if it was loaded from the cache (i.e.: when the back button is pressed)-->
-<script>
-        window.addEventListener('pageshow', function(event) {
-            if (event.persisted) {
-                window.location.reload();
-            }
-        });
-</script>
+    .navbar {
+      background-color: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .navbar-brand {
+      font-weight: bold;
+      color: #333 !important;
+    }
+
+    .navbar-nav .nav-link {
+      font-weight: 500;
+      color: #555 !important;
+    }
+
+    .navbar-nav .nav-link:hover {
+      color: #000 !important;
+    }
+
+    main {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding:  20px;
+    }
+  </style>
+</head>
 
 <body>
   <header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-      <div class="container">
-        <span class="navbar-brand" asp-area="">IMS</span>
-        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-          <ul class="navbar-nav flex-grow-1">
-
-            @if (!string.IsNullOrEmpty(user))
-            {
-              <!-- these are only displayed If user is logged in -->
-              <li class="nav_item">
-                <a class="nav-link text-dark" asp-area="" asp-page="/InventoryManagerLanding">Home Page</a>
-              </li>
-
-              <li class="nav_item">
-                <a class="nav-link text-dark" asp-area="" asp-page="/Products">Inventory</a> <!-- ✅ New Inventory Page -->
-              </li>
-
-              @if (perms != null && perms.Value)
-              {
-                <!-- these are only displayed If user is logged in and has IT perms-->
-                <li class="nav_item">
-                  <a class="nav-link text-dark" asp-area="" asp-page="/ITManagerLanding">Validate Accounts</a>
-                </li>
-              }
-
-              <li class="nav_item">
-                <a class="nav-link text-dark" asp-area="" asp-page="/CreateProduct">Create New Product</a>
-              </li>
-            }
-            else
-            {
-              <!-- these are only displayed If user is NOT logged in-->
-              <li class="nav_item">
-                <a class="nav-link text-dark" asp-area="" asp-page="/Login">Login</a>
-              </li>
-              <li class="nav_item">
-                <a class="nav-link text-dark" asp-area="" asp-page="/CreateAccount">Register</a>
-              </li>
-            }
-            <!-- anything that's displayed REGARDLESS of login status should be added outside of the if-else block -->
-
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+      <div class="container-fluid">
+        <a class="navbar-brand" asp-area="" asp-page="/Index">IMS</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+          aria-controls="navbarContent" aria-expanded="false">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarContent">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" asp-area="" asp-page="/Login">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" asp-area="" asp-page="/CreateAccount">Register</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" asp-area="" asp-page="/Products">Products</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" asp-area="" asp-page="/Privacy">Privacy</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" asp-area="" asp-page="/Contact">Contact</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" asp-area="" asp-page="/Support">Support</a>
+            </li>
           </ul>
         </div>
       </div>
     </nav>
   </header>
 
-  <div class="container">
-    <main role="main" class="pb-3">
-      @RenderBody()
-    </main>
-  </div>
-
-  <footer class="border-top footer text-muted">
-    <div class="container">
-      &copy; 2025 - IMS - <a asp-area="" asp-page="/Privacy">Privacy</a>
-    </div>
-  </footer>
+  <main role="main">
+    @RenderBody()
+  </main>
 
   <script src="~/lib/jquery/dist/jquery.min.js"></script>
   <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="~/js/site.js" asp-append-version="true"></script>
+  <script src="~/js/site.js"></script>
 
   @await RenderSectionAsync("Scripts", required: false)
 </body>
