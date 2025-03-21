@@ -4,108 +4,117 @@
   ViewData["Title"] = "Inventory Manager Dashboard";
 }
 
-<!-- Header with Log Out Button -->
-<div class="d-flex justify-content-between align-items-center mb-4">
-  <h1>Inventory Manager Dashboard</h1>
-  <form method="post">
-    <button type="submit" asp-page-handler="Logout" class="btn btn-danger">Log Out</button>
-  </form>
-</div>
+<div class="container-fluid py-4">
 
-@if (ViewData.ModelState[""]?.Errors?.Count > 0)
-{
-  <div class="alert alert-warning">
-    @ViewData.ModelState[""]?.Errors?.FirstOrDefault()?.ErrorMessage
+  <!-- Header with Log Out Button -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Inventory Manager Dashboard</h1>
+    <form method="post">
+      <button type="submit" asp-page-handler="Logout" class="btn btn-danger">Log Out</button>
+    </form>
   </div>
-}
 
-<!-- Top Quick Info Bar -->
-<div class="row mb-4">
-  <div class="col-md-4">
-    <h4>Weather</h4>
-    <div id="weather-widget" class="border p-3">
-      <p>Fetching Weather...</p>
+  <!-- Quick Info Bar -->
+  <div class="row mb-4">
+    <div class="col-md-4">
+      <h4>Weather</h4>
+      <div id="weather-widget" class="border p-3">
+        Fetching Weather...
+      </div>
     </div>
-  </div>
-  <div class="col-md-4 text-center">
-    <h4>Current Date & Time</h4>
-    <div class="border p-3">
-      <p id="live-clock"></p>
+    <div class="col-md-4 text-center">
+      <h4>Current Date & Time</h4>
+      <div class="border p-3">
+        <p id="live-clock"></p>
+      </div>
     </div>
-  </div>
-  <div class="col-md-4 text-right">
-    <h4>Quick Order</h4>
-    <div id="quick-order" class="border p-3">
+    <div class="col-md-4 text-end">
+      <h4>Quick Order</h4>
       <button class="btn btn-success">Order Products</button>
     </div>
   </div>
-</div>
 
-<!-- Quick Product Search -->
-<div class="row mb-4">
-  <div class="col-md-6">
-    <h4>Quick Product Search</h4>
-    <form method="get">
-      <input type="text" name="SearchTerm" value="@Model.SearchTerm" class="form-control"
-        placeholder="Search by name, description, category, SKU, etc..." />
-      <button type="submit" class="btn btn-primary mt-2">Search</button>
-    </form>
-    @if (!string.IsNullOrEmpty(Model.SearchTerm) && Model.Products.Count > 0)
-    {
-      <ul class="list-group">
-        @foreach (var product in Model.Products)
+  <!-- Quick Product Search -->
+  <div class="row mb-4">
+    <div class="col-md-6">
+      <h4>Quick Product Search</h4>
+      <form method="get">
+        <input type="text" name="SearchTerm" value="@Model.SearchTerm" class="form-control"
+          placeholder="Search products..." />
+        <button type="submit" class="btn btn-primary mt-2">Search</button>
+      </form>
+      @if (!string.IsNullOrEmpty(Model.SearchTerm))
+      {
+        if (Model.Products.Any())
         {
-          <li class="list-group-item">
-            <strong>@product.Name</strong> - $@product.Price, Qty: @product.Quantity
-          </li>
+          <ul class="list-group mt-2">
+            @foreach (var product in Model.Products)
+            {
+              <li class="list-group-item">
+                <strong>@product.Name</strong> - $@product.Price, Qty: @product.Quantity
+              </li>
+            }
+          </ul>
         }
-      </ul>
-    }
-    else if (!string.IsNullOrEmpty(Model.SearchTerm))
-    {
-      <p>No products found.</p>
-    }
+        else
+        {
+          <p>No products found.</p>
+        }
+      }
+    </div>
   </div>
-</div>
 
-<!-- Notes Section -->
-<div class="row mb-4">
-  <div class="col-md-6">
-    <h4>Notes</h4>
-    <form method="post" asp-page-handler="AddNote">
-      <textarea name="NewNote" class="form-control" placeholder="Enter note here..." rows="3"></textarea>
-      <button type="submit" class="btn btn-secondary mt-2">Save Note</button>
-    </form>
-    <hr />
-    <h6>Recent Notes</h6>
-    @if (Model.Notes.Any())
-    {
-      <ul class="list-group">
+  <!-- Notes Section -->
+  <div class="row mb-4">
+    <div class="col-md-6">
+      <h4>Notes</h4>
+      <form method="post" asp-page-handler="AddNote">
+        <textarea name="NewNote" class="form-control" placeholder="Enter note..." rows="3"></textarea>
+        <button type="submit" class="btn btn-secondary mt-2">Save Note</button>
+      </form>
+      <ul class="list-group mt-3">
         @foreach (var note in Model.Notes)
         {
           <li class="list-group-item d-flex justify-content-between align-items-center">
             <div>
               <small>@note.Timestamp.ToString("f")</small>
-              <p id="note-content-@note.Id">@note.Content</p>
+              <p>@note.Content</p>
             </div>
             <div>
               <button class="btn btn-sm btn-warning" onclick="openEditModal(@note.Id, '@note.Content')">Edit</button>
-              <form method="post" asp-page-handler="DeleteNote" asp-route-id="@note.Id" class="d-inline-block">
+              <form method="post" asp-page-handler="DeleteNote" asp-route-id="@note.Id" class="d-inline">
                 <button type="submit" class="btn btn-sm btn-danger">Delete</button>
               </form>
             </div>
           </li>
         }
       </ul>
-    }
-    else
-    {
-      <p>No notes yet.</p>
-    }
+    </div>
+  </div>
+
+  <!-- Interactive Calendar -->
+  <div class="row mb-5">
+    <div class="col-md-12">
+      <h4>Interactive Calendar</h4>
+      <table class="table table-bordered">
+        <thead class="table-primary">
+          <tr>
+            <th>Sun</th>
+            <th>Mon</th>
+            <th>Tue</th>
+            <th>Wed</th>
+            <th>Thu</th>
+            <th>Fri</th>
+            <th>Sat</th>
+          </tr>
+        </thead>
+        <tbody id="calendar-body"></tbody>
+      </table>
+    </div>
   </div>
 </div>
 
-<!-- Modal for Editing Notes -->
+<!-- Edit Note Modal -->
 <div class="modal fade" id="editNoteModal" tabindex="-1">
   <div class="modal-dialog">
     <form method="post" asp-page-handler="EditNote" class="modal-content">
@@ -125,64 +134,50 @@
   </div>
 </div>
 
-<!-- Interactive Calendar -->
-<div class="calendar-container">
-  <table class="calendar">
-    <thead>
-      <tr>
-        <th>Sun</th>
-        <th>Mon</th>
-        <th>Tue</th>
-        <th>Wed</th>
-        <th>Thu</th>
-        <th>Fri</th>
-        <th>Sat</th>
-      </tr>
-    </thead>
-    <tbody id="calendar-body"></tbody>
-  </table>
-</div>
-
-<!-- Bootstrap Modal for Adding Events -->
-<div class="modal fade" id="eventModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header bg-primary text-white">
-        <h5 class="modal-title">Add Event</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        <label>Event Title:</label>
-        <input type="text" id="event-title" class="form-control" placeholder="Enter event name">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button id="save-event" class="btn btn-success">Save Event</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 @section Scripts {
   <script>
-    function openEditModal(noteId, noteContent) {
-      document.getElementById('EditNoteId').value = noteId;
-      document.getElementById('EditNoteContent').value = noteContent;
-      var editModal = new bootstrap.Modal(document.getElementById('editNoteModal'));
-      editModal.show();
-    }
-
+    // Clock
     function updateClock() {
       document.getElementById("live-clock").textContent = new Date().toLocaleString();
     }
     setInterval(updateClock, 1000);
     updateClock();
 
+    // Weather
     fetch('https://api.weather.gov/gridpoints/SEW/124,67/forecast')
-      .then(response => response.json())
+      .then(res => res.json())
       .then(data => {
-        document.getElementById("weather-widget").innerHTML = `<p>${data.properties.periods[0].detailedForecast}</p>`;
+        document.getElementById("weather-widget").innerHTML = data.properties.periods[0].detailedForecast;
       })
-      .catch(() => document.getElementById("weather-widget").innerHTML = "<p>Weather not available.</p>");
+      .catch(() => document.getElementById("weather-widget").innerHTML = "Weather unavailable.");
+
+    // Calendar
+    function buildCalendar() {
+      const today = new Date();
+      const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+      const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+      let dayCount = 1 - firstDay.getDay();
+      calendarBody.innerHTML = "";
+
+      for (let i = 0; i < 6; i++) {
+        let row = document.createElement('tr');
+        for (let j = 0; j < 7; j++, dayCount++) {
+          let cell = document.createElement('td');
+          if (dayCount > 0 && dayCount <= lastDay.getDate()) {
+            cell.innerHTML = `<div>${dayCount}</div>`;
+          }
+          row.appendChild(cell);
+        }
+        calendarBody.appendChild(row);
+      }
+    }
+    buildCalendar();
+
+    // Edit Note Modal
+    function openEditModal(noteId, noteContent) {
+      document.getElementById('EditNoteId').value = noteId;
+      document.getElementById('EditNoteContent').value = noteContent;
+      new bootstrap.Modal(document.getElementById('editNoteModal')).show();
+    }
   </script>
 }

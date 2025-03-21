@@ -34,6 +34,8 @@ namespace IMS.Pages {
     public DateTime CurrentTime { get; private set; }
     public IList<Note> Notes { get; set; } = new List<Note>();
 
+    public IList<CalendarEvent> CalendarEvents { get; set; } = new List<CalendarEvent>();
+
     public async Task OnGetAsync() {
       CurrentTime = DateTime.Now;
 
@@ -89,6 +91,17 @@ namespace IMS.Pages {
     public IActionResult OnPostLogout() {
       HttpContext.Session.Clear();
       return RedirectToPage("/Login");
+    }
+
+    public async Task<JsonResult> OnGetCalendarEventsAsync() {
+      var events = await _context.CalendarEvents.Select(e => new {
+        e.Id,
+        e.Title,
+        Date = e.StartDate.ToString("yyyy-MM-dd"),
+        e.Description
+      }).ToListAsync();
+
+      return new JsonResult(events);
     }
   }
 }
