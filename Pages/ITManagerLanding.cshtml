@@ -4,49 +4,178 @@
   ViewData["Title"] = "IT Manager Dashboard";
 }
 
-<div class="container mt-5">
-  <h1>IT Manager Dashboard</h1>
-  <div class="d-flex justify-content-end mb-3">
-  <form method="post">
-    <button type="submit" asp-page-handler="Logout" class="btn btn-danger">Log Out</button>
-  </form>
+<div class="container-fluid py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>IT Manager Dashboard - All User Accounts</h2>
+    <form method="post">
+      <button type="submit" asp-page-handler="Logout" class="btn btn-danger">Log Out</button>
+    </form>
   </div>
 
-  <h2>Unverified Accounts</h2>
-
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>Username</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      @if (Model.UnverifiedAccounts != null && Model.UnverifiedAccounts.Any())
-      {
-        @foreach (var account in Model.UnverifiedAccounts)
-        {
+  <!-- User Accounts Table -->
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <table class="table table-striped align-middle">
+        <thead class="table-primary">
           <tr>
-            <td>@account.Username</td>
-            <td>
-              <form method="post" asp-page-handler="Verify" asp-route-id="@account.Account_Id" class="d-inline">
-                @Html.AntiForgeryToken()
-                <button type="submit" class="btn btn-success">Verify</button>
-              </form>
-              <form method="post" asp-page-handler="Delete" asp-route-id="@account.Account_Id" class="d-inline">
-                @Html.AntiForgeryToken()
-                <button type="submit" class="btn btn-danger">Delete</button>
-              </form>
-            </td>
+            <th scope="col">Username</th>
+            <th scope="col">ID</th>
+            <th scope="col">Account Type</th>
+            <th scope="col">Verified Status</th>
+            <th scope="col">Actions</th>
           </tr>
-        }
-      }
-      else
+        </thead>
+        <tbody>
+          @foreach (var account in Model.AllUserAccounts)
+          {
+            <tr>
+              <td>
+                <a href="#" class="text-decoration-none"
+                  onclick="showUserDetails(@account.Account_Id, '@account.Username', '@account.Is_IT_User', '@account.Verified')">
+                  @account.Username
+                </a>
+              </td>
+              <td>@account.Account_Id</td>
+              <td>@(account.Is_IT_User ? "IT User" : "General User")</td>
+              <td>
+                <span class="badge @(account.Verified ? "bg-success" : "bg-warning text-dark")">
+                  @(account.Verified ? "Verified" : "Unverified")
+                </span>
+              </td>
+              <td>
+                @if (!account.Verified)
+                {
+                  <form method="post" asp-page-handler="Verify" asp-route-id="@account.Account_Id" class="d-inline-block">
+                    <button class="btn btn-sm btn-success">Verify</button>
+                  </form>
+                }
+                <button class="btn btn-sm btn-danger" onclick="confirmDeletion(@account.Account_Id, '@account.Username')">
+                  Delete
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+      @if (!Model.AllUserAccounts.Any())
       {
-        <tr>
-          <td colspan="2" class="text-center">No unverified accounts.</td>
-        </tr>
+        <div class="text-center text-muted">No user accounts available.</div>
       }
-    </tbody>
-  </table>
+    </div>
+  </div>
 </div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteAccountModal" tabindex="-1">
+  <div class="modal-dialog">
+    <form method="post" asp-page-handler="Delete" class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title">Confirm Account Deletion</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="deleteAccountId" name="id" />
+        <p>Are you sure you want to permanently delete the account "<strong id="deleteAccountName"></strong>"?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="submit" class="btn btn-danger">Delete Account</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- User Detail Modal -->
+<div class="modal fade" id="userDetailsModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-info text-white">
+        <h5 class="modal-title">User Details: <span id="detailUsername"></span></h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-borderless">
+          <tbody>
+            <tr>
+              <th scope="row">Account ID:</th>
+              <td id="detailAccountId"></td>
+            </tr>
+            <tr>
+              <th scope="row">Account Type:</th>
+              <td id="detailAccountType"></td>
+            </tr>
+            <tr>
+              <th scope="row">Verified Status:</th>
+              <td id="detailVerifiedStatus"></td>
+            </tr>
+            <tr>
+              <th scope="row">First Name:</th>
+              <td id="detailFirstName"></td>
+            </tr>
+            <tr>
+              <th scope="row">Last Name:</th>
+              <td id="detailLastName"></td>
+            </tr>
+            <tr>
+              <th scope="row">Email:</th>
+              <td id="detailEmail"></td>
+            </tr>
+            <tr>
+              <th scope="row">Phone Number:</th>
+              <td id="detailPhoneNumber"></td>
+            </tr>
+            <tr>
+              <th scope="row">City:</th>
+              <td id="detailCity"></td>
+            </tr>
+            <tr>
+              <th scope="row">State:</th>
+              <td id="detailState"></td>
+            </tr>
+            <tr>
+              <th scope="row">Time Zone:</th>
+              <td id="detailTimeZone"></td>
+            </tr>
+            <tr>
+              <th scope="row">Created At:</th>
+              <td id="detailCreatedAt"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+@section Scripts {
+  <script>
+    function confirmDeletion(accountId, username) {
+      document.getElementById('deleteAccountId').value = accountId;
+      document.getElementById('deleteAccountName').textContent = username;
+      new bootstrap.Modal(document.getElementById('deleteAccountModal')).show();
+    }
+
+    function showUserDetails(accountId, username, isItUser, verified, firstName, lastName, email, phoneNumber, city, state, timeZone, createdAt) {
+      document.getElementById('detailAccountId').textContent = accountId;
+      document.getElementById('detailUsername').textContent = username;
+      document.getElementById('detailAccountType').textContent = (isItUser === 'True' || isItUser === 'true') ? "IT User" : "General User";
+      document.getElementById('detailVerifiedStatus').innerHTML = verified === 'True' || verified === 'true' ?
+        '<span class="badge bg-success">Verified</span>' :
+        '<span class="badge bg-warning text-dark">Unverified</span>';
+
+      document.getElementById('detailFirstName').textContent = firstName || '';
+      document.getElementById('detailLastName').textContent = lastName || '';
+      document.getElementById('detailEmail').textContent = email || '';
+      document.getElementById('detailPhoneNumber').textContent = phoneNumber || '';
+      document.getElementById('detailCity').textContent = city || '';
+      document.getElementById('detailState').textContent = state || '';
+      document.getElementById('detailTimeZone').textContent = timeZone || '';
+      document.getElementById('detailCreatedAt').textContent = createdAt || '';
+
+      new bootstrap.Modal(document.getElementById('userDetailsModal')).show();
+    }
+  </script>
+}
