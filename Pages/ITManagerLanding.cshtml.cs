@@ -3,13 +3,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using IMS.Data;
 using IMS.Models;
-using IMS.Attributes;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace IMS.Pages {
-  [RequireITPerms]
   public class ITManagerLandingModel:PageModel {
     private readonly AppDbContext _context;
 
@@ -17,55 +15,35 @@ namespace IMS.Pages {
       _context = context;
     }
 
-    public IList<UserAccount> UnverifiedAccounts { get; private set; } = new List<UserAccount>();
+    public IList<UserAccount> AllUserAccounts { get; set; } = new List<UserAccount>();
 
-    public async Task<IActionResult> OnGetAsync() {
-      if(_context.UserAccounts == null) {
-        return NotFound("Database context is null.");
-      }
-
-      UnverifiedAccounts = await _context.UserAccounts
-          .Where(u => !u.Verified)
-          .ToListAsync();
-
-      return Page();
+    public async Task OnGetAsync() {
+      AllUserAccounts = await _context.UserAccounts
+                          .OrderBy(u => u.Username)
+                          .ToListAsync();
     }
-    public async Task<IActionResult> OnPostLogout()
-    {
-        HttpContext.Session.Clear(); // This clears the session
-        return RedirectToPage("/Login"); // Redirect to login page
-    }
-    public async Task<IActionResult> OnPostDeleteAsync(int? id) {
-      if(id == null) {
-        return BadRequest("Invalid user ID.");
+
+    public async Task<IActionResult> OnPostVerifyAsync(int id) {
+      var account = await _context.UserAccounts.FindAsync(id);
+      if(account != null) {
+        account.Verified = true;
+        await _context.SaveChangesAsync();
       }
-
-      var user = await _context.UserAccounts.FindAsync(id);
-      if(user == null) {
-        return NotFound($"User with ID {id} not found.");
-      }
-
-      _context.UserAccounts.Remove(user);
-      await _context.SaveChangesAsync();
-
       return RedirectToPage();
     }
 
-    public async Task<IActionResult> OnPostVerifyAsync(int? id) {
-      if(id == null) {
-        return BadRequest("Invalid user ID.");
+    public async Task<IActionResult> OnPostDeleteAsync(int id) {
+      var account = await _context.UserAccounts.FindAsync(id);
+      if(account != null) {
+        _context.UserAccounts.Remove(account);
+        await _context.SaveChangesAsync();
       }
-
-      var user = await _context.UserAccounts.FindAsync(id);
-      if(user == null) {
-        return NotFound($"User with ID {id} not found.");
-      }
-
-      user.Verified = true;
-      _context.UserAccounts.Update(user);
-      await _context.SaveChangesAsync();
-
       return RedirectToPage();
+    }
+
+    public IActionResult OnPostLogout() {
+      HttpContext.Session.Clear();
+      return RedirectToPage("/Login");
     }
   }
 }
