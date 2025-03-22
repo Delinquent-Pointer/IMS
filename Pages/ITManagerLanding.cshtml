@@ -29,8 +29,13 @@
           @foreach (var account in Model.AllUserAccounts)
           {
             <tr>
-              <td>@account.Username</td>
-              <td>@account.Account_Id</td> <!-- Correctly displaying Account Id -->
+              <td>
+                <a href="#" class="text-decoration-none"
+                  onclick="showUserDetails(@account.Account_Id, '@account.Username', '@account.Is_IT_User', '@account.Verified')">
+                  @account.Username
+                </a>
+              </td>
+              <td>@account.Account_Id</td>
               <td>@(account.Is_IT_User ? "IT User" : "General User")</td>
               <td>
                 <span class="badge @(account.Verified ? "bg-success" : "bg-warning text-dark")">
@@ -80,12 +85,97 @@
   </div>
 </div>
 
+<!-- User Detail Modal -->
+<div class="modal fade" id="userDetailsModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-info text-white">
+        <h5 class="modal-title">User Details: <span id="detailUsername"></span></h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-borderless">
+          <tbody>
+            <tr>
+              <th scope="row">Account ID:</th>
+              <td id="detailAccountId"></td>
+            </tr>
+            <tr>
+              <th scope="row">Account Type:</th>
+              <td id="detailAccountType"></td>
+            </tr>
+            <tr>
+              <th scope="row">Verified Status:</th>
+              <td id="detailVerifiedStatus"></td>
+            </tr>
+            <tr>
+              <th scope="row">First Name:</th>
+              <td id="detailFirstName"></td>
+            </tr>
+            <tr>
+              <th scope="row">Last Name:</th>
+              <td id="detailLastName"></td>
+            </tr>
+            <tr>
+              <th scope="row">Email:</th>
+              <td id="detailEmail"></td>
+            </tr>
+            <tr>
+              <th scope="row">Phone Number:</th>
+              <td id="detailPhoneNumber"></td>
+            </tr>
+            <tr>
+              <th scope="row">City:</th>
+              <td id="detailCity"></td>
+            </tr>
+            <tr>
+              <th scope="row">State:</th>
+              <td id="detailState"></td>
+            </tr>
+            <tr>
+              <th scope="row">Time Zone:</th>
+              <td id="detailTimeZone"></td>
+            </tr>
+            <tr>
+              <th scope="row">Created At:</th>
+              <td id="detailCreatedAt"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 @section Scripts {
   <script>
     function confirmDeletion(accountId, username) {
       document.getElementById('deleteAccountId').value = accountId;
       document.getElementById('deleteAccountName').textContent = username;
       new bootstrap.Modal(document.getElementById('deleteAccountModal')).show();
+    }
+
+    function showUserDetails(accountId, username, isItUser, verified, firstName, lastName, email, phoneNumber, city, state, timeZone, createdAt) {
+      document.getElementById('detailAccountId').textContent = accountId;
+      document.getElementById('detailUsername').textContent = username;
+      document.getElementById('detailAccountType').textContent = (isItUser === 'True' || isItUser === 'true') ? "IT User" : "General User";
+      document.getElementById('detailVerifiedStatus').innerHTML = verified === 'True' || verified === 'true' ?
+        '<span class="badge bg-success">Verified</span>' :
+        '<span class="badge bg-warning text-dark">Unverified</span>';
+
+      document.getElementById('detailFirstName').textContent = firstName || '';
+      document.getElementById('detailLastName').textContent = lastName || '';
+      document.getElementById('detailEmail').textContent = email || '';
+      document.getElementById('detailPhoneNumber').textContent = phoneNumber || '';
+      document.getElementById('detailCity').textContent = city || '';
+      document.getElementById('detailState').textContent = state || '';
+      document.getElementById('detailTimeZone').textContent = timeZone || '';
+      document.getElementById('detailCreatedAt').textContent = createdAt || '';
+
+      new bootstrap.Modal(document.getElementById('userDetailsModal')).show();
     }
   </script>
 }
