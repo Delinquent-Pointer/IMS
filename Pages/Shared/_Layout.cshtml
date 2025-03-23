@@ -1,5 +1,21 @@
-﻿<!DOCTYPE html>
+﻿@{
+  string? user = Context.Session.GetString("User");
+  bool? perms = Context.Session.GetInt32("ITPerms") == 1;
+}
+<!DOCTYPE html>
 <html lang="en">
+
+
+
+<!-- Reloads the page if it was loaded from the cache (i.e.: when the back button is pressed)-->
+<script>
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                window.location.reload();
+            }
+        });
+</script>
+
 
 <head>
   <meta charset="utf-8" />
@@ -56,15 +72,42 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarContent">
           <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-              <a class="nav-link" asp-area="" asp-page="/Login">Login</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" asp-area="" asp-page="/CreateAccount">Register</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" asp-area="" asp-page="/Products">Products</a>
-            </li>
+            
+            @if (!string.IsNullOrEmpty(user))
+            {
+              <!-- these are only displayed If user is logged in -->
+              <li class="nav-item">
+                <a class="nav-link" asp-area="" asp-page="/InventoryManagerLanding">Home Page</a>
+              </li>
+
+              @if (perms != null && perms.Value)
+              {
+                <!-- these are only displayed If user is logged in and has IT perms-->
+                <li class="nav-item">
+                  <a class="nav-link" asp-area="" asp-page="/ITManagerLanding">IT: Manage Accounts</a>
+                </li>
+              }
+
+              <li class="nav-item">
+                <a class="nav-link" asp-area="" asp-page="/Products">Inventory</a> <!-- ✅ New Inventory Page -->
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link" asp-area="" asp-page="/CreateProduct">Create New Product</a>
+              </li>
+      
+            }
+            else
+            {
+              <!-- these are only displayed If user is NOT logged in-->
+              <li class="nav-item">
+                <a class="nav-link" asp-area="" asp-page="/Login">Login</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" asp-area="" asp-page="/CreateAccount">Register</a>
+              </li>
+            }
+            <!-- anything that's displayed REGARDLESS of login status should be added outside of the if-else block -->
             <li class="nav-item">
               <a class="nav-link" asp-area="" asp-page="/Privacy">Privacy</a>
             </li>
@@ -74,6 +117,7 @@
             <li class="nav-item">
               <a class="nav-link" asp-area="" asp-page="/Support">Support</a>
             </li>
+
           </ul>
         </div>
       </div>
