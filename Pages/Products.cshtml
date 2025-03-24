@@ -84,6 +84,7 @@
         foreach (var product in Model.Products)
         {
           <tr class="clickable-row" data-bs-toggle="modal" data-bs-target="#productModal"
+              data-id="@product.Id" 
               data-name="@product.Name" data-description="@product.Description"
               data-price="@product.Price" data-quantity="@product.Quantity"
               data-sku="@product.SKU" data-category="@product.Category"
@@ -114,50 +115,55 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form id="editProductForm">
-          <input type="hidden" id="modalProductId">
+        <form method="post" asp-page-handler="EditProduct" id="editProductForm">
+          <input type="hidden" id="modalProductId" name="Input.Id">
 
           <div class="mb-2">
             <label><strong>Name:</strong></label>
-            <input type="text" id="modalProductName" class="form-control" disabled>
+            <input type="text" id="modalProductName" name="Input.ProductName" class="form-control" disabled>
           </div>
 
           <div class="mb-2">
             <label><strong>Description:</strong></label>
-            <textarea id="modalProductDescription" class="form-control" disabled></textarea>
+            <textarea id="modalProductDescription" name="Input.Description" class="form-control" disabled></textarea>
           </div>
 
           <div class="mb-2">
             <label><strong>Price ($):</strong></label>
-            <input type="number" id="modalProductPrice" class="form-control" disabled>
+            <input type="number" id="modalProductPrice" name="Input.Price" class="form-control" step="0.01" disabled>
           </div>
 
           <div class="mb-2">
             <label><strong>Quantity:</strong></label>
-            <input type="number" id="modalProductQuantity" class="form-control" disabled>
+            <input type="number" id="modalProductQuantity" name="Input.Quantity" class="form-control" disabled>
+          </div>
+          
+          <div class="mb-2">
+            <label><strong>Reorder Level:</strong></label>
+            <input type="number" id="modalProductReorderLevel" name="Input.ReorderLevel" class="form-control" disabled>
           </div>
 
           <div class="mb-2">
             <label><strong>SKU:</strong></label>
-            <input type="text" id="modalProductSKU" class="form-control" disabled>
+            <input type="text" id="modalProductSKU" name="Input.SKU" class="form-control" disabled>
           </div>
 
           <div class="mb-2">
             <label><strong>Category:</strong></label>
-            <input type="text" id="modalProductCategory" class="form-control" disabled>
+            <input type="text" id="modalProductCategory" name="Input.Category" class="form-control" disabled>
           </div>
 
           <div class="mb-2">
             <label><strong>Location:</strong></label>
-            <input type="text" id="modalProductLocation" class="form-control" disabled>
+            <input type="text" id="modalProductLocation" name="Input.Location" class="form-control" disabled>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" id="editButton" class="btn btn-warning">Edit</button>
+            <button type="submit" id="saveButton" class="btn btn-success" style="display: none;">Save Changes</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           </div>
         </form>
-      </div>
-
-      <div class="modal-footer">
-        <button type="button" id="editButton" class="btn btn-warning">Edit</button>
-        <button type="button" id="saveButton" class="btn btn-success" style="display: none;">Save Changes</button>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
@@ -177,6 +183,7 @@
         document.getElementById("modalProductDescription").value = this.dataset.description || "";
         document.getElementById("modalProductPrice").value = this.dataset.price || "";
         document.getElementById("modalProductQuantity").value = this.dataset.quantity || "";
+        document.getElementById("modalProductReorderLevel").value = this.dataset.reorderLevel || "";
         document.getElementById("modalProductSKU").value = this.dataset.sku || "";
         document.getElementById("modalProductCategory").value = this.dataset.category || "";
         document.getElementById("modalProductLocation").value = this.dataset.location || "";
@@ -192,49 +199,10 @@
       editButton.style.display = "none";
       saveButton.style.display = "inline-block";
     });
-
-    saveButton.addEventListener("click", function () {
-      if (confirm("Are you sure you want to save changes?")) {
-        var updatedProduct = {
-          Id: document.getElementById("modalProductId").value,
-          Name: document.getElementById("modalProductName").value,
-          Description: document.getElementById("modalProductDescription").value,
-          Price: parseFloat(document.getElementById("modalProductPrice").value) || 0,
-          Quantity: parseInt(document.getElementById("modalProductQuantity").value) || 0,
-          SKU: document.getElementById("modalProductSKU").value,
-          Category: document.getElementById("modalProductCategory").value,
-          Location: document.getElementById("modalProductLocation").value
-        };
-
-        fetch("/Products?handler=EditProduct", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(updatedProduct)
-        })
-        .then(response => {
-          if (response.ok) {
-            return response.json();
-          } else {
-            throw new Error("Failed to update product.");
-          }
-        })
-        .then(data => {
-          if (data.success) {
-            alert("Product updated successfully!");
-            window.location.reload();
-          } else {
-            alert("Error updating product: " + (data.message || "Unknown error."));
-          }
-        })
-        .catch(error => {
-          console.error("Error:", error);
-          alert("Something went wrong. Try again.");
-        });
-      }
-    });
   });
 </script>
 
+@* 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     var rows = document.querySelectorAll(".clickable-row");
@@ -251,5 +219,5 @@
       });
     });
   });
-</script>
+</script> *@
 
