@@ -5013,23 +5013,19 @@
     ]
   },
   "packageFolders": {
-    "/Users/boronze/.nuget/packages/": {}
+    "C:\\Users\\Jared\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/boronze/Documents/GitHub/IMS/IMS.csproj",
       "projectUniqueName": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS.csproj",
       "projectName": "IMS",
-      "projectPath": "/Users/boronze/Documents/GitHub/IMS/IMS.csproj",
-      "packagesPath": "/Users/boronze/.nuget/packages/",
-      "outputPath": "/Users/boronze/Documents/GitHub/IMS/obj/",
       "projectPath": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS.csproj",
       "packagesPath": "C:\\Users\\Jared\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/boronze/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\Jared\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
@@ -5101,7 +5097,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.200/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.200/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

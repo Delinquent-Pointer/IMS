@@ -3,6 +3,14 @@
 @{
   ViewData["Title"] = "Create Product";
 }
+
+
+<style>
+    .text-danger {
+        white-space: pre-line;
+    }
+</style>
+
 <div class="container d-flex flex-column justify-content-center align-items-center" style="min-height: 100vh;">
   <div class="w-100" style="max-width: 400px;">
     <div class="text-center mb-4">
@@ -27,7 +35,7 @@
       </div>
       <div class="form-group">
         <label asp-for="Input.Price"></label>
-        <input type="text" placeholder="$0.00"  pattern="\d+(\.\d{0,2})?" asp-for="Input.Price" class="form-control" />
+        <input type="text" placeholder="$0.00"  pattern="\d+(\.\d{0,2})?" asp-f  or="Input.Price" class="form-control" />
         <span asp-validation-for="Input.Price" class="text-danger"></span>
       </div>
       <div class="form-group">
@@ -47,7 +55,7 @@
       </div>
       <div class="form-group">
         <label asp-for="Input.Category"></label>
-        <input type="search" list="Categories" asp-for="Input.Category" placeholder="Select a Category" class="form-control" />
+        <input type="search" list="Categories" asp-for="Input.Category" placeholder="Enter a Category" class="form-control" />
         <datalist id="Categories">
         @foreach (var category in Model.Categories)
         {
@@ -58,7 +66,7 @@
       </div>
       <div class="form-group">
         <label asp-for="Input.Location"></label>
-        <input type="search" list="Locations" asp-for="Input.Location" placeholder="Select a Location" class="form-control" />
+        <input type="search" list="Locations" asp-for="Input.Location" placeholder="Enter a Location" class="form-control" />
         <datalist id="Locations">
         @foreach (var location in Model.Locations)
         {
