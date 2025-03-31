@@ -34,6 +34,11 @@
     color: #333;
   }
 
+  .spinner-border {
+    width: 3rem;
+    height: 3rem;
+  }
+
   .form-control,
   .btn {
     border-radius: 8px;
@@ -70,37 +75,50 @@
   }
 </style>
 
-<div class="login-card">
-  <div class="text-center mb-4">
-    <h1>Inventory Management System (IMS)</h1>
-    <p class="lead">Please login to continue</p>
+@if (!Model.IsDatabaseOnline)
+{
+  <div id="db-loading" class="text-center text-light" style="padding: 3em;">
+    <h3>Waking up the database...</h3>
+    <div class="spinner-border text-light mt-3" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-2">This may take a few moments if the database is sleeping.</p>
   </div>
+}
+else
+{
+  <div class="login-card" id="login-form">
+    <div class="text-center mb-4">
+      <h1>Inventory Management System (IMS)</h1>
+      <p class="lead">Please login to continue</p>
+    </div>
 
-  @if (ViewData.ModelState[""] != null)
-  {
-    <div
-      class="alert @(Model.LoginErrorType.Equals(LoginModel.LoginErrorTypes.Redirect) ? "alert-warning" : "alert-danger")">
-      @ViewData.ModelState[""].Errors[0].ErrorMessage
-    </div>
-  }
+    @if (ViewData.ModelState[""] != null)
+    {
+      <div
+        class="alert @(Model.LoginErrorType.Equals(LoginModel.LoginErrorTypes.Redirect) ? "alert-warning" : "alert-danger")">
+        @ViewData.ModelState[""].Errors[0].ErrorMessage
+      </div>
+    }
 
-  <form method="post">
-    <div class="form-group">
-      <label asp-for="Input.Username"></label>
-      <input asp-for="Input.Username" class="form-control" />
-      <span asp-validation-for="Input.Username" class="text-danger"></span>
-    </div>
-    <div class="form-group mt-3">
-      <label asp-for="Input.Password"></label>
-      <input asp-for="Input.Password" type="password" class="form-control" />
-      <span asp-validation-for="Input.Password" class="text-danger"></span>
-    </div>
-    <div class="d-grid gap-2 mt-4">
-      <button type="submit" class="btn btn-primary">Login</button>
-      <a href="/CreateAccount" class="btn btn-secondary">Create Account</a>
-    </div>
-  </form>
-</div>
+    <form method="post">
+      <div class="form-group">
+        <label asp-for="Input.Username"></label>
+        <input asp-for="Input.Username" class="form-control" />
+        <span asp-validation-for="Input.Username" class="text-danger"></span>
+      </div>
+      <div class="form-group mt-3">
+        <label asp-for="Input.Password"></label>
+        <input asp-for="Input.Password" type="password" class="form-control" />
+        <span asp-validation-for="Input.Password" class="text-danger"></span>
+      </div>
+      <div class="d-grid gap-2 mt-4">
+        <button type="submit" class="btn btn-primary">Login</button>
+        <a href="/CreateAccount" class="btn btn-secondary">Create Account</a>
+      </div>
+    </form>
+  </div>
+}
 
 @section Scripts {
   <partial name="_ValidationScriptsPartial" />

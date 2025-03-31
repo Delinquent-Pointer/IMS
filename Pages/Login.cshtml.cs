@@ -23,25 +23,36 @@ namespace IMS.Pages{
 
     [BindProperty]
     public LoginInputModel Input {get; set;}
-
-
     public enum LoginErrorTypes{None, Redirect, NullPassword, AccountNotFound}
-
     public LoginErrorTypes LoginErrorType {get; set;} = LoginErrorTypes.None;
+    public bool IsDatabaseOnline { get; set; } = false;
 
     public class LoginInputModel {
       [Required]
-      public required string Username {get; set;}
+      public required string Username { get; set; }
 
       [Required]
       [DataType(DataType.Password)]
-      public required string Password {get; set;}
+      public required string Password { get; set; }
     }
 
-    public void OnGet(){
+    // public void OnGet(){
+    //   String? loginError = HttpContext.Session.GetString("LoginRedirectError");
+    //   if(loginError != null) {
+    //     ModelState.AddModelError(string.Empty, loginError);
+    //     LoginErrorType = LoginErrorTypes.Redirect;
+    //     HttpContext.Session.Remove("LoginRedirectError");
+    //   }
+    // }
+    public async Task OnGetAsync() {
+      // Simulate database still waking
+      // IsDatabaseOnline = false;
+      // Attempt to wake the database
+      IsDatabaseOnline = await PingDatabaseAsync();
+
       String? loginError = HttpContext.Session.GetString("LoginRedirectError");
       if(loginError != null) {
-        ModelState.AddModelError(string.Empty, loginError);
+        ModelState.AddModelError(string.Empty,loginError);
         LoginErrorType = LoginErrorTypes.Redirect;
         HttpContext.Session.Remove("LoginRedirectError");
       }
@@ -85,7 +96,16 @@ namespace IMS.Pages{
       return Redirect("/InventoryManagerLanding");
     }
 
-    private static string HashPassword(string password){
+    private async Task<bool> PingDatabaseAsync() {
+      try {
+        await _context.Database.ExecuteSqlRawAsync("SELECT 1");
+        return true;
+      } catch {
+        return false;
+      }
+    }
+
+    private static string HashPassword(string password) {
       using(var sha256 = SHA256.Create()) {
         byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
         StringBuilder builder = new StringBuilder();
