@@ -44,16 +44,13 @@
   </div>  
 </form>
 
-<!-- Style for hover effect -->
 <style>
-  /* Highlight row on hover */
   .clickable-row:hover {
     border: 2px solid #0d6efd !important; /* Bootstrap primary blue */
     cursor: pointer; 
   }
 </style>
 
-<!-- Script to handle dropdown visibility -->
 <script>
   function toggleDropdown() {
     var operatorDiv = document.getElementById('operatorDiv');
@@ -119,18 +116,15 @@
         <form method="post" asp-page-handler="EditProduct" id="editProductForm" enctype="multipart/form-data">
           <input type="hidden" id="modalProductId" name="Input.Id">
 
-          <!-- Move image to the top of the modal -->
           <div class="mb-2">
             <img id="modalProductImage" src="" alt="Product Image" class="img-fluid" style="max-width: 200px; max-height: 200px;" />
           </div>
 
-          <!-- Product image label below the image -->
           <div class="mb-2">
             <label><strong>Product Image:</strong></label>
             <input type="file" id="imageFileInput" name="Input.ImageFile" class="form-control mt-2" style="display: none;" />
           </div>
 
-          <!-- Other input fields remain unchanged -->
           <div class="mb-2">
             <label><strong>Name:</strong></label>
             <input type="text" id="modalProductName" name="Input.ProductName" class="form-control" disabled>
@@ -203,10 +197,9 @@
               document.getElementById("modalProductCategory").value = this.dataset.category || "";
               document.getElementById("modalProductLocation").value = this.dataset.location || "";
 
-              // Check if the image data exists; if not, show a default image
               var productImageData = this.dataset.image;
               if (productImageData) {
-                  imageElement.src = 'data:image/jpeg;base64,' + productImageData; // Set the image
+                  imageElement.src = 'data:image/jpeg;base64,' + productImageData; 
               } else {
                   imageElement.src = '/images/default-product-image.png'; // Set a default image if no image exists
               }
@@ -221,7 +214,7 @@
           formInputs.forEach(input => input.disabled = false);
           saveButton.style.display = "inline-block";
           editButton.style.display = "none";
-          fileInput.style.display = "block"; // Show the file input when editing
+          fileInput.style.display = "block"; 
       });
   });
 </script>

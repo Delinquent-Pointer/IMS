@@ -93,7 +93,7 @@ namespace IMS.Pages {
       if (ImageFile != null) {
           using (var memoryStream = new MemoryStream()) {
               await ImageFile.CopyToAsync(memoryStream);
-              imageData = memoryStream.ToArray(); // Convert the uploaded file to byte array
+              imageData = memoryStream.ToArray(); 
           }
       }
 
