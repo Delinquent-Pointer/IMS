@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using IMS.DataTransferObj;
 
 namespace IMS.Pages {
   public class InventoryManagerLandingModel:PageModel {
@@ -55,7 +56,10 @@ namespace IMS.Pages {
 
       Products = await query.ToListAsync();
 
+      int userId = GetCurrentUserId();
+
       Notes = await _context.Notes
+          .Where(n => n.Account_Id == userId)
           .OrderByDescending(n => n.Timestamp)
           .Select(n => new NoteDTO {
             Id = n.Id,
@@ -67,33 +71,50 @@ namespace IMS.Pages {
 
     public async Task<IActionResult> OnPostAddNoteAsync() {
       if(!string.IsNullOrEmpty(NewNote)) {
+        int userId = GetCurrentUserId();
+
         _context.Notes.Add(new Note {
           Content = NewNote,
-          Timestamp = DateTime.Now
+          Timestamp = DateTime.Now,
+          Account_Id = userId
         });
+
         await _context.SaveChangesAsync();
       }
+
       return RedirectToPage();
     }
 
     public async Task<IActionResult> OnPostDeleteNoteAsync(int id) {
-      var note = await _context.Notes.FindAsync(id);
+      int userId = GetCurrentUserId();
+
+      var note = await _context.Notes
+          .Where(n => n.Id == id && n.Account_Id == userId)
+          .FirstOrDefaultAsync();
+
       if(note != null) {
         _context.Notes.Remove(note);
         await _context.SaveChangesAsync();
       }
+
       return RedirectToPage();
     }
 
     public async Task<IActionResult> OnPostEditNoteAsync() {
       if(!string.IsNullOrEmpty(EditNoteContent)) {
-        var note = await _context.Notes.FindAsync(EditNoteId);
+        int userId = GetCurrentUserId();
+
+        var note = await _context.Notes
+            .Where(n => n.Id == EditNoteId && n.Account_Id == userId)
+            .FirstOrDefaultAsync();
+
         if(note != null) {
           note.Content = EditNoteContent;
           note.Timestamp = DateTime.Now;
           await _context.SaveChangesAsync();
         }
       }
+
       return RedirectToPage();
     }
 
@@ -103,14 +124,33 @@ namespace IMS.Pages {
     }
 
     public async Task<JsonResult> OnGetCalendarEventsAsync() {
-      var events = await _context.CalendarEvents.Select(e => new {
-        e.Id,
-        e.Title,
-        Date = e.StartDate.ToString("yyyy-MM-dd"),
-        e.Description
-      }).ToListAsync();
+      int userId = GetCurrentUserId();
+
+      var events = await _context.CalendarEvents
+          .Where(e => e.Account_Id == userId)
+          .Select(e => new {
+            e.Id,
+            e.Title,
+            Date = e.StartDate.ToString("yyyy-MM-dd"),
+            e.Description
+          }).ToListAsync();
 
       return new JsonResult(events);
+    }
+
+    private UserDto? CurrentUser { get; set; }
+
+    private int GetCurrentUserId() {
+      if(CurrentUser is null) {
+        var userJson = HttpContext.Session.GetString("User");
+        if(string.IsNullOrEmpty(userJson))
+          throw new Exception("User is not logged in.");
+
+        CurrentUser = System.Text.Json.JsonSerializer.Deserialize<UserDto>(userJson);
+      }
+      // tells the compiler: “I know this isn't null — trust me.”
+      var user = CurrentUser!;
+      return user.Account_Id;
     }
   }
 }
