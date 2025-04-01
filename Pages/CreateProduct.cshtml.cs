@@ -53,6 +53,8 @@ namespace IMS.Pages {
 
     [BindProperty]
     public CreateProductInputModel Input { get; set; }
+    [BindProperty]
+    public IFormFile? ImageFile { get; set; }
 
     public List<string?> Categories { get; set; } = new List<string?>();
     public List<string?> Locations { get; set; } =  new List<string?>();
@@ -76,6 +78,7 @@ namespace IMS.Pages {
       public string? Category { get; set; }
 
       public string? Location { get; set; }
+      public IFormFile? ImageFile { get; set; }
     }
     public async Task OnGetAsync() {
       Categories = await _context.Products.Select(p => p.Category).Distinct().ToListAsync(); 
@@ -85,6 +88,13 @@ namespace IMS.Pages {
     public async Task<IActionResult> OnPostAsync() {
       if(!ModelState.IsValid) {
         return Page();
+      }
+      byte[]? imageData = null;
+      if (ImageFile != null) {
+          using (var memoryStream = new MemoryStream()) {
+              await ImageFile.CopyToAsync(memoryStream);
+              imageData = memoryStream.ToArray(); // Convert the uploaded file to byte array
+          }
       }
 
       //Handles nulls to allow empty fields on the input form
@@ -96,7 +106,8 @@ namespace IMS.Pages {
         ReorderLevel = Input.ReorderLevel ?? 0,
         SKU = Input.SKU ?? "",
         Category = Input.Category ?? "",
-        Location = Input.Location ?? ""
+        Location = Input.Location ?? "",
+        Image = imageData
       };
 
       _context.Products.Add(product);

@@ -119,6 +119,18 @@
         <form method="post" asp-page-handler="EditProduct" id="editProductForm" enctype="multipart/form-data">
           <input type="hidden" id="modalProductId" name="Input.Id">
 
+          <!-- Move image to the top of the modal -->
+          <div class="mb-2">
+            <img id="modalProductImage" src="" alt="Product Image" class="img-fluid" style="max-width: 200px; max-height: 200px;" />
+          </div>
+
+          <!-- Product image label below the image -->
+          <div class="mb-2">
+            <label><strong>Product Image:</strong></label>
+            <input type="file" id="imageFileInput" name="Input.ImageFile" class="form-control mt-2" style="display: none;" />
+          </div>
+
+          <!-- Other input fields remain unchanged -->
           <div class="mb-2">
             <label><strong>Name:</strong></label>
             <input type="text" id="modalProductName" name="Input.ProductName" class="form-control" disabled>
@@ -138,7 +150,7 @@
             <label><strong>Quantity:</strong></label>
             <input type="number" id="modalProductQuantity" name="Input.Quantity" class="form-control" disabled>
           </div>
-          
+
           <div class="mb-2">
             <label><strong>Reorder Level:</strong></label>
             <input type="number" id="modalProductReorderLevel" name="Input.ReorderLevel" class="form-control" disabled>
@@ -157,12 +169,6 @@
           <div class="mb-2">
             <label><strong>Location:</strong></label>
             <input type="text" id="modalProductLocation" name="Input.Location" class="form-control" disabled>
-          </div>
-
-          <div class="mb-2">
-            <label><strong>Product Image:</strong></label>
-            <img id="modalProductImage" src="" alt="Product Image" class="img-fluid" style="max-width: 200px; max-height: 200px;" />
-            <input type="file" id="imageFileInput" name="Input.ImageFile" class="form-control mt-2" style="display: none;" />
           </div>
 
           <div class="modal-footer">

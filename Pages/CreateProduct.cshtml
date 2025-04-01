@@ -4,7 +4,6 @@
   ViewData["Title"] = "Create Product";
 }
 
-
 <style>
     .text-danger {
         white-space: pre-line;
@@ -18,49 +17,49 @@
       <p class="lead">Please fill in the details to create a new product</p>
     </div>
     @if (ViewData.ModelState[""] != null){
-    <div class= "alert @("alert-danger")">
+    <div class="alert @("alert-danger")">
       @ViewData.ModelState[""].Errors[0].ErrorMessage
-      </div>
+    </div>
     }
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
       <div class="form-group">
         <label asp-for="Input.ProductName">Product Name</label>
-        <input asp-for="Input.ProductName" class="form-control" required/>
+        <input asp-for="Input.ProductName" class="form-control" required />
         <span asp-validation-for="Input.ProductName" class="text-danger"></span>
       </div>
       <div class="form-group">
         <label asp-for="Input.Description"></label>
-        <textarea asp-for="Input.Description"class="form-control"></textarea>
+        <textarea asp-for="Input.Description" class="form-control"></textarea>
         <span asp-validation-for="Input.Description" class="text-danger"></span> 
       </div>
       <div class="form-group">
         <label asp-for="Input.Price"></label>
-        <input type="text" placeholder="$0.00"  pattern="\d+(\.\d{0,2})?" asp-f  or="Input.Price" class="form-control" />
+        <input type="text" placeholder="$0.00" pattern="\d+(\.\d{0,2})?" asp-for="Input.Price" class="form-control" />
         <span asp-validation-for="Input.Price" class="text-danger"></span>
       </div>
       <div class="form-group">
         <label asp-for="Input.Quantity"></label>
-        <input type="text" placeholder="0"  pattern="\d+" asp-for="Input.Quantity" class="form-control" />
-        <span asp-validation-for="Input.Price" class="text-danger"></span>
+        <input type="text" placeholder="0" pattern="\d+" asp-for="Input.Quantity" class="form-control" />
+        <span asp-validation-for="Input.Quantity" class="text-danger"></span>
       </div>
       <div class="form-group">
         <label asp-for="Input.ReorderLevel">Set Low Quantity Alert</label>
         <input type="text" placeholder="0" pattern="\d+" asp-for="Input.ReorderLevel" class="form-control" />
-        <span asp-validation-for="Input.Price" class="text-danger"></span>
+        <span asp-validation-for="Input.ReorderLevel" class="text-danger"></span>
       </div>
       <div class="form-group">
         <label asp-for="Input.SKU"></label>
-        <input asp-for="Input.SKU"  class="form-control" />
+        <input asp-for="Input.SKU" class="form-control" />
         <span asp-validation-for="Input.SKU" class="text-danger"></span>
       </div>
       <div class="form-group">
         <label asp-for="Input.Category"></label>
         <input type="search" list="Categories" asp-for="Input.Category" placeholder="Enter a Category" class="form-control" />
         <datalist id="Categories">
-        @foreach (var category in Model.Categories)
-        {
-          <option value="@category"></option>
-        }
+          @foreach (var category in Model.Categories)
+          {
+            <option value="@category"></option>
+          }
         </datalist>
         <span asp-validation-for="Input.Category" class="text-danger"></span>
       </div>
@@ -68,12 +67,18 @@
         <label asp-for="Input.Location"></label>
         <input type="search" list="Locations" asp-for="Input.Location" placeholder="Enter a Location" class="form-control" />
         <datalist id="Locations">
-        @foreach (var location in Model.Locations)
-        {
-          <option value="@location"></option>
-        }
+          @foreach (var location in Model.Locations)
+          {
+            <option value="@location"></option>
+          }
         </datalist>
         <span asp-validation-for="Input.Location" class="text-danger"></span>
+      </div>
+      <!-- Image Upload Section -->
+      <div class="form-group">
+        <label for="imageFileInput">Product Image</label>
+        <input type="file" id="imageFileInput" name="ImageFile" class="form-control" accept="image/*" />
+        <span asp-validation-for="Input.ImageFile" class="text-danger"></span>
       </div>
       <div class="d-flex justify-content-between mt-3">
         <button type="submit" class="btn btn-primary">Create Product</button>
