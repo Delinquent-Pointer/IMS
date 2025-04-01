@@ -11,5 +11,6 @@ namespace IMS.Models {
     public string? SKU { get; set; }             // Unique identifier for the product
     public string? Category { get; set; }        // Product category
     public string? Location { get; set; }        // Warehouse or storage location
+    public byte[]? Image { get; set; }           // Product image
   }
 }
