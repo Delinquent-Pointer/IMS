@@ -81,27 +81,28 @@
     <tbody>
       @if (Model.Products != null && Model.Products.Count > 0)
       {
-        foreach (var product in Model.Products)
-        {
-          <tr class="clickable-row" data-bs-toggle="modal" data-bs-target="#productModal"
-              data-id="@product.Id" 
-              data-name="@product.Name" data-description="@product.Description"
-              data-price="@product.Price" data-quantity="@product.Quantity"
-              data-sku="@product.SKU" data-category="@product.Category"
-              data-location="@product.Location">
-            <td>@product.Name</td>
-            <td>@product.Description</td>
-            <td>$@product.Price</td>
-            <td>@product.Quantity</td>
-            <td>@product.SKU</td>
-            <td>@product.Category</td>
-            <td>@product.Location</td>
-          </tr>
-        }
+          foreach (var product in Model.Products)
+          {
+              var imageBase64 = product.Image != null ? Convert.ToBase64String(product.Image) : null;
+              <tr class="clickable-row" data-bs-toggle="modal" data-bs-target="#productModal"
+                  data-id="@product.Id" 
+                  data-name="@product.Name" data-description="@product.Description"
+                  data-price="@product.Price" data-quantity="@product.Quantity"
+                  data-sku="@product.SKU" data-category="@product.Category"
+                  data-location="@product.Location" data-image="@imageBase64">
+                  <td>@product.Name</td>
+                  <td>@product.Description</td>
+                  <td>$@product.Price</td>
+                  <td>@product.Quantity</td>
+                  <td>@product.SKU</td>
+                  <td>@product.Category</td>
+                  <td>@product.Location</td>
+              </tr>
+          }
       }
       else
       {
-        <tr><td colspan="7" class="text-center">No products found.</td></tr>
+          <tr><td colspan="7" class="text-center">No products found.</td></tr>
       }
     </tbody>
   </table>
@@ -115,7 +116,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form method="post" asp-page-handler="EditProduct" id="editProductForm">
+        <form method="post" asp-page-handler="EditProduct" id="editProductForm" enctype="multipart/form-data">
           <input type="hidden" id="modalProductId" name="Input.Id">
 
           <div class="mb-2">
@@ -158,6 +159,12 @@
             <input type="text" id="modalProductLocation" name="Input.Location" class="form-control" disabled>
           </div>
 
+          <div class="mb-2">
+            <label><strong>Product Image:</strong></label>
+            <img id="modalProductImage" src="" alt="Product Image" class="img-fluid" style="max-width: 200px; max-height: 200px;" />
+            <input type="file" id="imageFileInput" name="Input.ImageFile" class="form-control mt-2" style="display: none;" />
+          </div>
+
           <div class="modal-footer">
             <button type="button" id="editButton" class="btn btn-warning">Edit</button>
             <button type="submit" id="saveButton" class="btn btn-success" style="display: none;">Save Changes</button>
@@ -171,53 +178,44 @@
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
-    var rows = document.querySelectorAll(".clickable-row");
-    var editButton = document.getElementById("editButton");
-    var saveButton = document.getElementById("saveButton");
-    var formInputs = document.querySelectorAll("#editProductForm input, #editProductForm textarea");
+      var rows = document.querySelectorAll(".clickable-row");
+      var editButton = document.getElementById("editButton");
+      var saveButton = document.getElementById("saveButton");
+      var formInputs = document.querySelectorAll("#editProductForm input, #editProductForm textarea");
+      var imageElement = document.getElementById("modalProductImage");
+      var fileInput = document.getElementById("imageFileInput");
 
-    rows.forEach(row => {
-      row.addEventListener("click", function () {
-        document.getElementById("modalProductId").value = this.dataset.id || "";
-        document.getElementById("modalProductName").value = this.dataset.name || "";
-        document.getElementById("modalProductDescription").value = this.dataset.description || "";
-        document.getElementById("modalProductPrice").value = this.dataset.price || "";
-        document.getElementById("modalProductQuantity").value = this.dataset.quantity || "";
-        document.getElementById("modalProductReorderLevel").value = this.dataset.reorderLevel || "";
-        document.getElementById("modalProductSKU").value = this.dataset.sku || "";
-        document.getElementById("modalProductCategory").value = this.dataset.category || "";
-        document.getElementById("modalProductLocation").value = this.dataset.location || "";
+      rows.forEach(row => {
+          row.addEventListener("click", function () {
+              document.getElementById("modalProductId").value = this.dataset.id || "";
+              document.getElementById("modalProductName").value = this.dataset.name || "";
+              document.getElementById("modalProductDescription").value = this.dataset.description || "";
+              document.getElementById("modalProductPrice").value = this.dataset.price || "";
+              document.getElementById("modalProductQuantity").value = this.dataset.quantity || "";
+              document.getElementById("modalProductReorderLevel").value = this.dataset.reorderLevel || "";
+              document.getElementById("modalProductSKU").value = this.dataset.sku || "";
+              document.getElementById("modalProductCategory").value = this.dataset.category || "";
+              document.getElementById("modalProductLocation").value = this.dataset.location || "";
 
-        formInputs.forEach(input => input.disabled = true);
-        saveButton.style.display = "none";
-        editButton.style.display = "inline-block";
+              // Check if the image data exists; if not, show a default image
+              var productImageData = this.dataset.image;
+              if (productImageData) {
+                  imageElement.src = 'data:image/jpeg;base64,' + productImageData; // Set the image
+              } else {
+                  imageElement.src = '/images/default-product-image.png'; // Set a default image if no image exists
+              }
+
+              formInputs.forEach(input => input.disabled = true);
+              saveButton.style.display = "none";
+              editButton.style.display = "inline-block";
+          });
       });
-    });
 
-    editButton.addEventListener("click", function () {
-      formInputs.forEach(input => input.disabled = false);
-      editButton.style.display = "none";
-      saveButton.style.display = "inline-block";
-    });
+      editButton.addEventListener("click", function () {
+          formInputs.forEach(input => input.disabled = false);
+          saveButton.style.display = "inline-block";
+          editButton.style.display = "none";
+          fileInput.style.display = "block"; // Show the file input when editing
+      });
   });
 </script>
-
-@* 
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    var rows = document.querySelectorAll(".clickable-row");
-
-    rows.forEach(row => {
-      row.addEventListener("click", function () {
-        document.getElementById("modalProductName").textContent = this.dataset.name;
-        document.getElementById("modalProductDescription").textContent = this.dataset.description;
-        document.getElementById("modalProductPrice").textContent = this.dataset.price;
-        document.getElementById("modalProductQuantity").textContent = this.dataset.quantity;
-        document.getElementById("modalProductSKU").textContent = this.dataset.sku;
-        document.getElementById("modalProductCategory").textContent = this.dataset.category;
-        document.getElementById("modalProductLocation").textContent = this.dataset.location;
-      });
-    });
-  });
-</script> *@
-

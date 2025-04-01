@@ -44,6 +44,7 @@ namespace IMS.Pages {
             public string? SKU { get; set; }
             public string? Category { get; set; }
             public string? Location { get; set; }
+            public IFormFile? ImageFile { get; set; }
         }
 
         // Fetch data for editing the product
@@ -66,6 +67,11 @@ namespace IMS.Pages {
                 Category = product.Category,
                 Location = product.Location
             };
+            if (product.Image != null && product.Image.Length > 0)
+            {
+                string base64Image = Convert.ToBase64String(product.Image);
+                ViewData["ProductImage"] = $"data:image/png;base64,{base64Image}";
+            }
 
             // Load categories and locations for the dropdown options
             Categories = await _appDbContext.Products.Select(p => p.Category).Distinct().ToListAsync();
@@ -95,6 +101,12 @@ namespace IMS.Pages {
             product.SKU = Input.SKU ?? "";
             product.Category = Input.Category ?? "";
             product.Location = Input.Location ?? "";
+            if (Input.ImageFile != null && Input.ImageFile.Length > 0)
+            {
+                using var memoryStream = new MemoryStream();
+                await Input.ImageFile.CopyToAsync(memoryStream);
+                product.Image = memoryStream.ToArray(); // Save as binary
+            }
 
             _appDbContext.Products.Update(product);
             await _appDbContext.SaveChangesAsync();
