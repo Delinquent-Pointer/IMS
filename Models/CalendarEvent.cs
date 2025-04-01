@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace IMS.Models {
   public class CalendarEvent {
@@ -16,5 +17,11 @@ namespace IMS.Models {
     public DateTime? EndDate { get; set; }
 
     public string? Description { get; set; }
+
+    [Required]
+    public int Account_Id { get; set; }
+
+    [ForeignKey("Account_Id")]
+    public UserAccount Account { get; set; } = null!;
   }
 }

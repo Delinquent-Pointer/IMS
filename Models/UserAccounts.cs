@@ -12,5 +12,9 @@ namespace IMS.Models {
     public string Password_Hash { get; set; }
     public bool Is_IT_User { get; set; } = false;
     public bool Verified { get; set; } = false;
+
+    // Bi-directional navigation
+    public ICollection<Note> Notes { get; set; } = new List<Note>();
+    public ICollection<CalendarEvent> CalendarEvents { get; set; } = new List<CalendarEvent>();
   }
 }
