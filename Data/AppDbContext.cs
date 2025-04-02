@@ -24,7 +24,7 @@ namespace IMS.Data {
       modelBuilder.Entity<AdminKeys>().ToTable("AdminKeys");
       modelBuilder.Entity<CalendarEvent>().ToTable("CalendarEvents");
       modelBuilder.Entity<Note>().ToTable("Notes");
-     modelBuilder.Entity<ProductBin>().ToTable("ProductsBin");
+      modelBuilder.Entity<ProductBin>().ToTable("ProductsBin");
 
       // Define precision for Product price
       modelBuilder.Entity<Product>()

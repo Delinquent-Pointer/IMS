@@ -198,7 +198,7 @@ namespace IMS.Pages {
 
             _appDbContext.Products.Remove(product);
             
-            /*_appDbContext.ProductsBin.Add(new ProductBin {
+            _appDbContext.ProductsBin.Add(new ProductBin {
                 Name = product.Name,
                 Description = product.Description,
                 Price = product.Price,
@@ -210,7 +210,7 @@ namespace IMS.Pages {
                 Image = product.Image,
                 DeleteDate = DateOnly.FromDateTime(DateTime.Now),
                 DeleteTime = TimeOnly.FromDateTime(DateTime.Now)
-            });*/
+            });
             await _appDbContext.SaveChangesAsync();
 
             return RedirectToPage("/Products");
