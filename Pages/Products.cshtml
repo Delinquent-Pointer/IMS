@@ -2,6 +2,7 @@
 @model IMS.Pages.ProductsModel
 @{
   ViewData["Title"] = "Products";
+  int selectedProductId = 0;
 }
 
 <h1>Product Search Index</h1>
@@ -196,6 +197,7 @@
   </div>
 </div>
 
+
 <div class="modal fade" id="deleteProductModal" tabindex="-1" aria-labelledby="deleteProductModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -208,14 +210,15 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <form method="post" asp-page-handler="DeleteProduct">
-                    <input type="hidden" id="deleteProductId" name="Input.Id">
-                    <button type="submit" class="btn btn-danger">Delete</button>
+                <form method="post" asp-page-handler="Delete">
+                    <input type="hidden" id="deleteProductId" name="id" />
+                    <button type="submit" class="btn btn-danger">Confirm</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
 <script>
   document.addEventListener("DOMContentLoaded", function () {
       var rows = document.querySelectorAll(".clickable-row");
@@ -225,9 +228,13 @@
       var imageElement = document.getElementById("modalProductImage");
       var fileInput = document.getElementById("imageFileInput");
 
+      var deleteProductModal = document.getElementById("deleteProductModal");
+      var deleteProductIdInput = document.getElementById("deleteProductId");
+
       rows.forEach(row => {
           row.addEventListener("click", function () {
               document.getElementById("modalProductId").value = this.dataset.id || "";
+              selectedProductId = this.dataset.id || 0; // Store the selected product ID for deletion
               document.getElementById("modalProductName").value = this.dataset.name || "";
               document.getElementById("modalProductDescription").value = this.dataset.description || "";
               document.getElementById("modalProductPrice").value = this.dataset.price || "";
@@ -255,6 +262,13 @@
           saveButton.style.display = "inline-block";
           editButton.style.display = "none";
           fileInput.style.display = "block"; 
+      });
+
+      // Handle delete modal logic
+      var deleteProductModal = document.getElementById("deleteProductModal");
+      deleteProductModal.addEventListener("show.bs.modal", function () {
+          // Set the delete modal's hidden input field to the selected product ID
+          deleteProductIdInput.value = selectedProductId;
       });
   });
 </script>
