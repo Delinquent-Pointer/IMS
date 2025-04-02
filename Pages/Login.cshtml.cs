@@ -44,6 +44,7 @@ namespace IMS.Pages {
       // IsDatabaseOnline = false;
       // Try waking up the DB (page refreshes every 15 seconds)
       IsDatabaseOnline = await PingDatabaseAsync();
+      //IsDatabaseOnline = true;
 
       if(!IsDatabaseOnline) {
         // Skip all login error setup if DB is offline

@@ -7,6 +7,7 @@ namespace IMS.Data {
         : base(options) { }
 
     public DbSet<Product> Products { get; set; }
+    public DbSet<ProductBin> ProductsBin { get; set; }
     public DbSet<UserAccount> UserAccounts { get; set; }
     public DbSet<AdminKeys> AdminKeys { get; set; }
     public DbSet<CalendarEvent> CalendarEvents { get; set; }
@@ -23,6 +24,7 @@ namespace IMS.Data {
       modelBuilder.Entity<AdminKeys>().ToTable("AdminKeys");
       modelBuilder.Entity<CalendarEvent>().ToTable("CalendarEvents");
       modelBuilder.Entity<Note>().ToTable("Notes");
+      modelBuilder.Entity<ProductBin>().ToTable("ProductsBin");
 
       // Define precision for Product price
       modelBuilder.Entity<Product>()
@@ -77,6 +79,9 @@ namespace IMS.Data {
           .WithOne()
           .HasForeignKey<UserProfile>(u => u.Account_Id)
           .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<ProductBin>()
+        .HasKey(p => p.Id);
     }
   }
 }

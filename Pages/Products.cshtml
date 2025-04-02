@@ -2,6 +2,7 @@
 @model IMS.Pages.ProductsModel
 @{
   ViewData["Title"] = "Products";
+  int selectedProductId = 0;
 }
 
 <h1>Product Search Index</h1>
@@ -49,6 +50,16 @@
     border: 2px solid #0d6efd !important; /* Bootstrap primary blue */
     cursor: pointer; 
   }
+
+  .description-cutoff {
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* cutoff after 2 lines */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis; /* add "..." at cutoff */ 
+    word-break: break-word; /* cutoff can split long words*/
+    white-space: normal;
+  }
 </style>
 
 <script>
@@ -62,7 +73,11 @@
   window.onload = toggleDropdown;
 </script>
 
-<div style="overflow-y: auto; max-height: 600px; border: 1px solid #ddd;">
+
+
+
+
+<div style="overflow-y: auto; max-height: 700px; border: 1px solid #ddd;">
   <table class="table table-striped mt-3">
     <thead style="position: sticky; top: 0; z-index: 1;">
       <tr>
@@ -85,10 +100,15 @@
                   data-id="@product.Id" 
                   data-name="@product.Name" data-description="@product.Description"
                   data-price="@product.Price" data-quantity="@product.Quantity"
+                  data-reorder-level="@product.ReorderLevel"
                   data-sku="@product.SKU" data-category="@product.Category"
                   data-location="@product.Location" data-image="@imageBase64">
                   <td>@product.Name</td>
-                  <td>@product.Description</td>
+                  <td style= "max-width: 500px;">
+                    <div class="description-cutoff" title="@product.Description">
+                    @product.Description
+                    </div>
+                  </td>
                   <td>$@product.Price</td>
                   <td>@product.Quantity</td>
                   <td>@product.SKU</td>
@@ -166,6 +186,7 @@
           </div>
 
           <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteProductModal">Delete</button>
             <button type="button" id="editButton" class="btn btn-warning">Edit</button>
             <button type="submit" id="saveButton" class="btn btn-success" style="display: none;">Save Changes</button>
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -174,6 +195,28 @@
       </div>
     </div>
   </div>
+</div>
+
+
+<div class="modal fade" id="deleteProductModal" tabindex="-1" aria-labelledby="deleteProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteProductModalLabel">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" Style="text-align: center; font-weight: bold; color: rgb(255, 123, 0);">
+                Are you sure you want to delete this product?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form method="post" asp-page-handler="Delete">
+                    <input type="hidden" id="deleteProductId" name="id" />
+                    <button type="submit" class="btn btn-danger">Confirm</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -185,9 +228,13 @@
       var imageElement = document.getElementById("modalProductImage");
       var fileInput = document.getElementById("imageFileInput");
 
+      var deleteProductModal = document.getElementById("deleteProductModal");
+      var deleteProductIdInput = document.getElementById("deleteProductId");
+
       rows.forEach(row => {
           row.addEventListener("click", function () {
               document.getElementById("modalProductId").value = this.dataset.id || "";
+              selectedProductId = this.dataset.id || 0; // Store the selected product ID for deletion
               document.getElementById("modalProductName").value = this.dataset.name || "";
               document.getElementById("modalProductDescription").value = this.dataset.description || "";
               document.getElementById("modalProductPrice").value = this.dataset.price || "";
@@ -215,6 +262,13 @@
           saveButton.style.display = "inline-block";
           editButton.style.display = "none";
           fileInput.style.display = "block"; 
+      });
+
+      // Handle delete modal logic
+      var deleteProductModal = document.getElementById("deleteProductModal");
+      deleteProductModal.addEventListener("show.bs.modal", function () {
+          // Set the delete modal's hidden input field to the selected product ID
+          deleteProductIdInput.value = selectedProductId;
       });
   });
 </script>
