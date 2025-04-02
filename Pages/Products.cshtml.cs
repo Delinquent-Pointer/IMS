@@ -187,5 +187,33 @@ namespace IMS.Pages {
 
             Products = await query.ToListAsync();
         }
+
+        //Delete functionality
+        public async Task<IActionResult> OnPostDeleteAsync(int id) {
+            var product = await _appDbContext.Products.FindAsync(id);
+
+            if (product == null) {
+                return NotFound();
+            }
+
+            _appDbContext.Products.Remove(product);
+            
+            /*_appDbContext.ProductsBin.Add(new ProductBin {
+                Name = product.Name,
+                Description = product.Description,
+                Price = product.Price,
+                Quantity = product.Quantity,
+                ReorderLevel = product.ReorderLevel,
+                SKU = product.SKU,
+                Category = product.Category,
+                Location = product.Location,
+                Image = product.Image,
+                DeleteDate = DateOnly.FromDateTime(DateTime.Now),
+                DeleteTime = TimeOnly.FromDateTime(DateTime.Now)
+            });*/
+            await _appDbContext.SaveChangesAsync();
+
+            return RedirectToPage("/Products");
+        }
     }
 }
