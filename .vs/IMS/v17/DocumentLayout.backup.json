@@ -34,34 +34,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 2,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "CreateProduct.cshtml",
-              "DocumentMoniker": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Pages\\CreateProduct.cshtml",
-              "RelativeDocumentMoniker": "Pages\\CreateProduct.cshtml",
-              "ToolTip": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Pages\\CreateProduct.cshtml",
-              "RelativeToolTip": "Pages\\CreateProduct.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-04-10T03:21:05.143Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Products.cs",
-              "DocumentMoniker": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Models\\Products.cs",
-              "RelativeDocumentMoniker": "Models\\Products.cs",
-              "ToolTip": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Models\\Products.cs",
-              "RelativeToolTip": "Models\\Products.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-09T23:40:49.867Z",
-              "EditorCaption": ""
-            },
             {
               "$type": "Document",
               "DocumentIndex": 4,
@@ -72,8 +46,7 @@
               "RelativeToolTip": "Pages\\Products.cshtml",
               "ViewState": "AgIAAOsAAAAAAAAAAAAuwBsBAABEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-04-09T08:20:00.834Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-09T08:20:00.834Z"
             },
             {
               "$type": "Document",
@@ -95,10 +68,34 @@
               "RelativeDocumentMoniker": "Pages\\Products.cshtml.cs",
               "ToolTip": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Pages\\Products.cshtml.cs",
               "RelativeToolTip": "Pages\\Products.cshtml.cs",
-              "ViewState": "AgIAACwBAAAAAAAAAAAAAGcBAAAMAAAAAAAAAA==",
+              "ViewState": "AgIAACEBAAAAAAAAAAA7wA4BAAAPAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-09T07:42:56.629Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Products.cs",
+              "DocumentMoniker": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Models\\Products.cs",
+              "RelativeDocumentMoniker": "Models\\Products.cs",
+              "ToolTip": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Models\\Products.cs",
+              "RelativeToolTip": "Models\\Products.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-09T23:40:49.867Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "CreateProduct.cshtml",
+              "DocumentMoniker": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Pages\\CreateProduct.cshtml",
+              "RelativeDocumentMoniker": "Pages\\CreateProduct.cshtml",
+              "ToolTip": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Pages\\CreateProduct.cshtml",
+              "RelativeToolTip": "Pages\\CreateProduct.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-04-10T03:21:05.143Z"
             },
             {
               "$type": "Document",

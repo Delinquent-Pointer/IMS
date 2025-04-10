@@ -257,22 +257,18 @@ namespace IMS.Pages {
                 return Page();
             }
 
+
             using (var reader = new StreamReader(file.OpenReadStream())) {
-                CsvReader csv = new(reader, new CsvHelper.Configuration.CsvConfiguration(CultureInfo.InvariantCulture) {
+                
+                CsvReader csv = new(reader, new CsvHelper.Configuration.CsvConfiguration(CultureInfo.InvariantCulture)
+                {
                     Delimiter = ",",
                     HasHeaderRecord = true,
                     MissingFieldFound = null, // Ignore missing fields
                     HeaderValidated = null, // Ignore header validation
                 });
 
-
-                if (!ValidateCsvHeader(csv.Context.Reader.HeaderRecord))
-                {
-                    ModelState.AddModelError(string.Empty, "Incorrect header formatting");
-                    ViewData["Errors"] = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-                    await PopulateProductsList();
-                    return Page();
-                }
+               
 
                 csv.Context.RegisterClassMap<ProductMap>(); //handles converting empty csv fields to default values. 
                 List<Product> records = csv.GetRecords<Product>().ToList();
@@ -337,37 +333,46 @@ namespace IMS.Pages {
             return isValid;    
         }
 
-        private bool ValidateCsvHeader(string[]? headerRecord)
-        {
-            if (headerRecord == null) return false;
-            
-            var allowedHeaders = new List<string> {
-        "Name", "Description", "Price", "Quantity", "ReorderLevel", "SKU", "Category", "Location", "Image"
-    };
+        //private bool ValidateCsvHeader(string[]? headerRecord)
+        //{
+        //    if (headerRecord == null){
+        //        ModelState.AddModelError(string.Empty, "No header found.");
+        //        return false;
+        //    }
+        //    var allowedHeaders = new List<string> {
+        //"Name", "Description", "Price", "Quantity", "ReorderLevel", "SKU", "Category", "Location", "Image"
+        //  };
 
-            //Name header is required
-            if (!headerRecord.Contains("Name", StringComparer.OrdinalIgnoreCase))
-            {
-                return false;
-            }
+        //    //Name header is required
+        //    if (!headerRecord.Contains("Name", StringComparer.OrdinalIgnoreCase))
+        //    {
+        //        ModelState.AddModelError(string.Empty, "The 'Name' header is required but missing.");
+        //        return false;
+        //    }
 
-            // all other headers are optional, but if they are present, they must match the allowedHeaders list
-            if (headerRecord.Any(header => !allowedHeaders.Contains(header, StringComparer.OrdinalIgnoreCase)))
-            {
-                return false;
-            }
-            
-            var duplicateHeaders = headerRecord
-                .GroupBy(header => header, StringComparer.OrdinalIgnoreCase)
-                .Where(group => group.Count() > 1)
-                .Select(group => group.Key);
+        //    // all other headers are optional, but if they are present, they must match the allowedHeaders list
+        //    var invalidHeaders = headerRecord
+        //        .Where(header => !allowedHeaders.Contains(header, StringComparer.OrdinalIgnoreCase))
+        //           .ToList();
 
-            if (duplicateHeaders.Any())
-            {
-                return false; // Duplicate headers found
-            }
+        //    if (invalidHeaders.Any())
+        //    {
+        //        ModelState.AddModelError(string.Empty, $"Invalid headers found: {string.Join(", ", invalidHeaders)}.");
+        //        return false;
+        //    }
 
-            return true;
-        }
+        //    var duplicateHeaders = headerRecord
+        //        .GroupBy(header => header, StringComparer.OrdinalIgnoreCase)
+        //        .Where(group => group.Count() > 1)
+        //        .Select(group => group.Key);
+
+        //    if (duplicateHeaders.Any())
+        //    {
+        //        ModelState.AddModelError(string.Empty, $"Duplicate headers found: {string.Join(", ", duplicateHeaders)}.");
+        //        return false; // Duplicate headers found
+        //    }
+
+        //    return true;
+        //}
     }
 }
