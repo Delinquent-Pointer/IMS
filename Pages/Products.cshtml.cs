@@ -265,6 +265,15 @@ namespace IMS.Pages {
                     HeaderValidated = null, // Ignore header validation
                 });
 
+
+                if (!ValidateCsvHeader(csv.Context.Reader.HeaderRecord))
+                {
+                    ModelState.AddModelError(string.Empty, "Incorrect header formatting");
+                    ViewData["Errors"] = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                    await PopulateProductsList();
+                    return Page();
+                }
+
                 csv.Context.RegisterClassMap<ProductMap>(); //handles converting empty csv fields to default values. 
                 List<Product> records = csv.GetRecords<Product>().ToList();
 
@@ -326,6 +335,39 @@ namespace IMS.Pages {
                 }
             }
             return isValid;    
+        }
+
+        private bool ValidateCsvHeader(string[]? headerRecord)
+        {
+            if (headerRecord == null) return false;
+            
+            var allowedHeaders = new List<string> {
+        "Name", "Description", "Price", "Quantity", "ReorderLevel", "SKU", "Category", "Location", "Image"
+    };
+
+            //Name header is required
+            if (!headerRecord.Contains("Name", StringComparer.OrdinalIgnoreCase))
+            {
+                return false;
+            }
+
+            // all other headers are optional, but if they are present, they must match the allowedHeaders list
+            if (headerRecord.Any(header => !allowedHeaders.Contains(header, StringComparer.OrdinalIgnoreCase)))
+            {
+                return false;
+            }
+            
+            var duplicateHeaders = headerRecord
+                .GroupBy(header => header, StringComparer.OrdinalIgnoreCase)
+                .Where(group => group.Count() > 1)
+                .Select(group => group.Key);
+
+            if (duplicateHeaders.Any())
+            {
+                return false; // Duplicate headers found
+            }
+
+            return true;
         }
     }
 }
