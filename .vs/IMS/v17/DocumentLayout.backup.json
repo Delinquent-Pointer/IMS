@@ -1,0 +1,122 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|c:\\users\\jared\\documents\\school\\cscd 488\\seniorproject\\ims\\ims\\pages\\products.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|solutionrelative:pages\\products.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|c:\\users\\jared\\documents\\school\\cscd 488\\seniorproject\\ims\\ims\\pages\\products.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|solutionrelative:pages\\products.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|c:\\users\\jared\\documents\\school\\cscd 488\\seniorproject\\ims\\ims\\pages\\createproduct.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|solutionrelative:pages\\createproduct.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|c:\\users\\jared\\documents\\school\\cscd 488\\seniorproject\\ims\\ims\\pages\\inventorymanagerlanding.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|solutionrelative:pages\\inventorymanagerlanding.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|c:\\users\\jared\\documents\\school\\cscd 488\\seniorproject\\ims\\ims\\models\\products.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|solutionrelative:models\\products.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|c:\\users\\jared\\documents\\school\\cscd 488\\seniorproject\\ims\\ims\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|solutionrelative:properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Products.cs",
+              "DocumentMoniker": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Models\\Products.cs",
+              "RelativeDocumentMoniker": "Models\\Products.cs",
+              "ToolTip": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Models\\Products.cs",
+              "RelativeToolTip": "Models\\Products.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-09T23:40:49.867Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "CreateProduct.cshtml.cs",
+              "DocumentMoniker": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Pages\\CreateProduct.cshtml.cs",
+              "RelativeDocumentMoniker": "Pages\\CreateProduct.cshtml.cs",
+              "ToolTip": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Pages\\CreateProduct.cshtml.cs",
+              "RelativeToolTip": "Pages\\CreateProduct.cshtml.cs",
+              "ViewState": "AgIAAEkAAAAAAAAAAAAUwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-09T23:38:41.246Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Products.cshtml",
+              "DocumentMoniker": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Pages\\Products.cshtml",
+              "RelativeDocumentMoniker": "Pages\\Products.cshtml",
+              "ToolTip": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Pages\\Products.cshtml",
+              "RelativeToolTip": "Pages\\Products.cshtml",
+              "ViewState": "AgIAAAwBAAAAAAAAAAAuwBsBAABEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-04-09T08:20:00.834Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "launchSettings.json",
+              "DocumentMoniker": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Properties\\launchSettings.json",
+              "RelativeDocumentMoniker": "Properties\\launchSettings.json",
+              "ToolTip": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Properties\\launchSettings.json",
+              "RelativeToolTip": "Properties\\launchSettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-04-09T22:48:03.719Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "InventoryManagerLanding.cshtml",
+              "DocumentMoniker": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Pages\\InventoryManagerLanding.cshtml",
+              "RelativeDocumentMoniker": "Pages\\InventoryManagerLanding.cshtml",
+              "ToolTip": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Pages\\InventoryManagerLanding.cshtml",
+              "RelativeToolTip": "Pages\\InventoryManagerLanding.cshtml",
+              "ViewState": "AgIAAN4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-04-09T08:20:53.362Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Products.cshtml.cs",
+              "DocumentMoniker": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Pages\\Products.cshtml.cs",
+              "RelativeDocumentMoniker": "Pages\\Products.cshtml.cs",
+              "ToolTip": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Pages\\Products.cshtml.cs",
+              "RelativeToolTip": "Pages\\Products.cshtml.cs",
+              "ViewState": "AgIAAAoBAAAAAAAAAAAkwG8AAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-09T07:42:56.629Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

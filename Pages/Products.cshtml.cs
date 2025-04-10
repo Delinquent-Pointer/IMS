@@ -7,10 +7,36 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
+using CsvHelper;
+using CsvHelper.Configuration;
+using System.Text.RegularExpressions;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace IMS.Pages {
     public class ProductsModel : PageModel {
         private readonly AppDbContext _appDbContext;
+
+        private class ProductMap : ClassMap<Product>{
+            ProductMap(){
+                Map(m => m.Name).Default(string.Empty);
+                Map(m => m.Description).Default(string.Empty);
+                Map(m => m.Price).Default(0.00m);
+                Map(m => m.Quantity).Default(0);
+                Map(m => m.ReorderLevel).Default(0);
+                Map(m => m.SKU).Default(string.Empty);
+                Map(m => m.Category).Default(string.Empty);
+                Map(m => m.Location).Default(string.Empty);
+                Map(m => m.Image).Convert(args =>{
+                    var base64String = args.Row.GetField("Image");
+                    return string.IsNullOrEmpty(base64String) ? Array.Empty<byte>() : Convert.FromBase64String(base64String);
+                });
+            }
+        }
+
+
+
+
 
         public ProductsModel(AppDbContext appDbContext) {
             _appDbContext = appDbContext;
@@ -83,6 +109,7 @@ namespace IMS.Pages {
         // Handle the form submission to update the product
         public async Task<IActionResult> OnPostAsync() {
             if (!ModelState.IsValid) {
+                await PopulateProductsList();
                 return Page();
             }
 
@@ -114,12 +141,17 @@ namespace IMS.Pages {
             return RedirectToPage("/Products");
         }
 
+        
+        private async Task PopulateProductsList() {
+            Products = await _appDbContext.Products.AsQueryable().ToListAsync();
+        }
+
         // Handle the search functionality
         public async Task OnGetAsync() {
             var query = _appDbContext.Products.AsQueryable();
 
             if (string.IsNullOrEmpty(SearchTerm)) {
-                Products = await query.ToListAsync();
+                await PopulateProductsList();
                 return;
             }
 
@@ -214,6 +246,86 @@ namespace IMS.Pages {
             await _appDbContext.SaveChangesAsync();
 
             return RedirectToPage("/Products");
+        }
+
+        public async Task<IActionResult> OnPostUploadCSVAsync(IFormFile file) {
+            ModelState.Clear();
+            if (file == null || file.Length == 0) {
+                ModelState.AddModelError(string.Empty, "Please upload a valid CSV file.");
+                ViewData["Errors"] = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                await PopulateProductsList();
+                return Page();
+            }
+
+            using (var reader = new StreamReader(file.OpenReadStream())) {
+                CsvReader csv = new(reader, new CsvHelper.Configuration.CsvConfiguration(CultureInfo.InvariantCulture) {
+                    Delimiter = ",",
+                    HasHeaderRecord = true,
+                    MissingFieldFound = null, // Ignore missing fields
+                    HeaderValidated = null, // Ignore header validation
+                });
+
+                csv.Context.RegisterClassMap<ProductMap>(); //handles converting empty csv fields to default values. 
+                List<Product> records = csv.GetRecords<Product>().ToList();
+
+                // Validate records before saving, if records are invalid, return to the page with errors
+                if (!ValidateRecords(records))
+                {
+                    ViewData["Errors"] = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                    await PopulateProductsList();
+                    return Page();
+                }
+                _appDbContext.Products.AddRange(records);
+                await _appDbContext.SaveChangesAsync();
+            }
+
+            return RedirectToPage("/Products");
+        }
+
+        private bool ValidateRecords(List<Product> records) {
+            bool isValid = true;
+            
+            for(int i = 0; i < records.Count; i++)
+            //foreach (var record in records)
+            {
+                Product record = records[i];
+                int index = i + 1; // 1-based index for error messages
+                if (string.IsNullOrEmpty(record.Name)){
+                    ModelState.AddModelError(string.Empty, $"Item {index}: Name is a required field and cannot be empty.");
+                    isValid = false;
+                }
+
+                if (record.Price < 0)
+                {
+                    ModelState.AddModelError(string.Empty, $"Item {index}: An item's Price cannot be negative.");
+                    isValid = false;
+                }
+                if (record.Quantity < 0)
+                {
+                    Console.WriteLine($"Validation failed for Quantity at index: {index}");
+                    ModelState.AddModelError(string.Empty, $"Item {index}: An item's Quantity cannot be negative.");
+                    isValid = false;
+                }
+                if (record.ReorderLevel < 0)
+                {
+                    ModelState.AddModelError(string.Empty, $"Item {index}: An item's Reorder Level cannot be negative.");
+                    isValid = false;
+                }
+
+                if (!string.IsNullOrEmpty(record.SKU))
+                {
+                    if (!Regex.IsMatch(record.SKU, @"^[A-Z0-9-]*$") ||
+                        !Regex.IsMatch(record.SKU, @"^\S+(-\S+)+$") ||
+                        !Regex.IsMatch(record.SKU, @"^\S{1,5}(-\S*)*$") ||
+                        !Regex.IsMatch(record.SKU, @"^\S+(-\S{1,10})+$") ||
+                        !Regex.IsMatch(record.SKU, @"^\S+(-\S+){1,3}$"))
+                    {
+                        ModelState.AddModelError(string.Empty, $"Item {index}: Incorrectly formatted SKU.");
+                        isValid = false;
+                    }
+                }
+            }
+            return isValid;    
         }
     }
 }
