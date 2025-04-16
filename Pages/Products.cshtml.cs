@@ -263,17 +263,42 @@ namespace IMS.Pages {
                 CsvReader csv = new(reader, new CsvHelper.Configuration.CsvConfiguration(CultureInfo.InvariantCulture)
                 {
                     Delimiter = ",",
+                    PrepareHeaderForMatch = args => args.Header.Trim(),
                     HasHeaderRecord = true,
                     MissingFieldFound = null, // Ignore missing fields
                     HeaderValidated = null, // Ignore header validation
                 });
 
-               
+                csv.Read(); //read the first row
+                csv.ReadHeader(); //read the first row as the header row
 
+                // Validate the header
+                string[]? headerRecord = csv.HeaderRecord;
+                if(!ValidateCsvHeader(headerRecord))
+                {
+                    ViewData["Errors"] = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                    await PopulateProductsList();
+                    return Page();
+                }
+
+                
                 csv.Context.RegisterClassMap<ProductMap>(); //handles converting empty csv fields to default values. 
-                List<Product> records = csv.GetRecords<Product>().ToList();
 
-                // Validate records before saving, if records are invalid, return to the page with errors
+                //attempt to read the records as Product objects
+                List<Product> records;
+                try
+                {
+                    records = csv.GetRecords<Product>().ToList();
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, $"CSV parsing error: {ex.Message}");
+                    ViewData["Errors"] = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                    await PopulateProductsList();
+                    return Page();
+                }
+
+                // Validate records before saving, if any records are invalid, return to the page with errors
                 if (!ValidateRecords(records))
                 {
                     ViewData["Errors"] = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
@@ -333,46 +358,53 @@ namespace IMS.Pages {
             return isValid;    
         }
 
-        //private bool ValidateCsvHeader(string[]? headerRecord)
-        //{
-        //    if (headerRecord == null){
-        //        ModelState.AddModelError(string.Empty, "No header found.");
-        //        return false;
-        //    }
-        //    var allowedHeaders = new List<string> {
-        //"Name", "Description", "Price", "Quantity", "ReorderLevel", "SKU", "Category", "Location", "Image"
-        //  };
+        private bool ValidateCsvHeader(string[]? headerRecord)
+        {
+            bool isValid = true;
+            if (headerRecord == null)
+            {
+                ModelState.AddModelError(string.Empty, "No header record found.");
+                return false;
+            }
+            var allowedHeaders = new List<string> {
+                "Name", "Description", "Price", "Quantity", "ReorderLevel", "SKU", "Category", "Location", "Image"
+            };
 
-        //    //Name header is required
-        //    if (!headerRecord.Contains("Name", StringComparer.OrdinalIgnoreCase))
-        //    {
-        //        ModelState.AddModelError(string.Empty, "The 'Name' header is required but missing.");
-        //        return false;
-        //    }
+            //Name header is required
+            if (!headerRecord.Contains("Name", StringComparer.OrdinalIgnoreCase))
+            {
+                ModelState.AddModelError(string.Empty, "The 'Name' header is required but missing.");
+                isValid = false;
+            }
 
-        //    // all other headers are optional, but if they are present, they must match the allowedHeaders list
-        //    var invalidHeaders = headerRecord
-        //        .Where(header => !allowedHeaders.Contains(header, StringComparer.OrdinalIgnoreCase))
-        //           .ToList();
+            // all other headers besides Name are optional, but if they are present, they must match the allowedHeaders list
+            var invalidHeaders = headerRecord
+                .Where(header => !allowedHeaders.Contains(header, StringComparer.OrdinalIgnoreCase))
+                   .ToList();
 
-        //    if (invalidHeaders.Any())
-        //    {
-        //        ModelState.AddModelError(string.Empty, $"Invalid headers found: {string.Join(", ", invalidHeaders)}.");
-        //        return false;
-        //    }
+            if (invalidHeaders.Any())
+            {
+                ModelState.AddModelError(string.Empty, $"Invalid headers found: {
+                    string.Join(", ", invalidHeaders.Select(header => $"\"{header}\""))
+                    }.");
+                isValid = false;
+            }
 
-        //    var duplicateHeaders = headerRecord
-        //        .GroupBy(header => header, StringComparer.OrdinalIgnoreCase)
-        //        .Where(group => group.Count() > 1)
-        //        .Select(group => group.Key);
 
-        //    if (duplicateHeaders.Any())
-        //    {
-        //        ModelState.AddModelError(string.Empty, $"Duplicate headers found: {string.Join(", ", duplicateHeaders)}.");
-        //        return false; // Duplicate headers found
-        //    }
+            var duplicateHeaders = headerRecord
+                .GroupBy(header => header, StringComparer.OrdinalIgnoreCase)
+                .Where(group => group.Count() > 1)
+                .Select(group => group.Key);
 
-        //    return true;
-        //}
+            if (duplicateHeaders.Any())
+            { 
+                ModelState.AddModelError(string.Empty, $"Duplicate headers found: {
+                    string.Join(", ", duplicateHeaders.Select(header => $"\"{header}\""))
+                    }.");
+                isValid = false; // Duplicate headers found
+            }
+
+            return isValid;
+        }
     }
 }
