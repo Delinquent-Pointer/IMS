@@ -12,13 +12,14 @@ using CsvHelper;
 using CsvHelper.Configuration;
 using System.Text.RegularExpressions;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using Microsoft.IdentityModel.Tokens;
 
 namespace IMS.Pages {
     public class ProductsModel : PageModel {
         private readonly AppDbContext _appDbContext;
 
         private class ProductMap : ClassMap<Product>{
-            ProductMap(){
+            public ProductMap(bool export = false){
                 Map(m => m.Name).Default(string.Empty);
                 Map(m => m.Description).Default(string.Empty);
                 Map(m => m.Price).Default(0.00m);
@@ -27,16 +28,27 @@ namespace IMS.Pages {
                 Map(m => m.SKU).Default(string.Empty);
                 Map(m => m.Category).Default(string.Empty);
                 Map(m => m.Location).Default(string.Empty);
-                Map(m => m.Image).Convert(args =>{
-                    var base64String = args.Row.GetField("Image");
-                    return string.IsNullOrEmpty(base64String) ? Array.Empty<byte>() : Convert.FromBase64String(base64String);
-                });
+                if (export)
+                {
+                    //convert binary to base64 when used for CSV export
+                    Map(m => m.Image).Convert(args =>
+                        args.Value.Image != null && args.Value.Image.Length > 0
+                            ? Convert.ToBase64String(args.Value.Image)
+                            : "");
+                }
+                else
+                {
+                    //convert uploaded Base64 to byte array when used for CSV import
+                    Map(m => m.Image).Convert(args =>
+                    {
+                        var base64 = args.Row.GetField("Image");
+                        return string.IsNullOrEmpty(base64)
+                            ? Array.Empty<byte>()
+                            : Convert.FromBase64String(base64);
+                    });
+                }
             }
         }
-
-
-
-
 
         public ProductsModel(AppDbContext appDbContext) {
             _appDbContext = appDbContext;
@@ -48,6 +60,7 @@ namespace IMS.Pages {
         [BindProperty]
         public EditProductInputModel Input { get; set; }
 
+        
         public IList<Product> Products { get; set; } = new List<Product>();
 
         [BindProperty(SupportsGet = true)]
@@ -282,7 +295,7 @@ namespace IMS.Pages {
                 }
 
                 
-                csv.Context.RegisterClassMap<ProductMap>(); //handles converting empty csv fields to default values. 
+                csv.Context.RegisterClassMap(new ProductMap()); //handles converting empty csv fields to default values. 
 
                 //attempt to read the records as Product objects
                 List<Product> records;
@@ -405,6 +418,35 @@ namespace IMS.Pages {
             }
 
             return isValid;
+        }
+
+
+        public async Task<IActionResult> OnPostDownloadCSVAsync(List<int> productIds)
+        {
+            //previous product list is enetered as hidden form, this will allow downloading of norrowed search results
+            Products = await _appDbContext.Products
+                .Where(p => productIds.Contains(p.Id))
+                .ToListAsync();
+
+            //if the result list was empty we grab the whole list
+            if (Products.IsNullOrEmpty())
+            {
+                await PopulateProductsList();
+            }
+
+
+            using (StringWriter writer = new StringWriter())
+            using (CsvWriter csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+            {
+                csv.Context.RegisterClassMap(new ProductMap(true));
+                csv.WriteRecords(Products);
+
+                string fileName = $"Products_{DateTime.Now:yyyyMMdd_HHmmss}.csv";
+                string contentType = "text/csv";
+                string fileContent = writer.ToString();
+                return File(new System.Text.UTF8Encoding().GetBytes(fileContent), contentType, fileName);
+            }
+
         }
     }
 }

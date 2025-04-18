@@ -282,7 +282,10 @@
 	<div>
 		<label style="font-weight: bold" for="csvInput">Download CSV</label>
 		<form class="d-flex" method="post" asp-page-handler="DownloadCSV">
-            <button type="button" class="btn btn-success">Download</button>
+            @foreach (var product in Model.Products){
+                <input type="hidden" name="ProductIds" value="@product.Id" />
+            }
+            <button type="submit" class="btn btn-success">Download</button>
 		</form>
     </div>
 </div>
