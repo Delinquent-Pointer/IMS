@@ -208,9 +208,31 @@
   </div>
 
 @section Scripts {
+  @{
+    var productNames = Model.Products.Select(p => p.Name).ToList();
+    var quantities = Model.Products.Select(p => p.Quantity).ToList();
+    var prices = Model.Products.Select(p => p.Price).ToList();
+    var reorderLevels = Model.Products.Select(p => p.ReorderLevel).ToList();
+    var categoryGroups = Model.Products
+    .GroupBy(p => p.Category ?? "Uncategorized")
+    .Select(g => new { Category = g.Key, TotalQty = g.Sum(p => p.Quantity) })
+    .ToList();
+    var priceQuantityPoints = Model.Products
+    .Select(p => new { x = p.Price, y = p.Quantity })
+    .ToList();
+  }
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
+      // DB data for charts
+      const productLabels = @Html.Raw(Json.Serialize(productNames));
+      const productQuantities = @Html.Raw(Json.Serialize(quantities));
+      const productPrices = @Html.Raw(Json.Serialize(prices));
+      const reorderLevels = @Html.Raw(Json.Serialize(reorderLevels));
+      const categoryLabels = @Html.Raw(Json.Serialize(@categoryGroups.Select(g => g.Category)));
+      const categoryData = @Html.Raw(Json.Serialize(@categoryGroups.Select(g => g.TotalQty)));
+      const priceQuantityPoints = @Html.Raw(Json.Serialize(priceQuantityPoints));
+
       // Clock
       function updateClock() {
         document.getElementById("live-clock").textContent = new Date().toLocaleString();
@@ -336,14 +358,103 @@
       new Chart(document.getElementById('stockBarChart'), {
         type: 'bar',
         data: {
-          labels: ['Item A', 'Item B', 'Item C'],
+          labels: productLabels,
           datasets: [{
-            label: 'Stock Quantity',
-            data: [30, 50, 20],
-            backgroundColor: 'rgba(75, 192, 192, 0.6)'
+            label: 'Quantity in Stock',
+            data: productQuantities,
+            backgroundColor: 'rgba(54, 162, 235, 0.7)'
           }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'top' },
+            title: { display: true, text: 'Stock Quantity by Product' }
+          }
         }
       });
 
+      new Chart(document.getElementById('categoryPieChart'), {
+        type: 'pie',
+        data: {
+          labels: categoryLabels,
+          datasets: [{
+            data: categoryData,
+            backgroundColor: ['#ff6384', '#36a2eb', '#ffce56', '#4bc0c0', '#9966ff', '#f67019']
+          }]
+        },
+        options: {
+          plugins: {
+            title: { display: true, text: 'Inventory Distribution by Category' }
+          }
+        }
+      });
+
+      new Chart(document.getElementById('reorderLineChart'), {
+        type: 'line',
+        data: {
+          labels: productLabels,
+          datasets: [
+            {
+              label: 'Quantity',
+              data: productQuantities,
+              borderColor: 'green',
+              fill: false,
+              tension: 0.3
+            },
+            {
+              label: 'Reorder Level',
+              data: reorderLevels,
+              borderColor: 'red',
+              borderDash: [5, 5],
+              fill: false,
+              tension: 0.3
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            title: {
+              display: true,
+              text: 'Stock Levels vs Reorder Thresholds'
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+
+      new Chart(document.getElementById('priceQuantityScatter'), {
+        type: 'scatter',
+        data: {
+          datasets: [{
+            label: 'Products',
+            data: priceQuantityPoints,
+            backgroundColor: 'rgba(75, 192, 192, 0.7)'
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            title: {
+              display: true,
+              text: 'Price vs Quantity per Product'
+            }
+          },
+          scales: {
+            x: {
+              title: { display: true, text: 'Price ($)' }
+            },
+            y: {
+              title: { display: true, text: 'Quantity' },
+              beginAtZero: true
+            }
+          }
+        }
+      });
     </script>
 }
