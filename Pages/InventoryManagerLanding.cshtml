@@ -34,6 +34,58 @@
     </div>
   </div>
 
+  <!-- Visual Graphical Selection -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exportModal">Export Data</button>
+  </div>
+
+  <div class="modal fade" id="exportModal" tabindex="-1" aria-labelledby="exportModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content p-3">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exportModalLabel">Export Graph</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <label for="exportChartType">Choose chart:</label>
+          <select id="exportChartType" class="form-select mb-3">
+            <option value="stockBarChart">Stock Bar Chart</option>
+            <option value="categoryPieChart">Category Pie Chart</option>
+            <option value="reorderLineChart">Reorder Level Line Chart</option>
+            <option value="priceQuantityScatter">Price vs Quantity Scatter</option>
+          </select>
+          <button class="btn btn-success w-100" onclick="downloadChart()">Download PNG</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chart Switcher -->
+  <div class="mb-3">
+    <label for="chartTypeSelector" class="form-label">Select Chart Type:</label>
+    <select class="form-select" id="chartTypeSelector" onchange="switchChart(this.value)">
+      <option value="">-- Select --</option>
+      <option value="stock">Stock Bar Chart</option>
+      <option value="category">Category Pie Chart</option>
+      <option value="reorder">Reorder vs Quantity Line</option>
+      <option value="scatter">Price vs Quantity</option>
+    </select>
+  </div>
+
+  <div id="loadingSpinner" style="display:none;">
+    <p><strong>Graph being generated...</strong></p>
+  </div>
+
+  <div id="chartContainer">
+    <!-- Chart canvases (can be hidden/revealed based on selection) -->
+    <canvas id="stockBarChart" style="display:none;"></canvas>
+    <canvas id="categoryPieChart" style="display:none;"></canvas>
+    <canvas id="reorderLineChart" style="display:none;"></canvas>
+    <canvas id="priceQuantityScatter" style="display:none;"></canvas>
+  </div>
+
+
+
   <!-- Quick Product Search -->
   <div class="row mb-4">
     <div class="col-md-6">
@@ -156,6 +208,8 @@
   </div>
 
 @section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script>
       // Clock
       function updateClock() {
@@ -252,5 +306,44 @@
         document.getElementById('EditNoteContent').value = noteContent;
         new bootstrap.Modal(document.getElementById('editNoteModal')).show();
       }
+
+      //  Download Chart
+      function downloadChart() {
+        const chartId = document.getElementById("exportChartType").value;
+        const canvas = document.getElementById(chartId);
+        const link = document.createElement('a');
+        link.download = `${chartId}.png`;
+        link.href = canvas.toDataURL();
+        link.click();
+      }
+
+      // Chart Switcher
+      function switchChart(type) {
+        const charts = ["stockBarChart", "categoryPieChart", "reorderLineChart", "priceQuantityScatter"];
+        document.getElementById("loadingSpinner").style.display = "block";
+        setTimeout(() => {
+          charts.forEach(id => document.getElementById(id).style.display = "none");
+          if (type === "stock") document.getElementById("stockBarChart").style.display = "block";
+          if (type === "category") document.getElementById("categoryPieChart").style.display = "block";
+          if (type === "reorder") document.getElementById("reorderLineChart").style.display = "block";
+          if (type === "scatter") document.getElementById("priceQuantityScatter").style.display = "block";
+          document.getElementById("loadingSpinner").style.display = "none";
+        }, 800); // simulate loading time
+      }
+
+      // Chart.js initialization (example for stockBarChart)
+
+      new Chart(document.getElementById('stockBarChart'), {
+        type: 'bar',
+        data: {
+          labels: ['Item A', 'Item B', 'Item C'],
+          datasets: [{
+            label: 'Stock Quantity',
+            data: [30, 50, 20],
+            backgroundColor: 'rgba(75, 192, 192, 0.6)'
+          }]
+        }
+      });
+
     </script>
 }
