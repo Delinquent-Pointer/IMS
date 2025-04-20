@@ -89,6 +89,12 @@ namespace IMS.Pages {
           return Page();
         }
 
+        if (!user.Verified) {
+            _logger.LogInformation("[Login] User account not verified.");
+            ModelState.AddModelError(string.Empty, "Login Failed: Account is not verified.");
+            return Page();
+        }
+
         var userDto = new UserDto {
           Account_Id = user.Account_Id,
           Username = user.Username,
