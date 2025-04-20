@@ -37,6 +37,10 @@ namespace IMS.Pages {
     public IList<NoteDTO> Notes { get; set; } = new List<NoteDTO>();
 
     public IList<CalendarEvent> CalendarEvents { get; set; } = new List<CalendarEvent>();
+    [BindProperty]
+    public string? ScannedSKU { get; set; }
+
+    public IList<Product> ScannedProducts { get; set; } = new List<Product>();
 
     public async Task OnGetAsync() {
       CurrentTime = DateTime.Now;
@@ -68,6 +72,30 @@ namespace IMS.Pages {
           })
           .ToListAsync();
     }
+
+public async Task<IActionResult> OnPostScanBarcodeAsync(string sku)
+{
+    if (string.IsNullOrWhiteSpace(sku))
+        return NotFound();
+
+    var product = await _context.Products
+        .Where(p => EF.Functions.Like(p.Name, $"%{sku}%") ||
+                    EF.Functions.Like(p.Description, $"%{sku}%") ||
+                    EF.Functions.Like(p.Category, $"%{sku}%") ||
+                    EF.Functions.Like(p.SKU, $"%{sku}%") ||
+                    EF.Functions.Like(p.Location, $"%{sku}%") ||
+                    p.ReorderLevel.ToString().Contains(sku) ||
+                    p.Quantity.ToString().Contains(sku) ||
+                    p.Price.ToString().Contains(sku))
+        .FirstOrDefaultAsync();
+
+    if (product == null)
+        return NotFound();
+
+    // Send delimited string (not JSON)
+    string result = $"{product.Name}|{product.SKU}|{product.Price}|{product.Quantity}";
+    return Content(result);
+}
 
     public async Task<IActionResult> OnPostAddNoteAsync() {
       if(!string.IsNullOrEmpty(NewNote)) {
