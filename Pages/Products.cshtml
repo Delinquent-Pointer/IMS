@@ -53,7 +53,7 @@
 
   .description-cutoff {
     display: -webkit-box;
-    -webkit-line-clamp: 2; /* cutoff after 2 lines */
+    -webkit-line-clamp: 2; /* cutoff description text after 2 lines */
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis; /* add "..." at cutoff */ 
@@ -72,9 +72,6 @@
   document.getElementById('SearchType').addEventListener('change', toggleDropdown);
   window.onload = toggleDropdown;
 </script>
-
-
-
 
 
 <div style="overflow-y: auto; max-height: 700px; border: 1px solid #ddd;">
@@ -271,4 +268,60 @@
           deleteProductIdInput.value = selectedProductId;
       });
   });
+</script>
+
+<div class="mt-3 d-flex justify-content-between align-items-center">
+  <div>
+      <label style="font-weight: bold" for="csvInput">Upload CSV</label>
+      <form class="d-flex" method="post" asp-page-handler="UploadCSV" enctype="multipart/form-data">
+        <input type="file" class="form-control w-auto" name ="file" accept=".csv"/>
+        <button type="submit" class="btn btn-primary">Upload</button>
+      </form>
+  </div>
+
+	<div>
+		<label style="font-weight: bold" for="csvInput">Download CSV</label>
+		<form class="d-flex" method="post" asp-page-handler="DownloadCSV">
+            @foreach (var product in Model.Products){
+                <input type="hidden" name="ProductIds" value="@product.Id" />
+            }
+            <button type="submit" class="btn btn-success">Download</button>
+		</form>
+    </div>
+</div>
+
+<div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="errorModalLabel">Errors</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul id="errorList" class="list-group"  >
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var errors = @Html.Raw(Json.Serialize(ViewData["Errors"] ?? new List<string>()));
+      if (errors.length > 0) {
+        var errorList = document.getElementById("errorList");
+        errors.forEach(function (error) {
+          var li = document.createElement("li");
+          li.className = "list-group-item";
+          li.textContent = error;
+		  li.style.color = "red";
+          errorList.appendChild(li);
+        });
+        var errorModal = new bootstrap.Modal(document.getElementById("errorModal"));
+        errorModal.show();
+      }
+    });
 </script>
