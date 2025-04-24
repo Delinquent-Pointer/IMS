@@ -207,6 +207,40 @@
     </div>
   </div>
 
+  <form method="post" asp-page-handler="SetThreshold" class="mb-3">
+    <label for="UniversalThreshold" class="form-label">Set Universal Low-Stock Threshold:</label>
+    <input type="number" name="UniversalThreshold" class="form-control w-25 d-inline-block"
+      value="@ViewData["Threshold"]" />
+    <button type="submit" class="btn btn-sm btn-outline-primary">Update</button>
+  </form>
+
+@if (Model.LowStockProducts.Any())
+{
+    <h4>🔴 Products Below Universal Threshold (@ViewData["Threshold"]):</h4>
+    <ul class="list-group mb-4">
+      @foreach (var item in Model.LowStockProducts)
+      {
+        <li class="list-group-item text-danger">
+          <strong>@item.Name</strong> — Quantity: @item.Quantity
+        </li>
+      }
+    </ul>
+}
+
+@if (Model.WatchedLowProducts.Any())
+{
+    <h4>🟠 Watched Products Below Individual Threshold:</h4>
+    <ul class="list-group mb-4">
+      @foreach (var item in Model.WatchedLowProducts)
+      {
+        <li class="list-group-item text-warning">
+          <strong>@item.Name</strong> — Quantity: @item.Quantity
+        </li>
+      }
+    </ul>
+}
+
+
 @section Scripts {
   @{
     var productNames = Model.Products.Select(p => p.Name).ToList();
