@@ -13,6 +13,7 @@ namespace IMS.Data {
     public DbSet<CalendarEvent> CalendarEvents { get; set; }
     public DbSet<Note> Notes { get; set; }
     public DbSet<UserProfile> UserProfiles { get; set; }
+    public DbSet<WatchedProduct> WatchedProducts { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
       base.OnModelCreating(modelBuilder);

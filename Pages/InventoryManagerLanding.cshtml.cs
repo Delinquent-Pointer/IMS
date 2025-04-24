@@ -19,6 +19,8 @@ namespace IMS.Pages {
     }
 
     public IList<Product> Products { get; set; } = new List<Product>();
+    public IList<Product> LowStockProducts { get; set; } = new List<Product>();
+    public IList<Product> WatchedLowProducts { get; set; } = new List<Product>();
 
     [BindProperty(SupportsGet = true)]
     public string? SearchTerm { get; set; }
@@ -32,15 +34,19 @@ namespace IMS.Pages {
     [BindProperty]
     public string? EditNoteContent { get; set; }
 
+    [BindProperty]
+    public int UniversalThreshold { get; set; } = 0;
     public DateTime CurrentTime { get; private set; }
     // public IList<Note> Notes { get; set; } = new List<Note>();
     public IList<NoteDTO> Notes { get; set; } = new List<NoteDTO>();
 
     public IList<CalendarEvent> CalendarEvents { get; set; } = new List<CalendarEvent>();
-
+    public async Task<IActionResult> OnPostSetThresholdAsync() {
+      HttpContext.Session.SetInt32("UniversalThreshold",UniversalThreshold);
+      return RedirectToPage();
+    }
     public async Task OnGetAsync() {
       CurrentTime = DateTime.Now;
-
       var query = _context.Products.AsQueryable();
 
       if(!string.IsNullOrEmpty(SearchTerm)) {
@@ -58,6 +64,7 @@ namespace IMS.Pages {
 
       int userId = GetCurrentUserId();
 
+      // Notes
       Notes = await _context.Notes
           .Where(n => n.Account_Id == userId)
           .OrderByDescending(n => n.Timestamp)
@@ -67,6 +74,25 @@ namespace IMS.Pages {
             Timestamp = n.Timestamp.ToString("yyyy-MM-ddTHH:mm:ss")
           })
           .ToListAsync();
+
+      // Universal Threshold
+      UniversalThreshold = HttpContext.Session.GetInt32("UniversalThreshold") ?? 0;
+      ViewData["Threshold"] = UniversalThreshold;
+
+      LowStockProducts = Products
+          .Where(p => p.Quantity < UniversalThreshold)
+          .ToList();
+
+      // Watched Threshold
+      var watchedItems = await _context.WatchedProducts
+          .Include(w => w.Product)
+          .Where(w => w.Account_Id == userId)
+          .ToListAsync();
+
+      WatchedLowProducts = watchedItems
+          .Where(w => w.Product.Quantity < w.Threshold)
+          .Select(w => w.Product)
+          .ToList();
     }
 
     public async Task<IActionResult> OnPostAddNoteAsync() {
@@ -152,5 +178,7 @@ namespace IMS.Pages {
       var user = CurrentUser!;
       return user.Account_Id;
     }
+
+
   }
 }
