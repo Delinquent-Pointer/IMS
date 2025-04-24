@@ -41,6 +41,8 @@ namespace IMS.Pages {
     public IList<NoteDTO> Notes { get; set; } = new List<NoteDTO>();
 
     public IList<CalendarEvent> CalendarEvents { get; set; } = new List<CalendarEvent>();
+    public string? ScannedSKU { get; set; }
+    public IList<Product> ScannedProducts { get; set; } = new List<Product>();
     public async Task<IActionResult> OnPostSetThresholdAsync() {
       HttpContext.Session.SetInt32("UniversalThreshold",UniversalThreshold);
       return RedirectToPage();
@@ -94,6 +96,71 @@ namespace IMS.Pages {
           .Select(w => w.Product)
           .ToList();
     }
+
+    public async Task<IActionResult> OnPostScanBarcodeAsync(string sku)
+{
+    if (string.IsNullOrWhiteSpace(sku))
+        return NotFound();
+
+    var product = await _context.Products
+        .Where(p => EF.Functions.Like(p.Name, $"%{sku}%") ||
+                    EF.Functions.Like(p.Description, $"%{sku}%") ||
+                    EF.Functions.Like(p.Category, $"%{sku}%") ||
+                    EF.Functions.Like(p.SKU, $"%{sku}%") ||
+                    EF.Functions.Like(p.Location, $"%{sku}%") ||
+                    p.ReorderLevel.ToString().Contains(sku) ||
+                    p.Quantity.ToString().Contains(sku) ||
+                    p.Price.ToString().Contains(sku))
+        .FirstOrDefaultAsync();
+
+    if (product == null)
+        return NotFound();
+
+    
+    string result = $"{product.Name}|{product.SKU}|{product.Price}|{product.Quantity}";
+    return Content(result);
+}
+
+public async Task<IActionResult> OnPostCompleteTransactionAsync()
+{
+    var form = Request.Form;
+
+    var groupedItems = new Dictionary<string, int>();
+
+    foreach (var key in form.Keys)
+    {
+        if (key.Contains(".SKU"))
+        {
+            var index = key.Split('[', ']')[1];
+            var skuKey = $"Items[{index}].SKU";
+            var qtyKey = $"Items[{index}].Quantity";
+
+            var sku = form[skuKey];
+            var quantityStr = form[qtyKey];
+
+            if (!int.TryParse(quantityStr, out int quantity))
+                continue;
+
+            if (groupedItems.ContainsKey(sku))
+                groupedItems[sku] += quantity;
+            else
+                groupedItems[sku] = quantity;
+        }
+    }
+
+    foreach (var (sku, qty) in groupedItems)
+    {
+        var product = await _context.Products.FirstOrDefaultAsync(p => p.SKU == sku);
+        if (product != null)
+        {
+            product.Quantity = Math.Max(0, product.Quantity - qty);
+        }
+    }
+
+    await _context.SaveChangesAsync();
+
+    return Content("success");
+}
 
     public async Task<IActionResult> OnPostAddNoteAsync() {
       if(!string.IsNullOrEmpty(NewNote)) {
