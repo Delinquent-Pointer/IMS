@@ -92,10 +92,52 @@ public async Task<IActionResult> OnPostScanBarcodeAsync(string sku)
     if (product == null)
         return NotFound();
 
-    // Send delimited string (not JSON)
+    
     string result = $"{product.Name}|{product.SKU}|{product.Price}|{product.Quantity}";
     return Content(result);
 }
+
+public async Task<IActionResult> OnPostCompleteTransactionAsync()
+{
+    var form = Request.Form;
+
+    var groupedItems = new Dictionary<string, int>();
+
+    foreach (var key in form.Keys)
+    {
+        if (key.Contains(".SKU"))
+        {
+            var index = key.Split('[', ']')[1];
+            var skuKey = $"Items[{index}].SKU";
+            var qtyKey = $"Items[{index}].Quantity";
+
+            var sku = form[skuKey];
+            var quantityStr = form[qtyKey];
+
+            if (!int.TryParse(quantityStr, out int quantity))
+                continue;
+
+            if (groupedItems.ContainsKey(sku))
+                groupedItems[sku] += quantity;
+            else
+                groupedItems[sku] = quantity;
+        }
+    }
+
+    foreach (var (sku, qty) in groupedItems)
+    {
+        var product = await _context.Products.FirstOrDefaultAsync(p => p.SKU == sku);
+        if (product != null)
+        {
+            product.Quantity = Math.Max(0, product.Quantity - qty);
+        }
+    }
+
+    await _context.SaveChangesAsync();
+
+    return Content("success");
+}
+
 
     public async Task<IActionResult> OnPostAddNoteAsync() {
       if(!string.IsNullOrEmpty(NewNote)) {

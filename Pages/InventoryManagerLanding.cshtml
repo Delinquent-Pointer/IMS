@@ -167,26 +167,28 @@
         <h5 class="modal-title" id="scannerModalLabel">Product Scanner</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
-      <div class="modal-body">
-        <div id="scanner" class="border p-3 text-center" style="min-height: 300px;">
-          <video id="barcode-video" width="100%" autoplay></video>
-        </div>
-        <div id="barcode-result" class="mt-2 text-center text-success fw-bold"></div>
+      <div class="modal-body pb-2">
 
-        <hr />
-        <div>
-          <h6>Scanned Items</h6>
+        <div class="pt-2">
+          <div id="barcode-result" class="mb-2 text-center text-success fw-bold small"></div>
+          <h6 class="mb-2">Scanned Items</h6>
           <ul id="scanned-items" class="list-group mb-2"></ul>
           <div class="fw-bold">Total: $<span id="total-price">0.00</span></div>
         </div>
+
+        <div id="scanner" class="border p-2 text-center position-relative" style="min-height: 240px; overflow: hidden;">
+          <video id="barcode-video" width="100%" class="position-absolute top-0 start-0 h-100 w-100 object-fit-cover" autoplay playsinline muted></video>
+        </div>
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onclick="simulateScan()">Simulate Scan</button>
+        <button type="button" class="btn btn-success" onclick="completeTransaction()">Complete Transaction</button>
       </div>
     </div>
   </div>
 </div>
+
 
 @section Scripts {
   <script>
@@ -249,7 +251,6 @@
       const formData = new FormData();
       formData.append('sku', code);
 
-      // Optional: Add anti-forgery token if needed
       const token = $('input[name="__RequestVerificationToken"]').val();
       if (token) {
         formData.append('__RequestVerificationToken', token);
@@ -308,17 +309,54 @@ function updateScannedList() {
   document.getElementById('total-price').textContent = total.toFixed(2);
 }
 
-    // Handle modal show and hide events
     document.getElementById('scannerModal').addEventListener('shown.bs.modal', function () {
         document.getElementById('barcode-result').innerText = '';
-        scannedItems.length = 0; // Clear the scanned items
-        updateScannedList(); // Update the list view
-        startScanner(); // Start the scanner
+        scannedItems.length = 0; 
+        updateScannedList(); 
+        startScanner(); 
     });
 
     document.getElementById('scannerModal').addEventListener('hidden.bs.modal', function () {
-        stopScanner(); // Stop the scanner when modal is closed
+        stopScanner(); 
     });
+
+    function completeTransaction() {
+  if (scannedItems.length === 0) {
+    $('#barcode-result').text("No items to complete.");
+    return;
+  }
+
+  const formData = new FormData();
+  scannedItems.forEach((item, index) => {
+    formData.append(`Items[${index}].SKU`, item.sku);
+    formData.append(`Items[${index}].Quantity`, item.quantity);
+  });
+
+  const token = $('input[name="__RequestVerificationToken"]').val();
+  if (token) {
+    formData.append('__RequestVerificationToken', token);
+  }
+
+  $.ajax({
+    url: '/InventoryManagerLanding?handler=CompleteTransaction',
+    method: 'POST',
+    data: formData,
+    contentType: false,
+    processData: false,
+    success: function (response) {
+      if (response === 'success') {
+        $('#barcode-result').text("Transaction complete. Inventory updated.");
+        scannedItems.length = 0;
+        updateScannedList();
+      } else {
+        $('#barcode-result').text("Transaction failed.");
+      }
+    },
+    error: function () {
+      $('#barcode-result').text("Transaction failed.");
+    }
+  });
+}
   </script>
 
 
