@@ -13,459 +13,547 @@ using CsvHelper.Configuration;
 using System.Text.RegularExpressions;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using Microsoft.IdentityModel.Tokens;
-using IMS.DataTransferObj;
 
 namespace IMS.Pages {
-  public class ProductsModel:PageModel {
-    private readonly AppDbContext _appDbContext;
+    public class ProductsModel : PageModel {
+        private readonly AppDbContext _appDbContext;
 
-    private class ProductMap:ClassMap<Product> {
-      public ProductMap(bool export = false) {
-        Map(m => m.Name).Default(string.Empty);
-        Map(m => m.Description).Default(string.Empty);
-        Map(m => m.Price).Default(0.00m);
-        Map(m => m.Quantity).Default(0);
-        Map(m => m.ReorderLevel).Default(0);
-        Map(m => m.SKU).Default(string.Empty);
-        Map(m => m.Category).Default(string.Empty);
-        Map(m => m.Location).Default(string.Empty);
-        if(export) {
-          //convert binary to base64 when used for CSV export
-          Map(m => m.Image).Convert(args =>
-              args.Value.Image != null && args.Value.Image.Length > 0
-                  ? Convert.ToBase64String(args.Value.Image)
-                  : "");
-        } else {
-          //convert uploaded Base64 to byte array when used for CSV import
-          Map(m => m.Image).Convert(args => {
-            var base64 = args.Row.GetField("Image");
-            return string.IsNullOrEmpty(base64)
-                ? Array.Empty<byte>()
-                : Convert.FromBase64String(base64);
-          });
-        }
-      }
-    }
-
-    public ProductsModel(AppDbContext appDbContext) {
-      _appDbContext = appDbContext;
-    }
-    // Low product threshold for the user
-    public int? WatchThreshold { get; set; }
-    public int? CurrentWatchThreshold { get; set; }
-
-    public List<string?> Categories { get; set; }
-    public List<string?> Locations { get; set; }
-
-    [BindProperty]
-    public EditProductInputModel Input { get; set; }
-
-    public IList<Product> LowStockProducts { get; set; } = new List<Product>();
-
-    public IList<Product> Products { get; set; } = new List<Product>();
-
-    [BindProperty(SupportsGet = true)]
-    public string? SearchType { get; set; }
-
-    [BindProperty(SupportsGet = true)]
-    public string? SearchTerm { get; set; }
-
-    [BindProperty(SupportsGet = true)]
-    public string? Operator { get; set; }
-
-    [BindProperty(SupportsGet = true)]
-    public int? UniversalThreshold { get; set; }
-
-
-    public class EditProductInputModel {
-      public int Id { get; set; } // Add Id for the product
-      [Required]
-      public string ProductName { get; set; }
-      public string? Description { get; set; }
-      public decimal? Price { get; set; }
-      public int? Quantity { get; set; }
-      public int? ReorderLevel { get; set; }
-      public string? SKU { get; set; }
-      public string? Category { get; set; }
-      public string? Location { get; set; }
-      public IFormFile? ImageFile { get; set; }
-    }
-
-    private int GetCurrentUserId() {
-      var userJson = HttpContext.Session.GetString("User");
-      if(string.IsNullOrEmpty(userJson))
-        throw new Exception("User is not logged in.");
-
-      var user = System.Text.Json.JsonSerializer.Deserialize<UserDto>(userJson)!;
-      return user.Account_Id;
-    }
-
-    // Fetch data for editing the product
-    public async Task<IActionResult> OnGetEditAsync(int id) {
-      var product = await _appDbContext.Products.FindAsync(id);
-
-      if(product == null) {
-        return NotFound();
-      }
-
-      // Populate the input model with product data
-      Input = new EditProductInputModel {
-        Id = product.Id,
-        ProductName = product.Name,
-        Description = product.Description,
-        Price = product.Price,
-        Quantity = product.Quantity,
-        ReorderLevel = product.ReorderLevel,
-        SKU = product.SKU,
-        Category = product.Category,
-        Location = product.Location
-      };
-      if(product.Image != null && product.Image.Length > 0) {
-        string base64Image = Convert.ToBase64String(product.Image);
-        ViewData["ProductImage"] = $"data:image/png;base64,{base64Image}";
-      }
-
-      // Load categories and locations for the dropdown options
-      Categories = await _appDbContext.Products.Select(p => p.Category).Distinct().ToListAsync();
-      Locations = await _appDbContext.Products.Select(p => p.Location).Distinct().ToListAsync();
-
-      int userId = GetCurrentUserId();
-      var watch = await _appDbContext.WatchedProducts
-          .FirstOrDefaultAsync(w => w.Account_Id == userId && w.ProductId == id);
-      CurrentWatchThreshold = watch?.Threshold ?? null;
-
-
-      return Page();
-
-    }
-
-    // Handle the form submission to update the product
-    public async Task<IActionResult> OnPostAsync() {
-      if(!ModelState.IsValid) {
-        await PopulateProductsList();
-        return Page();
-      }
-
-      var product = await _appDbContext.Products.FindAsync(Input.Id);
-
-      if(product == null) {
-        return NotFound();
-      }
-
-      // Update product properties
-      product.Name = Input.ProductName;
-      product.Description = Input.Description ?? "";
-      product.Price = Input.Price ?? 0.00m;
-      product.Quantity = Input.Quantity ?? 0;
-      product.ReorderLevel = Input.ReorderLevel ?? 0;
-      product.SKU = Input.SKU ?? "";
-      product.Category = Input.Category ?? "";
-      product.Location = Input.Location ?? "";
-      if(Input.ImageFile != null && Input.ImageFile.Length > 0) {
-        using var memoryStream = new MemoryStream();
-        await Input.ImageFile.CopyToAsync(memoryStream);
-        product.Image = memoryStream.ToArray(); // Save as binary
-      }
-
-      _appDbContext.Products.Update(product);
-      await _appDbContext.SaveChangesAsync();
-
-      int userId = GetCurrentUserId();
-
-      var existingWatch = await _appDbContext.WatchedProducts
-          .FirstOrDefaultAsync(w => w.Account_Id == userId && w.ProductId == Input.Id);
-
-      if(WatchThreshold.HasValue && WatchThreshold > 0) {
-        if(existingWatch != null) {
-          existingWatch.Threshold = WatchThreshold.Value;
-        } else {
-          _appDbContext.WatchedProducts.Add(new WatchedProduct {
-            Account_Id = userId,
-            ProductId = Input.Id,
-            Threshold = WatchThreshold.Value
-          });
-        }
-      } else if(existingWatch != null) {
-        _appDbContext.WatchedProducts.Remove(existingWatch);
-      }
-
-      await _appDbContext.SaveChangesAsync();
-      return RedirectToPage("/Products");
-    }
-
-    private async Task PopulateProductsList() {
-      Products = await _appDbContext.Products.AsQueryable().ToListAsync();
-    }
-
-    // Handle the search functionality
-    public async Task OnGetAsync() {
-      var query = _appDbContext.Products.AsQueryable();
-
-      if(string.IsNullOrEmpty(SearchTerm)) {
-        await PopulateProductsList();
-        return;
-      }
-
-      switch(SearchType) {
-        case "Name":
-        query = query.Where(p => EF.Functions.Like(p.Name,$"%{SearchTerm}%"));
-        break;
-        case "Description":
-        query = query.Where(p => EF.Functions.Like(p.Description,$"%{SearchTerm}%"));
-        break;
-        case "Category":
-        query = query.Where(p => EF.Functions.Like(p.Category,$"%{SearchTerm}%"));
-        break;
-        case "SKU":
-        query = query.Where(p => EF.Functions.Like(p.SKU,$"%{SearchTerm}%"));
-        break;
-        case "Location":
-        query = query.Where(p => EF.Functions.Like(p.Location,$"%{SearchTerm}%"));
-        break;
-        case "Quantity":
-        if(int.TryParse(SearchTerm,out int quantity)) {
-          switch(Operator) {
-            case "=":
-            query = query.Where(p => p.Quantity == quantity);
-            break;
-            case ">":
-            query = query.Where(p => p.Quantity > quantity);
-            break;
-            case "<":
-            query = query.Where(p => p.Quantity < quantity);
-            break;
-            case ">=":
-            query = query.Where(p => p.Quantity >= quantity);
-            break;
-            case "<=":
-            query = query.Where(p => p.Quantity <= quantity);
-            break;
-          }
-        }
-        break;
-        case "Price":
-        if(decimal.TryParse(SearchTerm,out decimal price)) {
-          switch(Operator) {
-            case "=":
-            query = query.Where(p => p.Price == price);
-            break;
-            case ">":
-            query = query.Where(p => p.Price > price);
-            break;
-            case "<":
-            query = query.Where(p => p.Price < price);
-            break;
-            case ">=":
-            query = query.Where(p => p.Price >= price);
-            break;
-            case "<=":
-            query = query.Where(p => p.Price <= price);
-            break;
-          }
-        }
-        break;
-        default:
-        break;
-      }
-
-      Products = await query.ToListAsync();
-
-      LowStockProducts = Products
-    .Where(p => p.Quantity < UniversalThreshold)
-    .ToList();
-
-    }
-
-    //Delete functionality
-    public async Task<IActionResult> OnPostDeleteAsync(int id) {
-      var product = await _appDbContext.Products.FindAsync(id);
-
-      if(product == null) {
-        return NotFound();
-      }
-
-      _appDbContext.Products.Remove(product);
-
-      _appDbContext.ProductsBin.Add(new ProductBin {
-        Name = product.Name,
-        Description = product.Description,
-        Price = product.Price,
-        Quantity = product.Quantity,
-        ReorderLevel = product.ReorderLevel,
-        SKU = product.SKU,
-        Category = product.Category,
-        Location = product.Location,
-        Image = product.Image,
-        DeleteDate = DateOnly.FromDateTime(DateTime.Now),
-        DeleteTime = TimeOnly.FromDateTime(DateTime.Now)
-      });
-      await _appDbContext.SaveChangesAsync();
-
-      return RedirectToPage("/Products");
-    }
-
-    public async Task<IActionResult> OnPostUploadCSVAsync(IFormFile file) {
-      ModelState.Clear();
-      if(file == null || file.Length == 0) {
-        ModelState.AddModelError(string.Empty,"Please upload a valid CSV file.");
-        ViewData["Errors"] = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-        await PopulateProductsList();
-        return Page();
-      }
-
-
-      using(var reader = new StreamReader(file.OpenReadStream())) {
-
-        CsvReader csv = new(reader,new CsvHelper.Configuration.CsvConfiguration(CultureInfo.InvariantCulture) {
-          Delimiter = ",",
-          PrepareHeaderForMatch = args => args.Header.Trim(),
-          HasHeaderRecord = true,
-          MissingFieldFound = null, // Ignore missing fields
-          HeaderValidated = null, // Ignore header validation
-        });
-
-        csv.Read(); //read the first row
-        csv.ReadHeader(); //read the first row as the header row
-
-        // Validate the header
-        string[]? headerRecord = csv.HeaderRecord;
-        if(!ValidateCsvHeader(headerRecord)) {
-          ViewData["Errors"] = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-          await PopulateProductsList();
-          return Page();
+        private class ProductMap : ClassMap<Product>{
+            public ProductMap(bool export = false){
+                Map(m => m.Name).Default(string.Empty);
+                Map(m => m.Description).Default(string.Empty);
+                Map(m => m.Price).Default(0.00m);
+                Map(m => m.Quantity).Default(0);
+                Map(m => m.ReorderLevel).Default(0);
+                Map(m => m.SKU).Default(string.Empty);
+                Map(m => m.Category).Default(string.Empty);
+                Map(m => m.Location).Default(string.Empty);
+                if (export)
+                {
+                    //convert binary to base64 when used for CSV export
+                    Map(m => m.Image).Convert(args =>
+                        args.Value.Image != null && args.Value.Image.Length > 0
+                            ? Convert.ToBase64String(args.Value.Image)
+                            : "");
+                }
+                else
+                {
+                    //convert uploaded Base64 to byte array when used for CSV import
+                    Map(m => m.Image).Convert(args =>
+                    {
+                        var base64 = args.Row.GetField("Image");
+                        return string.IsNullOrEmpty(base64)
+                            ? Array.Empty<byte>()
+                            : Convert.FromBase64String(base64);
+                    });
+                }
+            }
         }
 
-
-        csv.Context.RegisterClassMap(new ProductMap()); //handles converting empty csv fields to default values. 
-
-        //attempt to read the records as Product objects
-        List<Product> records;
-        try {
-          records = csv.GetRecords<Product>().ToList();
-        } catch(Exception ex) {
-          ModelState.AddModelError(string.Empty,$"CSV parsing error: {ex.Message}");
-          ViewData["Errors"] = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-          await PopulateProductsList();
-          return Page();
+        public ProductsModel(AppDbContext appDbContext) {
+            _appDbContext = appDbContext;
         }
 
-        // Validate records before saving, if any records are invalid, return to the page with errors
-        if(!ValidateRecords(records)) {
-          ViewData["Errors"] = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-          await PopulateProductsList();
-          return Page();
-        }
-        _appDbContext.Products.AddRange(records);
-        await _appDbContext.SaveChangesAsync();
-      }
+        public List<string?> Categories { get; set; }
+        public List<string?> Locations { get; set; }
 
-      return RedirectToPage("/Products");
-    }
+        [BindProperty]
+        public EditProductInputModel Input { get; set; }
 
-    private bool ValidateRecords(List<Product> records) {
-      bool isValid = true;
+        
+        public IList<Product> Products { get; set; } = new List<Product>();
 
-      for(int i = 0;i < records.Count;i++)
-      //foreach (var record in records)
-      {
-        Product record = records[i];
-        int index = i + 1; // 1-based index for error messages
-        if(string.IsNullOrEmpty(record.Name)) {
-          ModelState.AddModelError(string.Empty,$"Item {index}: Name is a required field and cannot be empty.");
-          isValid = false;
-        }
+        [BindProperty(SupportsGet = true)]
+        public string? SearchType { get; set; }
 
-        if(record.Price < 0) {
-          ModelState.AddModelError(string.Empty,$"Item {index}: An item's Price cannot be negative.");
-          isValid = false;
-        }
-        if(record.Quantity < 0) {
-          Console.WriteLine($"Validation failed for Quantity at index: {index}");
-          ModelState.AddModelError(string.Empty,$"Item {index}: An item's Quantity cannot be negative.");
-          isValid = false;
-        }
-        if(record.ReorderLevel < 0) {
-          ModelState.AddModelError(string.Empty,$"Item {index}: An item's Reorder Level cannot be negative.");
-          isValid = false;
+        [BindProperty(SupportsGet = true)]
+        public string? SearchTerm { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public string? Operator { get; set; }
+
+        public class EditProductInputModel {
+            public int Id { get; set; } // Add Id for the product
+            [Required]
+            public string ProductName { get; set; }
+            public string? Description { get; set; }
+            public decimal? Price { get; set; }
+            public int? Quantity { get; set; }
+            public int? ReorderLevel { get; set; }
+            public string? SKU { get; set; }
+            public string? Category { get; set; }
+            public string? Location { get; set; }
+            public IFormFile? ImageFile { get; set; }
         }
 
-        if(!string.IsNullOrEmpty(record.SKU)) {
-          if(!Regex.IsMatch(record.SKU,@"^[A-Z0-9-]*$") ||
-              !Regex.IsMatch(record.SKU,@"^\S+(-\S+)+$") ||
-              !Regex.IsMatch(record.SKU,@"^\S{1,5}(-\S*)*$") ||
-              !Regex.IsMatch(record.SKU,@"^\S+(-\S{1,10})+$") ||
-              !Regex.IsMatch(record.SKU,@"^\S+(-\S+){1,3}$")) {
-            ModelState.AddModelError(string.Empty,$"Item {index}: Incorrectly formatted SKU.");
-            isValid = false;
-          }
-        }
-      }
-      return isValid;
-    }
+        // Fetch data for editing the product
+        public async Task<IActionResult> OnGetEditAsync(int id) {
+            var product = await _appDbContext.Products.FindAsync(id);
 
-    private bool ValidateCsvHeader(string[]? headerRecord) {
-      bool isValid = true;
-      if(headerRecord == null) {
-        ModelState.AddModelError(string.Empty,"No header record found.");
-        return false;
-      }
-      var allowedHeaders = new List<string> {
+            if (product == null) {
+                return NotFound();
+            }
+
+            // Populate the input model with product data
+            Input = new EditProductInputModel {
+                Id = product.Id,
+                ProductName = product.Name,
+                Description = product.Description,
+                Price = product.Price,
+                Quantity = product.Quantity,
+                ReorderLevel = product.ReorderLevel,
+                SKU = product.SKU,
+                Category = product.Category,
+                Location = product.Location
+            };
+            if (product.Image != null && product.Image.Length > 0)
+            {
+                string base64Image = Convert.ToBase64String(product.Image);
+                ViewData["ProductImage"] = $"data:image/png;base64,{base64Image}";
+            }
+
+            // Load categories and locations for the dropdown options
+            Categories = await _appDbContext.Products.Select(p => p.Category).Distinct().ToListAsync();
+            Locations = await _appDbContext.Products.Select(p => p.Location).Distinct().ToListAsync();
+
+            return Page();
+        }
+
+        // Handle the form submission to update the product
+        public async Task<IActionResult> OnPostAsync() {
+            if (!ModelState.IsValid) {
+                await PopulateProductsList();
+                return Page();
+            }
+
+            var product = await _appDbContext.Products.FindAsync(Input.Id);
+
+            if (product == null) {
+                return NotFound();
+            }
+
+            // Update product properties
+            product.Name = Input.ProductName;
+            product.Description = Input.Description ?? "";
+            product.Price = Input.Price ?? 0.00m;
+            product.Quantity = Input.Quantity ?? 0;
+            product.ReorderLevel = Input.ReorderLevel ?? 0;
+            product.SKU = Input.SKU ?? "";
+            product.Category = Input.Category ?? "";
+            product.Location = Input.Location ?? "";
+            if (Input.ImageFile != null && Input.ImageFile.Length > 0)
+            {
+                using var memoryStream = new MemoryStream();
+                await Input.ImageFile.CopyToAsync(memoryStream);
+                product.Image = memoryStream.ToArray(); // Save as binary
+            }
+
+            _appDbContext.Products.Update(product);
+            await _appDbContext.SaveChangesAsync();
+
+            return RedirectToPage("/Products");
+        }
+
+        
+        private async Task PopulateProductsList() {
+            Products = await _appDbContext.Products.AsQueryable().ToListAsync();
+        }
+
+        // Handle the search functionality
+        public async Task OnGetAsync() {
+            var query = _appDbContext.Products.AsQueryable();
+
+            if (string.IsNullOrEmpty(SearchTerm)) {
+                await PopulateProductsList();
+                return;
+            }
+
+            switch (SearchType) {
+                case "Name":
+                    query = query.Where(p => EF.Functions.Like(p.Name, $"%{SearchTerm}%"));
+                    break;
+                case "Description":
+                    query = query.Where(p => EF.Functions.Like(p.Description, $"%{SearchTerm}%"));
+                    break;
+                case "Category":
+                    query = query.Where(p => EF.Functions.Like(p.Category, $"%{SearchTerm}%"));
+                    break;
+                case "SKU":
+                    query = query.Where(p => EF.Functions.Like(p.SKU, $"%{SearchTerm}%"));
+                    break;
+                case "Location":
+                    query = query.Where(p => EF.Functions.Like(p.Location, $"%{SearchTerm}%"));
+                    break;
+                case "Quantity":
+                    if (int.TryParse(SearchTerm, out int quantity)) {
+                        switch (Operator) {
+                            case "=":
+                                query = query.Where(p => p.Quantity == quantity);
+                                break;
+                            case ">":
+                                query = query.Where(p => p.Quantity > quantity);
+                                break;
+                            case "<":
+                                query = query.Where(p => p.Quantity < quantity);
+                                break;
+                            case ">=":
+                                query = query.Where(p => p.Quantity >= quantity);
+                                break;
+                            case "<=":
+                                query = query.Where(p => p.Quantity <= quantity);
+                                break;
+                        }
+                    }
+                    break;
+                case "Price":
+                    if (decimal.TryParse(SearchTerm, out decimal price)) {
+                        switch (Operator) {
+                            case "=":
+                                query = query.Where(p => p.Price == price);
+                                break;
+                            case ">":
+                                query = query.Where(p => p.Price > price);
+                                break;
+                            case "<":
+                                query = query.Where(p => p.Price < price);
+                                break;
+                            case ">=":
+                                query = query.Where(p => p.Price >= price);
+                                break;
+                            case "<=":
+                                query = query.Where(p => p.Price <= price);
+                                break;
+                        }
+                    }
+                    break;
+                case "AdvQuery":
+                    try {
+                        query = ParseAdvQuery(SearchTerm);
+                    }
+                    catch(ArgumentException e)
+                    {
+                        ModelState.AddModelError(string.Empty, e.Message);
+                        ViewData["Errors"] = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                        await PopulateProductsList();
+                        return;
+                    }
+                    break;
+                    default:
+                        ModelState.AddModelError(string.Empty, $"Unrecognized Search Category:{SearchType}");
+                        ViewData["Errors"] = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                    await PopulateProductsList();
+                        return;
+
+                    }
+
+            Products = await query.ToListAsync();
+        }
+
+        private IQueryable<Product> ParseAdvQuery(string searchTerm)
+        {
+            var query = _appDbContext.Products.AsQueryable();
+            // Split the search term into key-value pairs
+            Dictionary<string, string> terms = searchTerm.Split(new[] {';'}, StringSplitOptions.RemoveEmptyEntries)
+                .Select(term => term.Split(':'))
+                .Where(pair => pair.Length==2)
+                .ToDictionary(pair => pair[0], pair => pair[1]);
+
+            foreach (var term in terms)
+            {
+                string key = term.Key.Trim();
+                string value = term.Value.Trim();
+
+                switch (key.ToLower())
+                {
+                    case "name":
+                        query = query.Where(p => EF.Functions.Like(p.Name, $"%{value}%"));
+                        break;
+                    case "desc" or "description":
+                        query = query.Where(p => EF.Functions.Like(p.Description, $"%{value}%"));
+                        break; 
+                    case "price":
+                        if (decimal.TryParse(value, out decimal price)) {
+                            switch (terms.TryGetValue("priceop", out string? priceOp) ? priceOp : "=")
+                            {
+                                case ">":
+                                    query = query.Where(p => p.Price > price);
+                                    break;
+                                case "<":
+                                    query = query.Where(p => p.Price < price);
+                                    break;
+                                case ">=":
+                                    query = query.Where(p => p.Price >= price);
+                                    break;
+                                case "<=":
+                                    query = query.Where(p => p.Price <= price);
+                                    break;
+                                case "=":
+                                    query = query.Where(p => p.Price == price);
+                                    break;
+                                default:
+                                    throw new ArgumentException($"Invalid price operator: {priceOp}");
+                            }
+                        }
+                        break;
+                    case "qty" or "quantity":
+                        if (int.TryParse(value, out int quantity)){
+                            switch(terms.TryGetValue("qtyop", out string? qtyOp) ? qtyOp : "=" )
+                            {
+                                case ">":
+                                    query = query.Where(p => p.Quantity > quantity);
+                                    break;
+                                case "<":
+                                    query = query.Where(p => p.Quantity < quantity);
+                                    break;
+                                case ">=":
+                                    query = query.Where(p => p.Quantity >= quantity);
+                                    break;
+                                case "<=":
+                                    query = query.Where(p => p.Quantity <= quantity);
+                                    break;
+                                case "=":
+                                    query = query.Where(p => p.Quantity == quantity);
+                                    break;
+                                default:
+                                    throw new ArgumentException($"Invalid quantity operator: {qtyOp}");
+                            }
+                        }
+
+                        break;
+                    case "sku":
+                        query = query.Where(p => EF.Functions.Like(p.SKU, $"%{value}%"));
+                        break;
+                    case "cat" or "category":
+                        query = query.Where(p => EF.Functions.Like(p.Category, $"%{value}%"));
+                        break;
+                    case "loc" or "location":
+                        query = query.Where(p => EF.Functions.Like(p.Location, $"%{value}%"));
+                        break;
+                    default:
+                        throw new ArgumentException($"Invalid search category: {key}");
+                }
+            }
+
+            return query;
+        }
+
+        //Delete functionality
+        public async Task<IActionResult> OnPostDeleteAsync(int id) {
+            var product = await _appDbContext.Products.FindAsync(id);
+
+            if (product == null) {
+                return NotFound();
+            }
+
+            _appDbContext.Products.Remove(product);
+            
+            _appDbContext.ProductsBin.Add(new ProductBin {
+                Name = product.Name,
+                Description = product.Description,
+                Price = product.Price,
+                Quantity = product.Quantity,
+                ReorderLevel = product.ReorderLevel,
+                SKU = product.SKU,
+                Category = product.Category,
+                Location = product.Location,
+                Image = product.Image,
+                DeleteDate = DateOnly.FromDateTime(DateTime.Now),
+                DeleteTime = TimeOnly.FromDateTime(DateTime.Now)
+            });
+            await _appDbContext.SaveChangesAsync();
+
+            return RedirectToPage("/Products");
+        }
+
+        public async Task<IActionResult> OnPostUploadCSVAsync(IFormFile file) {
+            ModelState.Clear();
+            if (file == null || file.Length == 0) {
+                ModelState.AddModelError(string.Empty, "Please upload a valid CSV file.");
+                ViewData["Errors"] = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                await PopulateProductsList();
+                return Page();
+            }
+
+
+            using (var reader = new StreamReader(file.OpenReadStream())) {
+                
+                CsvReader csv = new(reader, new CsvHelper.Configuration.CsvConfiguration(CultureInfo.InvariantCulture)
+                {
+                    Delimiter = ",",
+                    PrepareHeaderForMatch = args => args.Header.Trim(),
+                    HasHeaderRecord = true,
+                    MissingFieldFound = null, // Ignore missing fields
+                    HeaderValidated = null, // Ignore header validation
+                });
+
+                csv.Read(); //read the first row
+                csv.ReadHeader(); //read the first row as the header row
+
+                // Validate the header
+                string[]? headerRecord = csv.HeaderRecord;
+                if(!ValidateCsvHeader(headerRecord))
+                {
+                    ViewData["Errors"] = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                    await PopulateProductsList();
+                    return Page();
+                }
+
+                
+                csv.Context.RegisterClassMap(new ProductMap()); //handles converting empty csv fields to default values. 
+
+                //attempt to read the records as Product objects
+                List<Product> records;
+                try
+                {
+                    records = csv.GetRecords<Product>().ToList();
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, $"CSV parsing error: {ex.Message}");
+                    ViewData["Errors"] = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                    await PopulateProductsList();
+                    return Page();
+                }
+
+                // Validate records before saving, if any records are invalid, return to the page with errors
+                if (!ValidateRecords(records))
+                {
+                    ViewData["Errors"] = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                    await PopulateProductsList();
+                    return Page();
+                }
+                _appDbContext.Products.AddRange(records);
+                await _appDbContext.SaveChangesAsync();
+            }
+
+            return RedirectToPage("/Products");
+        }
+
+
+
+
+        private bool ValidateRecords(List<Product> records) {
+            bool isValid = true;
+            
+            for(int i = 0; i < records.Count; i++)
+            //foreach (var record in records)
+            {
+                Product record = records[i];
+                int index = i + 1; // 1-based index for error messages
+                if (string.IsNullOrEmpty(record.Name)){
+                    ModelState.AddModelError(string.Empty, $"Item {index}: Name is a required field and cannot be empty.");
+                    isValid = false;
+                }
+
+                if (record.Price < 0)
+                {
+                    ModelState.AddModelError(string.Empty, $"Item {index}: An item's Price cannot be negative.");
+                    isValid = false;
+                }
+                if (record.Quantity < 0)
+                {
+                    Console.WriteLine($"Validation failed for Quantity at index: {index}");
+                    ModelState.AddModelError(string.Empty, $"Item {index}: An item's Quantity cannot be negative.");
+                    isValid = false;
+                }
+                if (record.ReorderLevel < 0)
+                {
+                    ModelState.AddModelError(string.Empty, $"Item {index}: An item's Reorder Level cannot be negative.");
+                    isValid = false;
+                }
+
+                if (!string.IsNullOrEmpty(record.SKU))
+                {
+                    if (!Regex.IsMatch(record.SKU, @"^[A-Z0-9-]*$") ||
+                        !Regex.IsMatch(record.SKU, @"^\S+(-\S+)+$") ||
+                        !Regex.IsMatch(record.SKU, @"^\S{1,5}(-\S*)*$") ||
+                        !Regex.IsMatch(record.SKU, @"^\S+(-\S{1,10})+$") ||
+                        !Regex.IsMatch(record.SKU, @"^\S+(-\S+){1,3}$"))
+                    {
+                        ModelState.AddModelError(string.Empty, $"Item {index}: Incorrectly formatted SKU.");
+                        isValid = false;
+                    }
+                }
+            }
+            return isValid;    
+        }
+
+        private bool ValidateCsvHeader(string[]? headerRecord)
+        {
+            bool isValid = true;
+            if (headerRecord == null)
+            {
+                ModelState.AddModelError(string.Empty, "No header record found.");
+                return false;
+            }
+            var allowedHeaders = new List<string> {
                 "Name", "Description", "Price", "Quantity", "ReorderLevel", "SKU", "Category", "Location", "Image"
             };
 
-      //Name header is required
-      if(!headerRecord.Contains("Name",StringComparer.OrdinalIgnoreCase)) {
-        ModelState.AddModelError(string.Empty,"The 'Name' header is required but missing.");
-        isValid = false;
-      }
+            //Name header is required
+            if (!headerRecord.Contains("Name", StringComparer.OrdinalIgnoreCase))
+            {
+                ModelState.AddModelError(string.Empty, "The 'Name' header is required but missing.");
+                isValid = false;
+            }
 
-      // all other headers besides Name are optional, but if they are present, they must match the allowedHeaders list
-      var invalidHeaders = headerRecord
-          .Where(header => !allowedHeaders.Contains(header,StringComparer.OrdinalIgnoreCase))
-             .ToList();
+            // all other headers besides Name are optional, but if they are present, they must match the allowedHeaders list
+            var invalidHeaders = headerRecord
+                .Where(header => !allowedHeaders.Contains(header, StringComparer.OrdinalIgnoreCase))
+                   .ToList();
 
-      if(invalidHeaders.Any()) {
-        ModelState.AddModelError(string.Empty,$"Invalid headers found: {string.Join(", ",invalidHeaders.Select(header => $"\"{header}\""))}.");
-        isValid = false;
-      }
+            if (invalidHeaders.Any())
+            {
+                ModelState.AddModelError(string.Empty, $"Invalid headers found: {
+                    string.Join(", ", invalidHeaders.Select(header => $"\"{header}\""))
+                    }.");
+                isValid = false;
+            }
 
 
-      var duplicateHeaders = headerRecord
-          .GroupBy(header => header,StringComparer.OrdinalIgnoreCase)
-          .Where(group => group.Count() > 1)
-          .Select(group => group.Key);
+            var duplicateHeaders = headerRecord
+                .GroupBy(header => header, StringComparer.OrdinalIgnoreCase)
+                .Where(group => group.Count() > 1)
+                .Select(group => group.Key);
 
-      if(duplicateHeaders.Any()) {
-        ModelState.AddModelError(string.Empty,$"Duplicate headers found: {string.Join(", ",duplicateHeaders.Select(header => $"\"{header}\""))}.");
-        isValid = false; // Duplicate headers found
-      }
+            if (duplicateHeaders.Any())
+            { 
+                ModelState.AddModelError(string.Empty, $"Duplicate headers found: {
+                    string.Join(", ", duplicateHeaders.Select(header => $"\"{header}\""))
+                    }.");
+                isValid = false; // Duplicate headers found
+            }
 
-      return isValid;
+            return isValid;
+        }
+
+
+        public async Task<IActionResult> OnPostDownloadCSVAsync(List<int> productIds)
+        {
+            //previous product list is entered as hidden form, this will allow downloading of narrowed search results
+            Products = await _appDbContext.Products
+                .Where(p => productIds.Contains(p.Id))
+                .ToListAsync();
+
+            //if the result list was empty we grab the whole list
+            if (Products.IsNullOrEmpty())
+            {
+                await PopulateProductsList();
+            }
+
+
+            using (StringWriter writer = new StringWriter())
+            using (CsvWriter csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+            {
+                csv.Context.RegisterClassMap(new ProductMap(true));
+                csv.WriteRecords(Products);
+
+                string fileName = $"Products_{DateTime.Now:yyyyMMdd_HHmmss}.csv";
+                string contentType = "text/csv";
+                string fileContent = writer.ToString();
+                return File(new System.Text.UTF8Encoding().GetBytes(fileContent), contentType, fileName);
+            }
+
+        }
     }
-
-
-    public async Task<IActionResult> OnPostDownloadCSVAsync(List<int> productIds) {
-      //previous product list is enetered as hidden form, this will allow downloading of norrowed search results
-      Products = await _appDbContext.Products
-          .Where(p => productIds.Contains(p.Id))
-          .ToListAsync();
-
-      //if the result list was empty we grab the whole list
-      if(Products.IsNullOrEmpty()) {
-        await PopulateProductsList();
-      }
-
-
-      using(StringWriter writer = new StringWriter())
-      using(CsvWriter csv = new CsvWriter(writer,CultureInfo.InvariantCulture)) {
-        csv.Context.RegisterClassMap(new ProductMap(true));
-        csv.WriteRecords(Products);
-
-        string fileName = $"Products_{DateTime.Now:yyyyMMdd_HHmmss}.csv";
-        string contentType = "text/csv";
-        string fileContent = writer.ToString();
-        return File(new System.Text.UTF8Encoding().GetBytes(fileContent),contentType,fileName);
-      }
-    }
-  }
 }
