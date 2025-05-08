@@ -10,11 +10,12 @@ using IMS.Models;
 using IMS.Attributes;
 using Microsoft.AspNetCore.Authorization;
 using System.Text.RegularExpressions;
+using IMS.Interfaces;
 
 namespace IMS.Pages {
     
     [AllowAnonymous]
-    public class CreateAccountModel:PageModel {
+    public class CreateAccountModel:PageModel, IHashPasswords {
     
     private readonly AppDbContext _context;
 
@@ -54,7 +55,7 @@ namespace IMS.Pages {
       }
 
 
-      var hashedPassword = HashPassword(Input.Password);
+      var hashedPassword = IHashPasswords.HashPassword(Input.Password);
       var user = new UserAccount {
         Username = Input.Username,
         Password_Hash = hashedPassword,
@@ -107,18 +108,5 @@ namespace IMS.Pages {
         await _context.SaveChangesAsync();
         return RedirectToPage("/Login");
     }
-
-    private static string HashPassword(string password) {
-      using(var sha256 = SHA256.Create()) {
-        var bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-        var builder = new StringBuilder();
-        for(int i = 0;i < bytes.Length;i++) {
-          builder.Append(bytes[i].ToString("x2"));
-        }
-        return builder.ToString();
-      }
-    }
-
-
   }
 }

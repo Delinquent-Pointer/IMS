@@ -10,11 +10,11 @@ using IMS.Data;
 using IMS.DataTransferObj;
 using IMS.Models;
 using IMS.Attributes;
+using IMS.Interfaces;
 
 namespace IMS.Pages {
-  //[RequireLogin]
   [AllowAnonymous]
-  public class LoginModel:PageModel {
+  public class LoginModel:PageModel, IHashPasswords {
     private readonly AppDbContext _context;
 
     public LoginModel(AppDbContext context,ILogger<LoginModel> logger) {
@@ -77,7 +77,7 @@ namespace IMS.Pages {
       try {
         _logger.LogInformation("[Login] Querying user: {Username}",Input.Username);
 
-        string hashedPassword = HashPassword(Input.Password);
+        string hashedPassword = IHashPasswords.HashPassword(Input.Password);
 
         var user = await _context.UserAccounts
           .FirstOrDefaultAsync(u => u.Username == Input.Username && u.Password_Hash == hashedPassword);
@@ -120,17 +120,6 @@ namespace IMS.Pages {
         return await _context.Database.CanConnectAsync();
       } catch {
         return false;
-      }
-    }
-
-    private static string HashPassword(string password) {
-      using(var sha256 = SHA256.Create()) {
-        byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-        StringBuilder builder = new StringBuilder();
-        for(int i = 0;i < bytes.Length;i++) {
-          builder.Append(bytes[i].ToString("x2"));
-        }
-        return builder.ToString();
       }
     }
   }
