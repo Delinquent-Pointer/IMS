@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  sql:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=YourStrong!Pass
+    ports:
+      - "1433:1433"
+    volumes:
+      - sql_data:/var/opt/mssql
+
+  web:
+    image: ims-offline:latest     # or ims-offline:<SHA> if you loaded by SHA
+    depends_on:
+      - sql
+    ports:
+      - "5000:80"
+    environment:
+      - ConnectionStrings__Default=Server=sql;Database=IMS;User Id=sa;Password=YourStrong!Pass
+
+volumes:
+  sql_data:
