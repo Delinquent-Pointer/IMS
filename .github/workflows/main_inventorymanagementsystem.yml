@@ -70,33 +70,33 @@ jobs:
     needs: build
     steps:
       - uses: actions/checkout@v4
-
+        
       - name: Download published app
         uses: actions/download-artifact@v4
         with:
           name: .net-app
           path: ./myapp
-
+        
       - name: Build Docker image
         run: |
           docker build -t ims-offline:${{ github.sha }} ./myapp
-
+        
       - name: Save image as tarball
         run: |
           docker save ims-offline:${{ github.sha }} \
-            | gzip > ims-offline_${{ github.sha }}.tar.gz
-
+          | gzip > ims-offline_${{ github.sha }}.tar.gz
+        
       - name: Upload offline image
         uses: actions/upload-artifact@v4
         with:
           name: offline-docker-image
           path: ims-offline_${{ github.sha }}.tar.gz
-      
+
       - name: Pull & save SQL Server image
         run: |
           docker pull mcr.microsoft.com/mssql/server:2019-latest
           docker save mcr.microsoft.com/mssql/server:2019-latest \
-            | gzip > sqlserver_2019.tar.gz
+          | gzip > sqlserver_2019.tar.gz
   
       - name: Upload SQL Server image
         uses: actions/upload-artifact@v4
