@@ -10,11 +10,11 @@ on:
   workflow_dispatch:
 
 jobs:
+
   build:
     runs-on: windows-latest
     permissions:
-      contents: read #This is required for actions/checkout
-
+      contents: read
     steps:
       - uses: actions/checkout@v4
 
@@ -27,30 +27,29 @@ jobs:
         run: dotnet build --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/myapp"
+        run: dotnet publish -c Release -o "${{ env.DOTNET_ROOT }}/myapp"
 
-      - name: Upload artifact for deployment job
+      - name: Upload artifact for deploy & docker
         uses: actions/upload-artifact@v4
         with:
           name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          path: ${{ env.DOTNET_ROOT }}/myapp
 
   deploy:
     runs-on: windows-latest
     needs: build
     environment:
-      name: 'Production'
+      name: Production
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
-      id-token: write #This is required for requesting the JWT
-      contents: read #This is required for actions/checkout
-
+      id-token: write
+      contents: read
     steps:
-      - name: Download artifact from build job
+      - name: Download artifact
         uses: actions/download-artifact@v4
         with:
           name: .net-app
-      
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -62,7 +61,46 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'InventoryManagementSystem'
-          slot-name: 'Production'
-          package: .
-          
+          app-name:  InventoryManagementSystem
+          slot-name: Production
+          package:   .
+
+  offline:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download published app
+        uses: actions/download-artifact@v4
+        with:
+          name: .net-app
+          path: ./myapp
+
+      - name: Build Docker image
+        run: |
+          docker build -t ims-offline:${{ github.sha }} ./myapp
+
+      - name: Save image as tarball
+        run: |
+          docker save ims-offline:${{ github.sha }} \
+            | gzip > ims-offline_${{ github.sha }}.tar.gz
+
+      - name: Upload offline image
+        uses: actions/upload-artifact@v4
+        with:
+          name: offline-docker-image
+          path: ims-offline_${{ github.sha }}.tar.gz
+      
+      - name: Pull & save SQL Server image
+        run: |
+          docker pull mcr.microsoft.com/mssql/server:2019-latest
+          docker save mcr.microsoft.com/mssql/server:2019-latest \
+            | gzip > sqlserver_2019.tar.gz
+  
+      - name: Upload SQL Server image
+        uses: actions/upload-artifact@v4
+        with:
+          name: offline-sqlserver-image
+          path: sqlserver_2019.tar.gz
+  
