@@ -124,7 +124,6 @@ namespace IMS.Pages {
 public async Task<IActionResult> OnPostCompleteTransactionAsync()
 {
     var form = Request.Form;
-
     var groupedItems = new Dictionary<string, int>();
 
     foreach (var key in form.Keys)
@@ -148,19 +147,44 @@ public async Task<IActionResult> OnPostCompleteTransactionAsync()
         }
     }
 
+    int userId = GetCurrentUserId();
+    decimal totalAmount = 0;
+
+   
+    var salesTransaction = new SalesTransaction
+    {
+        Timestamp = DateTime.Now,
+        Account_Id = userId,
+        TotalAmount = 0 
+    };
+    _context.SalesTransactions.Add(salesTransaction);
+    await _context.SaveChangesAsync(); 
+
     foreach (var (sku, qty) in groupedItems)
     {
         var product = await _context.Products.FirstOrDefaultAsync(p => p.SKU == sku);
         if (product != null)
         {
+            var itemTotal = qty * product.Price;
+            totalAmount += itemTotal;
+            _context.TransactionItems.Add(new TransactionItem
+            {
+                SalesTransactionId = salesTransaction.Id,
+                SKU = product.SKU,
+                ProductName = product.Name,
+                QuantityRemoved = qty,
+                PriceAtSale = product.Price
+            });
             product.Quantity = Math.Max(0, product.Quantity - qty);
         }
     }
-
+    salesTransaction.TotalAmount = totalAmount;
     await _context.SaveChangesAsync();
 
     return Content("success");
 }
+
+
 
     public async Task<IActionResult> OnPostAddNoteAsync() {
       if(!string.IsNullOrEmpty(NewNote)) {
