@@ -14,6 +14,8 @@ namespace IMS.Data {
     public DbSet<Note> Notes { get; set; }
     public DbSet<UserProfile> UserProfiles { get; set; }
     public DbSet<WatchedProduct> WatchedProducts { get; set; }
+    public DbSet<SalesTransaction> SalesTransactions { get; set; }
+    public DbSet<TransactionItem> TransactionItems { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
       base.OnModelCreating(modelBuilder);
