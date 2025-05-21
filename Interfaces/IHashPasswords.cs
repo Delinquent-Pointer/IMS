@@ -18,5 +18,12 @@ namespace IMS.Interfaces {
                 return builder.ToString();
             }
         }
+
+        static bool VerifyPassword(string password, string hashedPassword)
+        {
+            var hash = HashPassword(password);
+            return hash == hashedPassword;
+        }
+
     }
 }

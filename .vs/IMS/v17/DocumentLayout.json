@@ -3,52 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|c:\\users\\jared\\documents\\school\\cscd 488\\seniorproject\\ims\\ims\\pages\\products.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|solutionrelative:pages\\products.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|c:\\users\\jared\\documents\\school\\cscd 488\\seniorproject\\ims\\ims\\pages\\accountsettings.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|solutionrelative:pages\\accountsettings.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|c:\\users\\jared\\documents\\school\\cscd 488\\seniorproject\\ims\\ims\\interfaces\\ihandlecsvconversion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|solutionrelative:interfaces\\ihandlecsvconversion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|c:\\users\\jared\\documents\\school\\cscd 488\\seniorproject\\ims\\ims\\pages\\accountsettings.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|solutionrelative:pages\\accountsettings.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|c:\\users\\jared\\documents\\school\\cscd 488\\seniorproject\\ims\\ims\\pages\\products.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|solutionrelative:pages\\products.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|c:\\users\\jared\\documents\\school\\cscd 488\\seniorproject\\ims\\ims\\pages\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|solutionrelative:pages\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|c:\\users\\jared\\documents\\school\\cscd 488\\seniorproject\\ims\\ims\\exceptions\\productcsvexception.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|solutionrelative:exceptions\\productcsvexception.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|c:\\users\\jared\\documents\\school\\cscd 488\\seniorproject\\ims\\ims\\pages\\privacy.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|solutionrelative:pages\\privacy.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|c:\\users\\jared\\documents\\school\\cscd 488\\seniorproject\\ims\\ims\\interfaces\\ihashpasswords.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|solutionrelative:interfaces\\ihashpasswords.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|c:\\users\\jared\\documents\\school\\cscd 488\\seniorproject\\ims\\ims\\pages\\advancedsearch.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|solutionrelative:pages\\advancedsearch.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|c:\\users\\jared\\documents\\school\\cscd 488\\seniorproject\\ims\\ims\\pages\\createproduct.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|solutionrelative:pages\\createproduct.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|c:\\users\\jared\\documents\\school\\cscd 488\\seniorproject\\ims\\ims\\pages\\error.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|solutionrelative:pages\\error.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|c:\\users\\jared\\documents\\school\\cscd 488\\seniorproject\\ims\\ims\\pages\\itmanagerlanding.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|solutionrelative:pages\\itmanagerlanding.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|c:\\users\\jared\\documents\\school\\cscd 488\\seniorproject\\ims\\ims\\pages\\login.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|solutionrelative:pages\\login.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|c:\\users\\jared\\documents\\school\\cscd 488\\seniorproject\\ims\\ims\\pages\\createaccount.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|solutionrelative:pages\\createaccount.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|c:\\users\\jared\\documents\\school\\cscd 488\\seniorproject\\ims\\ims\\datatransferobj\\userdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|solutionrelative:datatransferobj\\userdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -67,184 +35,64 @@
           ]
         },
         {
-          "DockedWidth": 505,
-          "SelectedChildIndex": 4,
+          "DockedWidth": 515,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "ProductCsvException.cs",
-              "DocumentMoniker": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Exceptions\\ProductCsvException.cs",
-              "RelativeDocumentMoniker": "Exceptions\\ProductCsvException.cs",
-              "ToolTip": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Exceptions\\ProductCsvException.cs",
-              "RelativeToolTip": "Exceptions\\ProductCsvException.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAABAAAAAAAAAA==",
+              "Title": "UserDto.cs",
+              "DocumentMoniker": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\DataTransferObj\\UserDto.cs",
+              "RelativeDocumentMoniker": "DataTransferObj\\UserDto.cs",
+              "ToolTip": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\DataTransferObj\\UserDto.cs",
+              "RelativeToolTip": "DataTransferObj\\UserDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAA/AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-08T05:29:41.562Z"
+              "WhenOpened": "2025-05-17T04:00:14.426Z",
+              "IsPinned": true,
+              "EditorCaption": ""
             },
             {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Privacy.cshtml.cs",
-              "DocumentMoniker": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Pages\\Privacy.cshtml.cs",
-              "RelativeDocumentMoniker": "Pages\\Privacy.cshtml.cs",
-              "ToolTip": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Pages\\Privacy.cshtml.cs",
-              "RelativeToolTip": "Pages\\Privacy.cshtml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAQAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-08T00:45:13.409Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "Error.cshtml.cs",
-              "DocumentMoniker": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Pages\\Error.cshtml.cs",
-              "RelativeDocumentMoniker": "Pages\\Error.cshtml.cs",
-              "ToolTip": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Pages\\Error.cshtml.cs",
-              "RelativeToolTip": "Pages\\Error.cshtml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAQAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-08T00:44:46.917Z"
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{0174dea2-fdbe-4ef1-8f99-c0beae78880f}"
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "Products.cshtml",
-              "DocumentMoniker": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Pages\\Products.cshtml",
-              "RelativeDocumentMoniker": "Pages\\Products.cshtml",
-              "ToolTip": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Pages\\Products.cshtml",
-              "RelativeToolTip": "Pages\\Products.cshtml",
-              "ViewState": "AgIAACABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Title": "Login.cshtml",
+              "DocumentMoniker": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Pages\\Login.cshtml",
+              "RelativeDocumentMoniker": "Pages\\Login.cshtml",
+              "ToolTip": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Pages\\Login.cshtml",
+              "RelativeToolTip": "Pages\\Login.cshtml",
+              "ViewState": "AgIAAE4AAAAAAAAAAAAAAGUAAAAEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-05-08T05:48:57.639Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Products.cshtml.cs",
-              "DocumentMoniker": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Pages\\Products.cshtml.cs",
-              "RelativeDocumentMoniker": "Pages\\Products.cshtml.cs",
-              "ToolTip": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Pages\\Products.cshtml.cs",
-              "RelativeToolTip": "Pages\\Products.cshtml.cs",
-              "ViewState": "AgIAAGUBAAAAAAAAAAAMwHcBAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-01T03:10:57.716Z",
+              "WhenOpened": "2025-05-21T02:00:40.344Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "AdvancedSearch.cshtml.cs",
-              "DocumentMoniker": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Pages\\AdvancedSearch.cshtml.cs",
-              "RelativeDocumentMoniker": "Pages\\AdvancedSearch.cshtml.cs",
-              "ToolTip": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Pages\\AdvancedSearch.cshtml.cs",
-              "RelativeToolTip": "Pages\\AdvancedSearch.cshtml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 0,
+              "Title": "AccountSettings.cshtml.cs",
+              "DocumentMoniker": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Pages\\AccountSettings.cshtml.cs",
+              "RelativeDocumentMoniker": "Pages\\AccountSettings.cshtml.cs",
+              "ToolTip": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Pages\\AccountSettings.cshtml.cs",
+              "RelativeToolTip": "Pages\\AccountSettings.cshtml.cs",
+              "ViewState": "AgIAAI4AAAAAAAAAAAAjwKsAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-08T00:46:22.728Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "ITManagerLanding.cshtml.cs",
-              "DocumentMoniker": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Pages\\ITManagerLanding.cshtml.cs",
-              "RelativeDocumentMoniker": "Pages\\ITManagerLanding.cshtml.cs",
-              "ToolTip": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Pages\\ITManagerLanding.cshtml.cs",
-              "RelativeToolTip": "Pages\\ITManagerLanding.cshtml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-08T00:41:59.23Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "Login.cshtml.cs",
-              "DocumentMoniker": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Pages\\Login.cshtml.cs",
-              "RelativeDocumentMoniker": "Pages\\Login.cshtml.cs",
-              "ToolTip": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Pages\\Login.cshtml.cs",
-              "RelativeToolTip": "Pages\\Login.cshtml.cs",
-              "ViewState": "AgIAAH0AAAAAAAAAAAAAABUAAAAXAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-08T00:39:07.953Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "CreateAccount.cshtml.cs",
-              "DocumentMoniker": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Pages\\CreateAccount.cshtml.cs",
-              "RelativeDocumentMoniker": "Pages\\CreateAccount.cshtml.cs",
-              "ToolTip": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Pages\\CreateAccount.cshtml.cs",
-              "RelativeToolTip": "Pages\\CreateAccount.cshtml.cs",
-              "ViewState": "AgIAAFMAAAAAAAAAAAAswG8AAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-08T00:35:22.829Z"
-            }
-          ]
-        },
-        {
-          "DockedWidth": 174,
-          "SelectedChildIndex": -1,
-          "Children": [
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{40ea2e6b-2121-4bb8-a43e-c83c04b51041}"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Orientation": 0,
-      "VerticalTabListWidth": 256,
-      "FloatingWindowState": {
-        "Id": "f5f2656e-9935-42e9-911c-eadcbb2e72b0",
-        "Display": 0,
-        "X": -401,
-        "Y": 51,
-        "Width": 1932,
-        "Height": 1043,
-        "WindowState": 2
-      },
-      "DocumentGroups": [
-        {
-          "DockedWidth": 200,
-          "SelectedChildIndex": 2,
-          "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "CreateProduct.cshtml.cs",
-              "DocumentMoniker": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Pages\\CreateProduct.cshtml.cs",
-              "RelativeDocumentMoniker": "Pages\\CreateProduct.cshtml.cs",
-              "ToolTip": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Pages\\CreateProduct.cshtml.cs",
-              "RelativeToolTip": "Pages\\CreateProduct.cshtml.cs",
-              "ViewState": "AgIAAB4AAAAAAAAAAAAowAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-08T00:22:47.619Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "IHashPasswords.cs",
-              "DocumentMoniker": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Interfaces\\IHashPasswords.cs",
-              "RelativeDocumentMoniker": "Interfaces\\IHashPasswords.cs",
-              "ToolTip": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Interfaces\\IHashPasswords.cs",
-              "RelativeToolTip": "Interfaces\\IHashPasswords.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-08T00:34:12.867Z"
+              "WhenOpened": "2025-05-14T22:50:01.231Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "IHandleCsvConversion.cs",
-              "DocumentMoniker": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Interfaces\\IHandleCsvConversion.cs",
-              "RelativeDocumentMoniker": "Interfaces\\IHandleCsvConversion.cs",
-              "ToolTip": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Interfaces\\IHandleCsvConversion.cs",
-              "RelativeToolTip": "Interfaces\\IHandleCsvConversion.cs",
-              "ViewState": "AgIAAKQAAAAAAAAAAAAcwMsAAAA3AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-08T00:59:49.017Z",
+              "Title": "AccountSettings.cshtml",
+              "DocumentMoniker": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Pages\\AccountSettings.cshtml",
+              "RelativeDocumentMoniker": "Pages\\AccountSettings.cshtml",
+              "ToolTip": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Pages\\AccountSettings.cshtml",
+              "RelativeToolTip": "Pages\\AccountSettings.cshtml",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAACkAAABRAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-16T23:47:25.124Z",
               "EditorCaption": ""
             }
           ]
