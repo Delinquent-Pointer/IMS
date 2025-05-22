@@ -1,40 +1,44 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
-name: Build and deploy ASP.Net Core app to Azure Web App - InventoryManagementSystem
+name: Build, deploy & package offline images
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
 
+  # ─────────────────────────────────────────────────────────────────────────────
+  # 1) Build & publish your .NET app
+  # ─────────────────────────────────────────────────────────────────────────────
   build:
     runs-on: windows-latest
     permissions:
       contents: read
-    steps:
-      - uses: actions/checkout@v4
 
-      - name: Set up .NET Core
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 9 SDK
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '9.x'
 
-      - name: Build with dotnet
+      - name: Build (Release)
         run: dotnet build --configuration Release
 
-      - name: dotnet publish
+      - name: Publish to folder
         run: dotnet publish -c Release -o "${{ env.DOTNET_ROOT }}/myapp"
 
-      - name: Upload artifact for deploy & docker
+      - name: Upload published app
         uses: actions/upload-artifact@v4
         with:
-          name: .net-app
+          name: dotnet-publish
           path: ${{ env.DOTNET_ROOT }}/myapp
 
+  # ─────────────────────────────────────────────────────────────────────────────
+  # 2) Deploy to Azure Web App
+  # ─────────────────────────────────────────────────────────────────────────────
   deploy:
     runs-on: windows-latest
     needs: build
@@ -44,13 +48,15 @@ jobs:
     permissions:
       id-token: write
       contents: read
+
     steps:
-      - name: Download artifact
+      - name: Download published app
         uses: actions/download-artifact@v4
         with:
-          name: .net-app
+          name: dotnet-publish
+          path: ./myapp
 
-      - name: Login to Azure
+      - name: Azure login
         uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_7F8EB15A0F3F4426AA5DE2C0921189C7 }}
@@ -61,46 +67,76 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name:  InventoryManagementSystem
-          slot-name: Production
-          package:   .
+          app-name:   InventoryManagementSystem
+          slot-name:  Production
+          # point at the folder containing your published dlls
+          package:    ./myapp
 
+  # ─────────────────────────────────────────────────────────────────────────────
+  # 3) Build offline Docker images (web + SQL) as tarballs
+  # ─────────────────────────────────────────────────────────────────────────────
   offline:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     needs: build
+
     steps:
-      - uses: actions/checkout@v4
-        
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Download published app
         uses: actions/download-artifact@v4
         with:
-          name: .net-app
+          name: dotnet-publish
           path: ./myapp
-        
-      - name: Build Docker image
+
+      - name: Set up QEMU for multi-arch build
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Linux container image
         run: |
-          docker build -t ims-offline:${{ github.sha }} ./myapp
-        
-      - name: Save image as tarball
+          docker buildx build \
+            --platform linux/amd64 \
+            --load \
+            --tag ims-offline:${{ github.sha }} \
+            ./myapp
+
+      - name: Save web image to TAR
+        shell: pwsh
         run: |
-          docker save ims-offline:${{ github.sha }} \
-          | gzip > ims-offline_${{ github.sha }}.tar.gz
-        
-      - name: Upload offline image
-        uses: actions/upload-artifact@v4
-        with:
-          name: offline-docker-image
-          path: ims-offline_${{ github.sha }}.tar.gz
+          $tag = "ims-offline:$Env:GITHUB_SHA"
+          $tar = "ims-offline_$Env:GITHUB_SHA.tar"
+          docker save $tag -o $tar
+
+      - name: Zip web image
+        shell: pwsh
+        run: |
+          $tar = "ims-offline_$Env:GITHUB_SHA.tar"
+          $zip = "ims-offline_$Env:GITHUB_SHA.zip"
+          Compress-Archive -Path $tar -DestinationPath $zip
 
       - name: Pull & save SQL Server image
+        shell: pwsh
         run: |
           docker pull mcr.microsoft.com/mssql/server:2019-latest
-          docker save mcr.microsoft.com/mssql/server:2019-latest \
-          | gzip > sqlserver_2019.tar.gz
-  
-      - name: Upload SQL Server image
+          $sqlTar = "sqlserver_2019.tar"
+          docker save mcr.microsoft.com/mssql/server:2019-latest -o $sqlTar
+
+      - name: Zip SQL Server image
+        shell: pwsh
+        run: |
+          Compress-Archive -Path sqlserver_2019.tar -DestinationPath sqlserver_2019.zip
+
+      - name: Upload web image ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: offline-web-image
+          path: ims-offline_${{ github.sha }}.zip
+
+      - name: Upload SQL Server ZIP
         uses: actions/upload-artifact@v4
         with:
           name: offline-sqlserver-image
-          path: sqlserver_2019.tar.gz
-  
+          path: sqlserver_2019.zip
