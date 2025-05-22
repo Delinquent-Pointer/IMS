@@ -1,0 +1,40 @@
+name: Build Offline Docker Bundle
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up .NET 9
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.x'
+
+      - name: Publish app
+        run: dotnet publish -c Release -o ./myapp
+
+      - name: Build Docker image
+        run: docker build -t ims-offline:${{ github.sha }} .
+
+      - name: Save Docker image
+        run: docker save ims-offline:${{ github.sha }} | gzip > ims-offline.tar.gz
+
+      - name: Save SQL Server image
+        run: |
+          docker pull mcr.microsoft.com/mssql/server:2019-latest
+          docker save mcr.microsoft.com/mssql/server:2019-latest | gzip > sqlserver.tar.gz
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: offline-images
+          path: |
+            ims-offline.tar.gz
+            sqlserver.tar.gz
