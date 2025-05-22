@@ -57,7 +57,7 @@ namespace IMS.Pages {
 
       var hashedPassword = IHashPasswords.HashPassword(Input.Password);
       var user = new UserAccount {
-        Username = Input.Username,
+        Username = Input.Username.Trim(),
         Password_Hash = hashedPassword,
         Is_IT_User = Input.Is_IT_User
       };
