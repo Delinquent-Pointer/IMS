@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using IMS.Data;
-using IMS.Pages; 
+using IMS.Pages;
 using IMS.Filters;
 using IMS.Services;
 
@@ -9,43 +9,53 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddSession();  // Add session support for session variables
+builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddHttpContextAccessor(); //Context accessor for authorization
 builder.Services.AddControllersWithViews(options => {
-  options.Filters.Add(new LoginAuthorizationFilter());// Add the login authorization filter globally
-  options.Filters.Add(new ITAuthorizationFilter());  // Add the IT authorization filter globally
+  options.Filters.Add(new LoginAuthorizationFilter());
+  options.Filters.Add(new ITAuthorizationFilter());
 });
-
 
 // Add Database Context for Azure SQL
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-//adds the UserAccountService to the service collection
+// Add your custom user account service
 builder.Services.AddScoped<UserAccountService>();
+
+// Add authentication and cookie settings
+builder.Services.AddAuthentication("Cookies")
+    .AddCookie("Cookies",options => {
+      options.LoginPath = "/Login";
+    });
+
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if(!app.Environment.IsDevelopment()) {
   app.UseExceptionHandler("/Error");
-  app.UseHsts(); // The default HSTS value is 30 days
+  app.UseHsts();
 }
 
-app.UseHttpsRedirection();
-// app.UseDeveloperExceptionPage();  // Add this line to see detailed error messages
+app.UseHttpsRedirection(); // docker container possible fix
+// app.UseDeveloperExceptionPage();  // Optional
 app.UseRouting();
 
-app.UseAuthorization();
-app.UseAuthentication(); 
-app.UseSession();  
+app.UseAuthentication();  // correct order
+app.UseAuthorization();   // correct order
+app.UseSession();
 
 app.MapStaticAssets();
 app.MapRazorPages().WithStaticAssets();
 
-app.MapGet("/",context => { //otherwise the login page has to be named "Index"
+app.MapGet("/",context => {
   context.Response.Redirect("/Login");
   return Task.CompletedTask;
 });
+
+app.Urls.Clear();
+// app.Urls.Add("http://0.0.0.0:80"); // possible fix for docker container
 
 app.Run();
