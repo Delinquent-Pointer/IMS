@@ -8,7 +8,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -31,7 +30,6 @@ jobs:
         run: |
           docker pull mcr.microsoft.com/mssql/server:2019-latest
           docker save mcr.microsoft.com/mssql/server:2019-latest | gzip > sqlserver.tar.gz
-
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -39,12 +37,12 @@ jobs:
           path: |
             ims-offline.tar.gz
             sqlserver.tar.gz
-
-      - name: Mark Offline Bundle as Deployment
-        uses: actions/github-script@v6
-        with:
-          script: |
-                const deployment = await github.rest.repos.createDeployment({
+      
+            - name: Mark Offline Bundle as Deployment
+            uses: actions/github-script@v6
+            with:
+              script: |
+                const deployment = await github.repos.createDeployment({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   ref: context.sha,
@@ -56,7 +54,7 @@ jobs:
                   production_environment: false
                 });
           
-                await github.rest.repos.createDeploymentStatus({
+                await github.repos.createDeploymentStatus({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   deployment_id: deployment.data.id,
@@ -65,37 +63,3 @@ jobs:
                   description: "Offline bundle ready for download",
                   environment_url: `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
                 });
-          
-
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
-        with:
-          name: "Offline Bundle - ${{ github.ref_name }}"
-          tag_name: "offline-${{ github.run_number }}"
-          body: |
-            ## 📦 Offline Docker Bundle
-
-            This release contains the offline version of the IMS project.
-
-            ### 🐳 To use:
-            1. Download the `.tar.gz` files below
-            2. Load them into Docker:
-               ```
-               docker load < ims-offline.tar.gz
-               docker load < sqlserver.tar.gz
-               ```
-            3. Run with Docker Compose or individually.
-
-            ### 🔗 Related Production Version:
-            See https://github.com/Delinquent-Pointer/IMS/deployments for live deployment info.
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload release assets
-        uses: softprops/action-gh-release@v1
-        with:
-          files: |
-            ims-offline.tar.gz
-            sqlserver.tar.gz
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
