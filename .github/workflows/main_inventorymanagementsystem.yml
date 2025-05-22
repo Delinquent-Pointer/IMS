@@ -76,7 +76,7 @@ jobs:
   # 3) Build offline Docker images (web + SQL) as tarballs
   # ─────────────────────────────────────────────────────────────────────────────
   offline:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     needs: build
 
     steps:
@@ -89,44 +89,31 @@ jobs:
           name: dotnet-publish
           path: ./myapp
 
-      - name: Create & bootstrap Buildx builder
-        run: |
-          # create a container‐based builder
-          docker buildx create --name cbuilder --driver docker-container --use
-          # bootstrap pulls the correct QEMU/binfmt inside that builder
-          docker buildx inspect cbuilder --bootstrap
+      - name: Install zip
+        run: sudo apt-get update && sudo apt-get install -y zip
 
-      - name: Build Linux/amd64 image
+      - name: Build web Docker image
         run: |
-          docker buildx build \
-            --platform linux/amd64 \
-            --load \
+          docker build \
+            --file ./myapp/Dockerfile \
             --tag ims-offline:${{ github.sha }} \
             ./myapp
 
       - name: Save & zip web image
-        shell: pwsh
         run: |
-          $tar = "ims-offline_$Env:GITHUB_SHA.tar"
-          docker save ims-offline:$Env:GITHUB_SHA -o $tar
-          Compress-Archive -Path $tar -DestinationPath "$tar.zip"
+          docker save ims-offline:${{ github.sha }} -o web.tar
+          zip ims-offline_${{ github.sha }}.zip web.tar
 
       - name: Pull, save & zip SQL Server image
-        shell: pwsh
         run: |
           docker pull mcr.microsoft.com/mssql/server:2019-latest
-          $sqltar = "sqlserver_2019.tar"
-          docker save mcr.microsoft.com/mssql/server:2019-latest -o $sqltar
-          Compress-Archive -Path $sqltar -DestinationPath "$sqltar.zip"
+          docker save mcr.microsoft.com/mssql/server:2019-latest -o sql.tar
+          zip sqlserver_2019.zip sql.tar
 
-      - name: Upload web image ZIP
+      - name: Upload offline images
         uses: actions/upload-artifact@v4
         with:
-          name: offline-web-image
-          path: ims-offline_${{ github.sha }}.tar.zip
-
-      - name: Upload SQL Server ZIP
-        uses: actions/upload-artifact@v4
-        with:
-          name: offline-sqlserver-image
-          path: sqlserver_2019.tar.zip
+          name: offline-images
+          path: |
+            ims-offline_${{ github.sha }}.zip
+            sqlserver_2019.zip
