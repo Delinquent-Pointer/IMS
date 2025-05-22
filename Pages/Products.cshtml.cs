@@ -316,20 +316,20 @@ namespace IMS.Pages {
 
             _appDbContext.Products.Remove(product);
             
-            _appDbContext.ProductsBin.Add(new ProductBin {
-                Name = product.Name,
-                Description = product.Description,
-                Price = product.Price,
-                Quantity = product.Quantity,
-                ReorderLevel = product.ReorderLevel,
-                SKU = product.SKU,
-                Category = product.Category,
-                Location = product.Location,
-                Image = product.Image,
-                DeleteDate = DateOnly.FromDateTime(DateTime.Now),
-                DeleteTime = TimeOnly.FromDateTime(DateTime.Now)
-            });
-            await _appDbContext.SaveChangesAsync();
+           // _appDbContext.ProductsBin.Add(new ProductBin {
+            //    Name = product.Name,
+            //    Description = product.Description,
+            //    Price = product.Price,
+            //    Quantity = product.Quantity,
+            //    ReorderLevel = product.ReorderLevel,
+            //    SKU = product.SKU,
+            //    Category = product.Category,
+            //    Location = product.Location,
+            //    Image = product.Image,
+            //    DeleteDate = DateOnly.FromDateTime(DateTime.Now),
+            //    DeleteTime = TimeOnly.FromDateTime(DateTime.Now)
+            //});
+           // await _appDbContext.SaveChangesAsync();
 
             return RedirectToPage("/Products");
         }

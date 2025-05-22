@@ -1,7 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using IMS.Data;
-using IMS.Pages;  // Correct namespace for AppDbContext
-using IMS.Filters;  // Correct namespace for LoginAuthorizationFilter
+using IMS.Pages; 
+using IMS.Filters;
+using IMS.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,9 @@ builder.Services.AddControllersWithViews(options => {
 // Add Database Context for Azure SQL
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+//adds the UserAccountService to the service collection
+builder.Services.AddScoped<UserAccountService>();
 
 var app = builder.Build();
 

@@ -83,8 +83,9 @@ namespace IMS.Data {
           .HasForeignKey<UserProfile>(u => u.Account_Id)
           .OnDelete(DeleteBehavior.Cascade);
 
-        modelBuilder.Entity<ProductBin>()
+      modelBuilder.Entity<ProductBin>()
         .HasKey(p => p.Id);
+
     }
   }
 }

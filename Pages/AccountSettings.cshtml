@@ -1,0 +1,229 @@
+﻿@page
+@model IMS.Pages.AccountSettingsModel
+@{
+	ViewData["Title"] = "Account Settings";
+	var globalErrors = ViewData.ModelState
+		.Where(kvp => string.IsNullOrEmpty(kvp.Key))
+		.SelectMany(kvp => kvp.Value.Errors)
+		.ToList();
+
+
+}
+<style>
+	.text-danger {
+		white-space: pre-line;
+	}
+</style>
+
+<div class="container d-flex flex-column justify-content-center align-items-center" style="min-height: 100vh;">
+	<div class="w-100" style="max-width: 400px;">
+		<div class="text-center mb-4">
+			<h1>Account Settings</h1>
+			<p class="lead">View and update account information</p>
+		</div>
+
+		@if (globalErrors.Count > 0)
+		{
+			<div class="alert alert-danger">
+				@foreach (var error in globalErrors)
+				{
+					<div>@error.ErrorMessage</div>
+				}
+			</div>
+		}
+
+		<div class="form-group mb-3">
+			<label class="mb-1"><strong>Username:</strong></label>
+			<form method="post" asp-page-handler="ChangeUsername" id="changeUsername">
+				<div class="d-flex align-items-center mb-2">
+					<input asp-for="UsernameInput.Username" class="form-control" value="@(Model.Account.Username ?? "no name found")" disabled>
+					<button type="button" id="editUsernameButton" class="btn btn-warning">Edit</button>
+				</div>
+				<span asp-validation-for="UsernameInput.Username" class="text-danger"></span>
+				<div id="usernameHiddenButtons" class="mt-2" style="display: none;">
+					<button type="button" id="cancelUsernameButton" class="btn btn-secondary me-2">Cancel</button>
+					<button type="button" id="saveUsernameButton " class="btn btn-success"
+							data-bs-toggle="modal" data-bs-target="#confirmModal" onclick="openModal('changeUsername')">
+						Confirm
+					</button>
+				</div>
+			</form>
+		</div>
+
+		@if (Model.HasPerms)
+		{
+			<div class="form-group mb-3">
+				<label class="mb-1"><strong>Admin Key:</strong></label>
+				<form method="post" asp-page-handler="ChangeAdminKey" id="changeKey">
+					<div class="d-flex align-items-center mb-2">
+						<!--<input type="password" id="adminKey" name="newKey" class="form-control" pattern="[a-zA-Z0-9]{8,}" title="Eight or more alphanumeric characters"
+							   value="@(Model.Key)" disabled>-->
+						<input asp-for="AdminKeyInput.NewKey" id="adminKey" type="password" class="form-control"
+							   pattern="[a-zA-Z0-9]{8,}" title="Eight or more alphanumeric characters"
+							   value="@(Model.Key)" disabled>
+						<button type="button" id="editKeyButton" class="btn btn-warning">Edit</button>
+					</div>
+					<div id="keyHiddenButtons" class="mt-2" style="display: none;">
+						<button type="button" id="cancelKeyButton" class="btn btn-secondary me-2">Cancel</button>
+						<button type="button" id="saveKeyButton" class="btn btn-success"
+								data-bs-toggle="modal" data-bs-target="#confirmModal" onclick="openModal('changeKey')">
+							Confirm
+						</button>
+					</div>
+				</form>
+				<div class="mt-2">
+					<input type="checkbox" id="showKey" />
+					<label for="showKey">Show Admin Key</label>
+				</div>
+			</div>
+		}
+
+		<div class="form-group mb-3">
+			<form method="post" asp-page-handler="ChangePassword" id="changePassword">
+				<button type="button" id="changePasswordButton" class="btn btn-success">Change Password</button>
+				<div id="passwordHiddenForm" style="display: none;" class="mt-2">
+					<label class="mb-1"><strong>New Password:</strong></label>
+					<input asp-for="PasswordInput.NewPassword" type="password" class="form-control me-2">
+					<span asp-validation-for="PasswordInput.NewPassword" class="text-danger"></span>
+					<label class="mb-1"><strong>Confirm New Password:</strong></label>
+					<input asp-for="PasswordInput.ConfirmPassword" type="password" class="form-control me-2">
+					<span asp-validation-for="PasswordInput.ConfirmPassword" class="text-danger"></span>
+					<div class="mt-2">
+						<button type="button" id="cancelPasswordButton" class="btn btn-secondary me-2">Cancel</button>
+						<button type="button" id="savePasswordButton" class="btn btn-success"
+								data-bs-toggle="modal" data-bs-target="#confirmModal" onclick="openModal('changePassword')">
+							Confirm
+						</button>
+					</div>
+					<div class="mt-2">
+						<input type="checkbox" id="showPassword" />
+						<label for="showKey">Show Password</label>
+					</div>
+				</div>
+			</form>
+		</div>
+
+	</div>
+
+	<div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Confirm Password</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body" Style="text-align: center; font-weight: bold;">
+					Enter your current password to confirm the change.
+				</div>
+				<div class="modal-body">
+					<label for="currentPassword" class="form-label">Current Password:</label>
+					<input asp-for="CurrentPassword" type="password" class="form-control" form="">
+					<div class="mt-2">
+						<input type="checkbox" id="showCurrentPassword" />
+						<label for="showCurrentPassword">Show Password</label>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+							<button type="submit" class="btn btn-success" id="submitModal" form="">Confirm</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<script>
+				function openModal(formId){
+					document.getElementById('submitModal').setAttribute('form', formId);
+					document.getElementById('CurrentPassword').setAttribute('form', formId);
+				}
+			</script>
+
+		</div>
+	</div>
+
+
+		<script>
+			document.addEventListener('DOMContentLoaded', function () {
+				var editUsernameButton = document.getElementById('editUsernameButton');
+				var usernameHiddenButtons = document.getElementById('usernameHiddenButtons');
+				var usernameInput = document.getElementById('UsernameInput_Username');
+				var cancelUsernameButton = document.getElementById('cancelUsernameButton');
+
+				var editKeyButton = document.getElementById('editKeyButton');
+				var keyHiddenButtons = document.getElementById('keyHiddenButtons');
+				var showKey = document.getElementById('showKey');
+				var adminKey = document.getElementById('adminKey');
+
+				var changePasswordButton = document.getElementById('changePasswordButton');
+				var passwordHiddenForm = document.getElementById('passwordHiddenForm');
+				var showPassword = document.getElementById('showPassword');
+				var newPassword = document.getElementById('PasswordInput_NewPassword');
+				var confirmPassword = document.getElementById('PasswordInput_ConfirmPassword');
+				var cancelPasswordButton = document.getElementById('cancelPasswordButton');
+
+				var currentPassword = document.getElementById('CurrentPassword');
+				var showCurrentPassword = document.getElementById('showCurrentPassword');
+
+
+
+				editUsernameButton.addEventListener('click', () => {
+					usernameInput.disabled = false;
+					editUsernameButton.style.display = 'none';
+					usernameHiddenButtons.style.display = 'inline';
+				});
+
+				cancelUsernameButton.addEventListener('click', () => {
+					usernameInput.disabled = true;
+					editUsernameButton.style.display = 'inline';
+					usernameHiddenButtons.style.display = 'none';
+					usernameInput.value = '@Model.Account.Username';
+				});
+
+
+				if (editKeyButton && keyHiddenButtons) {
+					editKeyButton.addEventListener('click', () => {
+						adminKey.disabled = false;
+						editKeyButton.style.display = 'none';
+						keyHiddenButtons.style.display = 'inline';
+					});
+					cancelKeyButton.addEventListener('click', () => {
+						adminKey.disabled = true;
+						editKeyButton.style.display = 'inline';
+						keyHiddenButtons.style.display = 'none';
+						adminKey.value = '@Model.Key';
+					});
+				}
+
+
+				changePasswordButton.addEventListener('click', () => {
+					changePasswordButton.style.display = 'none';
+					passwordHiddenForm.style.display = 'inline';
+				});
+
+				var shouldShowPassword = '@TempData["ShowPasswordForm"]' === 'True';
+				if (shouldShowPassword) {
+					document.getElementById('changePasswordButton').style.display = 'none';
+					document.getElementById('passwordHiddenForm').style.display = 'inline';
+				}
+
+
+				cancelPasswordButton.addEventListener('click', () => {
+					changePasswordButton.style.display = 'flex';
+					passwordHiddenForm.style.display = 'none';
+				});
+
+				
+				if (showKey){
+					showKey.addEventListener('change', () => {
+						adminKey.type = showKey.checked ? 'text' : 'password';
+					});
+				}
+				showPassword.addEventListener('change', () => {
+					newPassword.type = showPassword.checked ? 'text' : 'password';
+					confirmPassword.type = showPassword.checked ? 'text' : 'password';
+				});
+
+				showCurrentPassword.addEventListener('change', () => {
+					currentPassword.type = showCurrentPassword.checked ? 'text' : 'password';
+				});
+			});
+		</script>
+</div>
