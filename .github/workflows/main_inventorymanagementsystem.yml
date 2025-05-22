@@ -89,13 +89,14 @@ jobs:
           name: dotnet-publish
           path: ./myapp
 
-      - name: Set up QEMU for multi-arch build
-        uses: docker/setup-qemu-action@v3
+      - name: Create & bootstrap Buildx builder
+        run: |
+          # create a container‐based builder
+          docker buildx create --name cbuilder --driver docker-container --use
+          # bootstrap pulls the correct QEMU/binfmt inside that builder
+          docker buildx inspect cbuilder --bootstrap
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build Linux container image
+      - name: Build Linux/amd64 image
         run: |
           docker buildx build \
             --platform linux/amd64 \
@@ -103,40 +104,29 @@ jobs:
             --tag ims-offline:${{ github.sha }} \
             ./myapp
 
-      - name: Save web image to TAR
-        shell: pwsh
-        run: |
-          $tag = "ims-offline:$Env:GITHUB_SHA"
-          $tar = "ims-offline_$Env:GITHUB_SHA.tar"
-          docker save $tag -o $tar
-
-      - name: Zip web image
+      - name: Save & zip web image
         shell: pwsh
         run: |
           $tar = "ims-offline_$Env:GITHUB_SHA.tar"
-          $zip = "ims-offline_$Env:GITHUB_SHA.zip"
-          Compress-Archive -Path $tar -DestinationPath $zip
+          docker save ims-offline:$Env:GITHUB_SHA -o $tar
+          Compress-Archive -Path $tar -DestinationPath "$tar.zip"
 
-      - name: Pull & save SQL Server image
+      - name: Pull, save & zip SQL Server image
         shell: pwsh
         run: |
           docker pull mcr.microsoft.com/mssql/server:2019-latest
-          $sqlTar = "sqlserver_2019.tar"
-          docker save mcr.microsoft.com/mssql/server:2019-latest -o $sqlTar
-
-      - name: Zip SQL Server image
-        shell: pwsh
-        run: |
-          Compress-Archive -Path sqlserver_2019.tar -DestinationPath sqlserver_2019.zip
+          $sqltar = "sqlserver_2019.tar"
+          docker save mcr.microsoft.com/mssql/server:2019-latest -o $sqltar
+          Compress-Archive -Path $sqltar -DestinationPath "$sqltar.zip"
 
       - name: Upload web image ZIP
         uses: actions/upload-artifact@v4
         with:
           name: offline-web-image
-          path: ims-offline_${{ github.sha }}.zip
+          path: ims-offline_${{ github.sha }}.tar.zip
 
       - name: Upload SQL Server ZIP
         uses: actions/upload-artifact@v4
         with:
           name: offline-sqlserver-image
-          path: sqlserver_2019.zip
+          path: sqlserver_2019.tar.zip
