@@ -38,3 +38,30 @@ jobs:
           path: |
             ims-offline.tar.gz
             sqlserver.tar.gz
+      
+            - name: Mark Offline Bundle as Deployment
+            uses: actions/github-script@v6
+            with:
+              script: |
+                const deployment = await github.repos.createDeployment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  ref: context.sha,
+                  required_contexts: [],
+                  environment: "offline-bundle",
+                  description: "Docker images for offline IMS deployment",
+                  transient_environment: false,
+                  auto_merge: false,
+                  production_environment: false
+                });
+          
+                await github.repos.createDeploymentStatus({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  deployment_id: deployment.data.id,
+                  state: "success",
+                  log_url: `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+                  description: "Offline bundle ready for download",
+                  environment_url: `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+                });
+          

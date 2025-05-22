@@ -55,7 +55,7 @@ app.MapGet("/",context => {
   return Task.CompletedTask;
 });
 
-app.Urls.Clear();
+// app.Urls.Clear(); // do not use this without adding a new URL
 // app.Urls.Add("http://0.0.0.0:80"); // possible fix for docker container
 
 app.Run();
