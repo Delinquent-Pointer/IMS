@@ -1,0 +1,110 @@
+
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Inventory Management System - User Guide}
+\author{CodeBaddies}
+\date{May 2025}
+
+\definecolor{codegray}{rgb}{0.95,0.95,0.95}
+\lstset{
+	backgroundcolor=\color{codegray},
+	basicstyle=\ttfamily\footnotesize,
+	breaklines=true,
+	frame=single,
+	columns=fullflexible
+}
+
+\titleformat{\section}{\large\bfseries}{\thesection.}{1em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection.}{1em}{}
+
+\begin{document}
+	
+	\maketitle
+	\tableofcontents
+	\newpage
+	
+	\section{Prerequisites}
+	\begin{itemize}[nosep]
+		\item Docker Desktop installed and running
+		\item .NET 9 SDK
+		\item Git
+		\item VS Code or other editor
+		\item Access credentials (DB password, etc.)
+	\end{itemize}
+	
+	\section{Installation}
+	\begin{lstlisting}[language=bash]
+		git clone https://github.com/YourTeam/ims.git
+		cd ims
+		.\install.ps1  # On Windows PowerShell
+		# or
+		./install.sh   # On Linux/macOS
+	\end{lstlisting}
+	
+	\section{Uninstallation}
+	\begin{lstlisting}[language=bash]
+		.\uninstall.ps1
+		# or
+		./uninstall.sh
+	\end{lstlisting}
+	
+	\section{Quick Start}
+	\begin{lstlisting}[language=bash]
+		docker-compose up
+		# Access at http://localhost:PORT
+	\end{lstlisting}
+	
+	\section{Feature Walkthrough}
+	
+	\subsection{Login}
+	\begin{enumerate}[nosep]
+		\item Navigate to the login page.
+		\item Use a demo account or register.
+	\end{enumerate}
+	
+	\subsection{Product Management}
+	\begin{itemize}[nosep]
+		\item Add/edit/delete products via the Products page.
+		\item Real-time quantity updates after scans.
+	\end{itemize}
+	
+	\subsection{Inventory Alerts}
+	\begin{itemize}[nosep]
+		\item Set thresholds via item modal.
+		\item View alerts in the dashboard and calendar.
+	\end{itemize}
+	
+	\subsection{Export/Import}
+	\begin{itemize}[nosep]
+		\item Go to Export page.
+		\item Choose chart type or full data.
+		\item Click download to export as CSV or PNG.
+	\end{itemize}
+	
+	\subsection{Dashboard Usage}
+	\begin{itemize}[nosep]
+		\item Monitor pie chart, alerts, and scanning activity.
+		\item Use filters to query data.
+	\end{itemize}
+	
+	\section{Troubleshooting}
+	\begin{itemize}[nosep]
+		\item \textbf{Docker not running}: Make sure Docker Desktop is started.
+		\item \textbf{Login issues}: Reset password from login screen.
+	\end{itemize}
+	
+	\section{Contact}
+	\begin{itemize}[nosep]
+		\item Maintained by: CodeBaddies
+		\item Email: \texttt{support@ims.example.com}
+	\end{itemize}
+	
+\end{document}
