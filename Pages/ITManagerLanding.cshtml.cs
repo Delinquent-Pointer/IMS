@@ -15,32 +15,25 @@ namespace IMS.Pages {
       _context = context;
     }
 
-    public IList<UserAccountViewModel> AllUserAccounts { get; set; } = new List<UserAccountViewModel>();
+    public IList<UserAccount> AllUserAccounts { get; set; } = new List<UserAccount>();
 
     public async Task OnGetAsync() {
-      AllUserAccounts = await (
-          from account in _context.UserAccounts
-          join profile in _context.Set<UserProfile>()
-          on account.Account_Id equals profile.Account_Id into accountProfile
-          from profile in accountProfile.DefaultIfEmpty()
-          select new UserAccountViewModel {
-            Account_Id = account.Account_Id,
-            Username = account.Username,
-            Is_IT_User = account.Is_IT_User,
-            Verified = account.Verified,
-            FirstName = profile != null ? profile.FirstName : "",
-            LastName = profile != null ? profile.LastName : "",
-            Email = profile != null ? profile.Email : "",
-            PhoneNumber = profile != null ? profile.PhoneNumber : "",
-            TimeZone = profile != null ? profile.TimeZone : "",
-            State = profile != null ? profile.State : "",
-            City = profile != null ? profile.City : "",
-            CreatedAt = profile != null ? profile.CreatedAt.ToString("g") : ""
-          }).OrderBy(u => u.Username).ToListAsync();
-    }
+            AllUserAccounts = await _context.UserAccounts
+                .OrderBy(u => u.Username).Select(u => new UserAccount
+                {
+                    Account_Id = u.Account_Id,
+                    Username = u.Username,
+                    Is_IT_User = u.Is_IT_User,
+                    Verified = u.Verified
+                })
+                .ToListAsync();
+     }
 
 
-    public async Task<IActionResult> OnPostVerifyAsync(int id) {
+
+
+
+        public async Task<IActionResult> OnPostVerifyAsync(int id) {
       var account = await _context.UserAccounts.FindAsync(id);
       if(account != null) {
         account.Verified = true;
