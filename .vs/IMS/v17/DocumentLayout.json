@@ -7,6 +7,10 @@
       "RelativeMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|solutionrelative:pages\\products.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|c:\\users\\jared\\documents\\school\\cscd 488\\seniorproject\\ims\\ims\\pages\\createproduct.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|solutionrelative:pages\\createproduct.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|c:\\users\\jared\\documents\\school\\cscd 488\\seniorproject\\ims\\ims\\pages\\createaccount.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{43F10EE1-C08B-736B-E5D4-B594FB0ABB88}|IMS.csproj|solutionrelative:pages\\createaccount.cshtml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -40,7 +44,7 @@
         },
         {
           "DockedWidth": 505,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Bookmark",
@@ -48,7 +52,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 1,
+              "Title": "CreateProduct.cshtml.cs",
+              "DocumentMoniker": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Pages\\CreateProduct.cshtml.cs",
+              "RelativeDocumentMoniker": "Pages\\CreateProduct.cshtml.cs",
+              "ToolTip": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Pages\\CreateProduct.cshtml.cs",
+              "RelativeToolTip": "Pages\\CreateProduct.cshtml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-11T05:17:30.405Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "ITManagerLanding.cshtml",
               "DocumentMoniker": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Pages\\ITManagerLanding.cshtml",
               "RelativeDocumentMoniker": "Pages\\ITManagerLanding.cshtml",
@@ -56,12 +73,11 @@
               "RelativeToolTip": "Pages\\ITManagerLanding.cshtml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-05-28T03:04:11.092Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-28T03:04:11.092Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "ITManagerLanding.cshtml.cs",
               "DocumentMoniker": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Pages\\ITManagerLanding.cshtml.cs",
               "RelativeDocumentMoniker": "Pages\\ITManagerLanding.cshtml.cs",
@@ -69,8 +85,7 @@
               "RelativeToolTip": "Pages\\ITManagerLanding.cshtml.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-08T00:41:59.23Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-08T00:41:59.23Z"
             },
             {
               "$type": "Document",
@@ -80,14 +95,14 @@
               "RelativeDocumentMoniker": "Pages\\Products.cshtml.cs",
               "ToolTip": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Pages\\Products.cshtml.cs",
               "RelativeToolTip": "Pages\\Products.cshtml.cs",
-              "ViewState": "AgIAACYBAAAAAAAAAAAWwDUBAABDAAAAAAAAAA==",
+              "ViewState": "AgIAAGUAAAAAAAAAAAAlwDUBAABDAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-05-28T03:15:42.929Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "Login.cshtml.cs",
               "DocumentMoniker": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Pages\\Login.cshtml.cs",
               "RelativeDocumentMoniker": "Pages\\Login.cshtml.cs",
@@ -95,12 +110,11 @@
               "RelativeToolTip": "Pages\\Login.cshtml.cs",
               "ViewState": "AgIAABAAAAAAAAAAAAA0wBUAAAAXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-08T00:39:07.953Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-08T00:39:07.953Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "CreateAccount.cshtml.cs",
               "DocumentMoniker": "C:\\Users\\Jared\\Documents\\school\\CSCD 488\\SeniorProject\\IMS\\IMS\\Pages\\CreateAccount.cshtml.cs",
               "RelativeDocumentMoniker": "Pages\\CreateAccount.cshtml.cs",
@@ -108,8 +122,7 @@
               "RelativeToolTip": "Pages\\CreateAccount.cshtml.cs",
               "ViewState": "AgIAAFMAAAAAAAAAAAAswG8AAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-08T00:35:22.829Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-05-08T00:35:22.829Z"
             }
           ]
         }
