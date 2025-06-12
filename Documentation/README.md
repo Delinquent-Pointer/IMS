@@ -83,8 +83,8 @@ Before installing or running the Inventory Management System (IMS), ensure the f
       - Download the <code>.zip</code> file containing Docker images and setup scripts.
     </td>
     <td>
-      <img src="install_1_1.png" width="400"/>
-      <img src="install_1_2.png" width="400"/>
+      <img src="install_1_1.png" width="500"/>
+      <img src="install_1_2.png" width="700"/>
     </td>
   </tr>
 
@@ -105,7 +105,7 @@ Before installing or running the Inventory Management System (IMS), ensure the f
       - Right-click and choose <b>Open in Terminal</b>
     </td>
     <td>
-      <img src="install_3.png" width="400"/>
+      <img src="install_3.png" width="700"/>
     </td>
   </tr>
 
@@ -116,7 +116,7 @@ Before installing or running the Inventory Management System (IMS), ensure the f
       - Right-click the Docker tray icon and select <b>Switch to Linux containers</b> if needed
     </td>
     <td>
-      <img src="install_4.png" width="400"/>
+      <img src="install_4.png" width="200"/>
     </td>
   </tr>
 
@@ -128,7 +128,7 @@ Before installing or running the Inventory Management System (IMS), ensure the f
       This will load Docker images and start the IMS containers.
     </td>
     <td>
-      <img src="install_5.png" width="400"/>
+      <img src="install_5.png" width="700"/>
     </td>
   </tr>
 </table>
@@ -145,7 +145,7 @@ Before installing or running the Inventory Management System (IMS), ensure the f
       - You should see a file named <code>uninstall.ps1</code>.
     </td>
     <td>
-      <img src="uninstall_1.png" width="400"/>
+      <img src="uninstall_1.png" width="700"/>
     </td>
   </tr>
 
@@ -168,8 +168,8 @@ Before installing or running the Inventory Management System (IMS), ensure the f
       - Delete anything left over
     </td>
     <td>
-      <img src="uninstall_2_1.png" width="400"/>
-      <img src="uninstall_2_2.png" width="400"/>
+      <img src="uninstall_2_1.png" width="700"/>
+      <img src="uninstall_2_2.png" width="700"/>
     </td>
   </tr>
 
