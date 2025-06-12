@@ -421,7 +421,7 @@ CSV Download:
 <table>
   <tr>
     <td>
-      The IT Dashboard allows IT users or Admins the ability to verify and delete accounts.<br><br>
+      <b>The IT Dashboard allows IT users or Admins the ability to verify and delete accounts.</b><br><br>
       <ul>
         <li>This page is only visible to users with Admin privileges.</li>
         <li>To verify a new account, press the Verify button.</li>
