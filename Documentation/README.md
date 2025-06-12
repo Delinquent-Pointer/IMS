@@ -25,7 +25,8 @@
     - [5.5.2 CSV Upload \& Download](#552-csv-upload--download)
   - [5.6 Inventory Alerts](#56-inventory-alerts)
   - [5.7 Main Dashboard](#57-main-dashboard)
-  - [5.8 Sales Page](#58-sales-page)
+  - [5.8 IT Dashboard](#58-it-dashboard)
+  - [5.9 Sales Page](#59-sales-page)
 - [6. Additional Information](#6-additional-information)
   - [6.1 Password Requirements](#61-password-requirements)
   - [6.2 SKU Requirements](#62-sku-requirements)
@@ -83,8 +84,8 @@ Before installing or running the Inventory Management System (IMS), ensure the f
       - Download the <code>.zip</code> file containing Docker images and setup scripts.
     </td>
     <td>
-      <img src="install_1_1.png" width="500"/>
-      <img src="install_1_2.png" width="700"/>
+      <img src="Documentation/install_1_1.png" width="500"/>
+      <img src="Documentation/install_1_2.png" width="700"/>
     </td>
   </tr>
 
@@ -105,7 +106,7 @@ Before installing or running the Inventory Management System (IMS), ensure the f
       - Right-click and choose <b>Open in Terminal</b>
     </td>
     <td>
-      <img src="install_3.png" width="700"/>
+      <img src="Documentation/install_3.png" width="700"/>
     </td>
   </tr>
 
@@ -116,7 +117,7 @@ Before installing or running the Inventory Management System (IMS), ensure the f
       - Right-click the Docker tray icon and select <b>Switch to Linux containers</b> if needed
     </td>
     <td>
-      <img src="install_4.png" width="200"/>
+      <img src="Documentation/install_4.png" width="200"/>
     </td>
   </tr>
 
@@ -128,7 +129,7 @@ Before installing or running the Inventory Management System (IMS), ensure the f
       This will load Docker images and start the IMS containers.
     </td>
     <td>
-      <img src="install_5.png" width="700"/>
+      <img src="Documentation/install_5.png" width="700"/>
     </td>
   </tr>
 </table>
@@ -145,7 +146,7 @@ Before installing or running the Inventory Management System (IMS), ensure the f
       - You should see a file named <code>uninstall.ps1</code>.
     </td>
     <td>
-      <img src="uninstall_1.png" width="700"/>
+      <img src="Documentation/uninstall_1.png" width="700"/>
     </td>
   </tr>
 
@@ -168,8 +169,8 @@ Before installing or running the Inventory Management System (IMS), ensure the f
       - Delete anything left over
     </td>
     <td>
-      <img src="uninstall_2_1.png" width="700"/>
-      <img src="uninstall_2_2.png" width="700"/>
+      <img src="Documentation/uninstall_2_1.png" width="700"/>
+      <img src="Documentation/uninstall_2_2.png" width="700"/>
     </td>
   </tr>
 
@@ -218,7 +219,7 @@ This section walks through the login process for your first visit of the webpage
       </ol>
     </td>
     <td>
-      <img src="image-1.png" alt="Login screenshot" width="500"/>
+      <img src="Documentation/image-1.png" alt="Login screenshot" width="700"/>
     </td>
   </tr>
 </table>
@@ -241,7 +242,7 @@ This section walks through the login process for your first visit of the webpage
       <li>A fresh Admin Key will be generated for each IT account. this key can be changed by visiting the Account Settings page as an IT user.</li></ul>
     </td>
     <td>
-      <img src="image.png" alt="Create Account Screenshot" width="500"/>
+      <img src="Documentation/image.png" alt="Create Account Screenshot" width="800"/>
     </td>
   </tr>
 </table>
@@ -262,8 +263,8 @@ This section walks through the login process for your first visit of the webpage
     </td>
     <td>
       <div style="display: flex; flex-direction: column; gap: 10px;">
-        <img src="accsettings.png" alt="Account Settings Screenshot" width="500"/>
-        <img src="pwconfirm.png" alt="Password confirmation Screenshot" width="500"/>
+        <img src="Documentation/accsettings.png" alt="Account Settings Screenshot" width="500"/>
+        <img src="Documentation/pwconfirm.png" alt="Password confirmation Screenshot" width="500"/>
       </div>
     </td>
   </tr>
@@ -283,7 +284,7 @@ This section walks through the login process for your first visit of the webpage
     </ul>
     </td>
     <td>
-      <img src="createprod.png" alt="Create Product Screenshot" width="400"/>
+      <img src="Documentation/createprod.png" alt="Create Product Screenshot" width="400"/>
     </td>
   </tr>
 </table>
@@ -306,7 +307,7 @@ This section walks through the login process for your first visit of the webpage
       </ul>
     </td>
     <td>
-        <img src="index.png" alt="Product Management Screenshot" width="800"/>
+        <img src="Documentation/index.png" alt="Product Management Screenshot" width="900"/>
     </td>
   </tr>
 </table>
@@ -333,7 +334,7 @@ Advanced Query:
     <li>Advanced queries can be typed manually or can be build using the query builder, which is accessible by pressing the "Build Query" button when the Advanced Query category is selected.
   </ul>
     <td>
-        <img src="advsearch.png" alt="Advanced Search Screenshot" width="500"/>
+        <img src="Documentation/advsearch.png" alt="Advanced Search Screenshot" width="700"/>
     </td>
   </tr>
 </table>
@@ -349,7 +350,7 @@ Popup Options:
     <li>Pressing the "Delete" button will prompt a secondary confirmation popup to delete the item from the database. Pressing "Confirm" will fully remove this item from the database.
   </ul>
     <td>
-        <img src="popup.png" alt="Product Popup Screenshot" width="500"/>
+        <img src="Documentation/Popup.png" alt="Product Popup Screenshot" width="700"/>
     </td>
   </tr>
 </table>
@@ -373,17 +374,30 @@ CSV Download:
   <li>The Inventory page supports the ability to directly download the current search result as a comma-separated CSV file.
   <li>Pressing the "Download" buttom wild initiate a download of the current search result as a CSV file.
   <li>Attempting to download an empty search result will instead give you a CSV of the full inventory.
+
+  </tr>
+</table>
+
+
+## 5.6 Inventory Alerts
+
+<table>
+  <tr>
     <td>
-    <img src="csv.png" alt="CSV Example Screenshot" width="800"/>
+      <b>The Inventory Alerts system notifies users when item quantities fall below set thresholds.</b><br><br>
+      Users can configure alerts by editing a product and specifying a "notify me when below" value.<br>
+      These alerts are visible on both the dashboard and the calendar view for the associated product.
+    </td>
+    <td>
+      <img src="Documentation/image_5_7_but.png" alt="Alert Setting Modal" width="400"/><br>
     </td>
   </tr>
 </table>
 
-## 5.6 Inventory Alerts
-- Set thresholds via item modal.
-- View alerts in the dashboard and calendar.
+---
 
 ## 5.7 Main Dashboard
+
 <table>
   <tr>
     <td>
@@ -393,17 +407,17 @@ CSV Download:
         <li>To use the Scanner, you must have a Camera on the device you are using.
           <ul>
             <li>It will auto-detect your Camera and ask for permission to use it.</li>
-            <li>Scan Items based off of their SKU inside of the database by creating a barcode.</li>
+            <li>Scan items based off of their SKU using a printed barcode.</li>
             <li>Currently there is no integrated barcode generator.
               <ul>
-                <li>The website used to create barcodes for testing purposes is: <a href="https://barcode.tec-it.com/en">Barcode.tec-it</a></li>
-                <li>Any type of barcode is valid, use version 'Code-128' for best results.</li>
+                <li>Use: <a href="https://barcode.tec-it.com/en">Barcode.tec-it</a></li>
+                <li>Recommended type: <b>Code-128</b></li>
               </ul>
             </li>
-            <li>Once finished scanning items, click the 'Complete Transaction' button.
+            <li>After scanning, click <b>'Complete Transaction'</b> to:
               <ul>
-                <li>This will remove the items scanned from the database, based off their quantity.</li>
-                <li>It will also add a receipt to the Sales Page.</li>
+                <li>Deduct scanned item quantities from inventory.</li>
+                <li>Generate a receipt on the Sales Page.</li>
               </ul>
             </li>
           </ul>
@@ -411,12 +425,68 @@ CSV Download:
       </ul>
     </td>
     <td>
-      <img src="image-4.png" alt="Dashboard Scanner Screenshot" width="350"/>
+      <img src="Documentation/image-4.png" alt="Dashboard Scanner Screenshot" width="400"/>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      <b>Chart Selection:</b><br>
+      Visualize current inventory using customizable chart types such as pie and bar charts. Use the dropdown to change views.
+    </td>
+    <td>
+      <img src="Documentation/image_5_7_1.png" alt="Chart Selection Dropdown" width="400"/>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      <b>Quick Product Search:</b><br>
+      Use the quick search bar for instant filtering of products based on name, SKU, or category. Designed for fast barcode-driven use.
+    </td>
+    <td>
+      <img src="Documentation/image_5_7_qps.png" alt="Quick Product Search" width="400"/>
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      <b>Interactive Notes:</b><br>
+      Notes added to items show up on the dashboard calendar with timestamps. Useful for tracking reminders, stock actions, or alerts.
+    </td>
+    <td>
+      <img src="Documentation/image_5_7_notes.png" alt="Dashboard Notes on Calendar" width="400"/>
     </td>
   </tr>
 </table>
 
-## 5.8 Sales Page
+## 5.8 IT Dashboard
+<table>
+  <tr>
+    <td>
+      <b>The IT Dashboard allows IT users or Admins the ability to verify and delete accounts.</b><br><br>
+      <ul>
+        <li>This page is only visible to users with Admin privileges.</li>
+        <li>To verify a new account, press the Verify button.</li>
+        <li>To delete any account, press the Delete button.</li>
+        <li>This page lists the following:
+          <ul>
+            <li>Username</li>
+            <li>ID</li>
+            <li>Account Type (General User or IT User)</li>
+            <li>Verified Status</li>
+            <li>Actions</li>
+          </ul>
+        </li>
+      </ul>
+    </td>
+    <td>
+      <img src="Documentation/image-6.png" alt="IT Dashboard Screenshot" width="700"/>
+    </td>
+  </tr>
+</table>
+
+## 5.9 Sales Page
 <table>
   <tr>
     <td>
@@ -438,7 +508,7 @@ CSV Download:
       </ul>
     </td>
     <td>
-      <img src="image-5.png" alt="Sales Page Screenshot" width="700"/>
+      <img src="Documentation/image-5.png" alt="Sales Page Screenshot" width="700"/>
     </td>
   </tr>
 </table>
