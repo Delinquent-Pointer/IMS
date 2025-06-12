@@ -8,7 +8,6 @@
 - [@Pbrown34](https://github.com/Pbrown34)  
 
 # Table of Contents
-    - [Project Contributors](#project-contributors)
 - [Table of Contents](#table-of-contents)
 - [1. Prerequisites](#1-prerequisites)
 - [2. Installation](#2-installation)
@@ -71,7 +70,7 @@ Before installing or running the Inventory Management System (IMS), ensure the f
   - **Public Docker Showcase**: [IMS-Docker](https://github.com/Delinquent-Pointer/IMS-Docker)
 
 - **Access Credentials (Admin/Database) [Only if building Azure cloud service]**  
-  Some functionality requires access credentials (e.g., admin password, database connection string). These can be obtained from your Azure portal or deployment lead.  
+  Some functionality requires access credentials (e.g., `admin password, database connection string`). These can be obtained from your Azure portal or deployment lead.  
   [Access Azure Portal](https://portal.azure.com/)
 
 # 2. Installation
@@ -84,8 +83,8 @@ Before installing or running the Inventory Management System (IMS), ensure the f
       - Download the <code>.zip</code> file containing Docker images and setup scripts.
     </td>
     <td>
-      <img src="Documentation/install_1_1.png" width="500"/>
-      <img src="Documentation/install_1_2.png" width="700"/>
+      <img src="install_1_1.png" width="500"/>
+      <img src="install_1_2.png" width="700"/>
     </td>
   </tr>
 
@@ -93,7 +92,7 @@ Before installing or running the Inventory Management System (IMS), ensure the f
     <td>
       <b>Step 2: Extract the ZIP File</b><br><br>
       - Right-click the downloaded archive and choose <b>Extract All</b>.<br>
-      - Extract to a preferred location (e.g., Desktop or Documents\IMS).
+      - Extract to a preferred location (e.g., `Documents\IMS`).
     </td>
     <td></td>
   </tr>
@@ -106,7 +105,7 @@ Before installing or running the Inventory Management System (IMS), ensure the f
       - Right-click and choose <b>Open in Terminal</b>
     </td>
     <td>
-      <img src="Documentation/install_3.png" width="700"/>
+      <img src="install_3.png" width="700"/>
     </td>
   </tr>
 
@@ -117,7 +116,7 @@ Before installing or running the Inventory Management System (IMS), ensure the f
       - Right-click the Docker tray icon and select <b>Switch to Linux containers</b> if needed
     </td>
     <td>
-      <img src="Documentation/install_4.png" width="200"/>
+      <img src="install_4.png" width="200"/>
     </td>
   </tr>
 
@@ -129,7 +128,7 @@ Before installing or running the Inventory Management System (IMS), ensure the f
       This will load Docker images and start the IMS containers.
     </td>
     <td>
-      <img src="Documentation/install_5.png" width="700"/>
+      <img src="install_5.png" width="700"/>
     </td>
   </tr>
 </table>
@@ -146,7 +145,7 @@ Before installing or running the Inventory Management System (IMS), ensure the f
       - You should see a file named <code>uninstall.ps1</code>.
     </td>
     <td>
-      <img src="Documentation/uninstall_1.png" width="700"/>
+      <img src="uninstall_1.png" width="700"/>
     </td>
   </tr>
 
@@ -169,8 +168,8 @@ Before installing or running the Inventory Management System (IMS), ensure the f
       - Delete anything left over
     </td>
     <td>
-      <img src="Documentation/uninstall_2_1.png" width="700"/>
-      <img src="Documentation/uninstall_2_2.png" width="700"/>
+      <img src="uninstall_2_1.png" width="700"/>
+      <img src="uninstall_2_2.png" width="700"/>
     </td>
   </tr>
 
@@ -219,7 +218,7 @@ This section walks through the login process for your first visit of the webpage
       </ol>
     </td>
     <td>
-      <img src="Documentation/image-1.png" alt="Login screenshot" width="700"/>
+      <img src="image-1.png" alt="Login screenshot" width="700"/>
     </td>
   </tr>
 </table>
@@ -242,7 +241,7 @@ This section walks through the login process for your first visit of the webpage
       <li>A fresh Admin Key will be generated for each IT account. this key can be changed by visiting the Account Settings page as an IT user.</li></ul>
     </td>
     <td>
-      <img src="Documentation/image.png" alt="Create Account Screenshot" width="800"/>
+      <img src="image.png" alt="Create Account Screenshot" width="800"/>
     </td>
   </tr>
 </table>
@@ -263,8 +262,8 @@ This section walks through the login process for your first visit of the webpage
     </td>
     <td>
       <div style="display: flex; flex-direction: column; gap: 10px;">
-        <img src="Documentation/accsettings.png" alt="Account Settings Screenshot" width="500"/>
-        <img src="Documentation/pwconfirm.png" alt="Password confirmation Screenshot" width="500"/>
+        <img src="accsettings.png" alt="Account Settings Screenshot" width="500"/>
+        <img src="pwconfirm.png" alt="Password confirmation Screenshot" width="500"/>
       </div>
     </td>
   </tr>
@@ -284,7 +283,7 @@ This section walks through the login process for your first visit of the webpage
     </ul>
     </td>
     <td>
-      <img src="Documentation/createprod.png" alt="Create Product Screenshot" width="400"/>
+      <img src="createprod.png" alt="Create Product Screenshot" width="400"/>
     </td>
   </tr>
 </table>
@@ -307,7 +306,7 @@ This section walks through the login process for your first visit of the webpage
       </ul>
     </td>
     <td>
-        <img src="Documentation/index.png" alt="Product Management Screenshot" width="900"/>
+        <img src="index.png" alt="Product Management Screenshot" width="900"/>
     </td>
   </tr>
 </table>
@@ -334,7 +333,7 @@ Advanced Query:
     <li>Advanced queries can be typed manually or can be build using the query builder, which is accessible by pressing the "Build Query" button when the Advanced Query category is selected.
   </ul>
     <td>
-        <img src="Documentation/advsearch.png" alt="Advanced Search Screenshot" width="700"/>
+        <img src="advsearch.png" alt="Advanced Search Screenshot" width="700"/>
     </td>
   </tr>
 </table>
@@ -350,7 +349,7 @@ Popup Options:
     <li>Pressing the "Delete" button will prompt a secondary confirmation popup to delete the item from the database. Pressing "Confirm" will fully remove this item from the database.
   </ul>
     <td>
-        <img src="Documentation/Popup.png" alt="Product Popup Screenshot" width="700"/>
+        <img src="Popup.png" alt="Product Popup Screenshot" width="700"/>
     </td>
   </tr>
 </table>
@@ -389,7 +388,7 @@ CSV Download:
       These alerts are visible on both the dashboard and the calendar view for the associated product.
     </td>
     <td>
-      <img src="Documentation/image_5_7_but.png" alt="Alert Setting Modal" width="400"/><br>
+      <img src="image_5_7_but.png" alt="Alert Setting Modal" width="400"/><br>
     </td>
   </tr>
 </table>
@@ -425,7 +424,7 @@ CSV Download:
       </ul>
     </td>
     <td>
-      <img src="Documentation/image-4.png" alt="Dashboard Scanner Screenshot" width="400"/>
+      <img src="image-4.png" alt="Dashboard Scanner Screenshot" width="400"/>
     </td>
   </tr>
 
@@ -435,7 +434,7 @@ CSV Download:
       Visualize current inventory using customizable chart types such as pie and bar charts. Use the dropdown to change views.
     </td>
     <td>
-      <img src="Documentation/image_5_7_1.png" alt="Chart Selection Dropdown" width="400"/>
+      <img src="image_5_7_1.png" alt="Chart Selection Dropdown" width="400"/>
     </td>
   </tr>
 
@@ -445,7 +444,7 @@ CSV Download:
       Use the quick search bar for instant filtering of products based on name, SKU, or category. Designed for fast barcode-driven use.
     </td>
     <td>
-      <img src="Documentation/image_5_7_qps.png" alt="Quick Product Search" width="400"/>
+      <img src="image_5_7_qps.png" alt="Quick Product Search" width="400"/>
     </td>
   </tr>
 
@@ -455,7 +454,7 @@ CSV Download:
       Notes added to items show up on the dashboard calendar with timestamps. Useful for tracking reminders, stock actions, or alerts.
     </td>
     <td>
-      <img src="Documentation/image_5_7_notes.png" alt="Dashboard Notes on Calendar" width="400"/>
+      <img src="image_5_7_notes.png" alt="Dashboard Notes on Calendar" width="400"/>
     </td>
   </tr>
 </table>
@@ -481,7 +480,7 @@ CSV Download:
       </ul>
     </td>
     <td>
-      <img src="Documentation/image-6.png" alt="IT Dashboard Screenshot" width="700"/>
+      <img src="image-6.png" alt="IT Dashboard Screenshot" width="700"/>
     </td>
   </tr>
 </table>
@@ -508,7 +507,7 @@ CSV Download:
       </ul>
     </td>
     <td>
-      <img src="Documentation/image-5.png" alt="Sales Page Screenshot" width="700"/>
+      <img src="image-5.png" alt="Sales Page Screenshot" width="700"/>
     </td>
   </tr>
 </table>
@@ -537,7 +536,7 @@ Notable information referenced by one or more pages.
       The creation and modification of product SKUs must follow the following enforced format requirements.<br><br>
       <b>SKU Formatting:</b>
       <ul>
-        <li>SKUs are defined by multiple 'categories' separated by dashes.<br> e.g: AAAA-BBBB </li>
+        <li>SKUs are defined by multiple 'categories' separated by dashes.<br> e.g: `AAAA-BBBB` </li>
         <li>A category must only contain capital letters and digits</li>
         <li>The initial category of an SKU must be 1-5 characters long</li>
         <li>Any following categories are 'subcategories', and can be 1-5 characters long</li>
@@ -637,7 +636,6 @@ For questions, bug reports, or feature requests, please reach out to the project
   - [@Delinquent-Pointer](https://github.com/Delinquent-Pointer)
   - [@Jared-Schimpf](https://github.com/Jared-Schimpf)
   - [@Pbrown34](https://github.com/Pbrown34)
-- Email (for deployment or credential issues): *School-email* 
 
 # 9. License & Academic Use
 
