@@ -350,7 +350,7 @@ Popup Options:
     <li>Pressing the "Delete" button will prompt a secondary confirmation popup to delete the item from the database. Pressing "Confirm" will fully remove this item from the database.
   </ul>
     <td>
-        <img src="popup.png" alt="Product Popup Screenshot" width="700"/>
+        <img src="Popup.png" alt="Product Popup Screenshot" width="700"/>
     </td>
   </tr>
 </table>
@@ -374,9 +374,7 @@ CSV Download:
   <li>The Inventory page supports the ability to directly download the current search result as a comma-separated CSV file.
   <li>Pressing the "Download" buttom wild initiate a download of the current search result as a CSV file.
   <li>Attempting to download an empty search result will instead give you a CSV of the full inventory.
-    <td>
-    <img src="csv.png" alt="CSV Example Screenshot" width="800"/>
-    </td>
+
   </tr>
 </table>
 
