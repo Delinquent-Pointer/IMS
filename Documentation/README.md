@@ -25,7 +25,8 @@
     - [5.5.2 CSV Upload \& Download](#552-csv-upload--download)
   - [5.6 Inventory Alerts](#56-inventory-alerts)
   - [5.7 Main Dashboard](#57-main-dashboard)
-  - [5.8 Sales Page](#58-sales-page)
+  - [5.8 IT Dashboard](#58-it-dashboard)
+  - [5.9 Sales Page](#59-sales-page)
 - [6. Additional Information](#6-additional-information)
   - [6.1 Password Requirements](#61-password-requirements)
   - [6.2 SKU Requirements](#62-sku-requirements)
@@ -218,7 +219,7 @@ This section walks through the login process for your first visit of the webpage
       </ol>
     </td>
     <td>
-      <img src="image-1.png" alt="Login screenshot" width="500"/>
+      <img src="image-1.png" alt="Login screenshot" width="700"/>
     </td>
   </tr>
 </table>
@@ -241,7 +242,7 @@ This section walks through the login process for your first visit of the webpage
       <li>A fresh Admin Key will be generated for each IT account. this key can be changed by visiting the Account Settings page as an IT user.</li></ul>
     </td>
     <td>
-      <img src="image.png" alt="Create Account Screenshot" width="500"/>
+      <img src="image.png" alt="Create Account Screenshot" width="800"/>
     </td>
   </tr>
 </table>
@@ -306,7 +307,7 @@ This section walks through the login process for your first visit of the webpage
       </ul>
     </td>
     <td>
-        <img src="index.png" alt="Product Management Screenshot" width="800"/>
+        <img src="index.png" alt="Product Management Screenshot" width="900"/>
     </td>
   </tr>
 </table>
@@ -333,7 +334,7 @@ Advanced Query:
     <li>Advanced queries can be typed manually or can be build using the query builder, which is accessible by pressing the "Build Query" button when the Advanced Query category is selected.
   </ul>
     <td>
-        <img src="advsearch.png" alt="Advanced Search Screenshot" width="500"/>
+        <img src="advsearch.png" alt="Advanced Search Screenshot" width="700"/>
     </td>
   </tr>
 </table>
@@ -349,7 +350,7 @@ Popup Options:
     <li>Pressing the "Delete" button will prompt a secondary confirmation popup to delete the item from the database. Pressing "Confirm" will fully remove this item from the database.
   </ul>
     <td>
-        <img src="popup.png" alt="Product Popup Screenshot" width="500"/>
+        <img src="popup.png" alt="Product Popup Screenshot" width="700"/>
     </td>
   </tr>
 </table>
@@ -411,12 +412,38 @@ CSV Download:
       </ul>
     </td>
     <td>
-      <img src="image-4.png" alt="Dashboard Scanner Screenshot" width="350"/>
+      <img src="image-4.png" alt="Dashboard Scanner Screenshot" width="500"/>
     </td>
   </tr>
 </table>
 
-## 5.8 Sales Page
+## 5.8 IT Dashboard
+<table>
+  <tr>
+    <td>
+      The IT Dashboard allows IT users or Admins the ability to verify and delete accounts.<br><br>
+      <ul>
+        <li>This page is only visible to users with Admin privileges.</li>
+        <li>To verify a new account, press the Verify button.</li>
+        <li>To delete any account, press the Delete button.</li>
+        <li>This page lists the following:
+          <ul>
+            <li>Username</li>
+            <li>ID</li>
+            <li>Account Type (General User or IT User)</li>
+            <li>Verified Status</li>
+            <li>Actions</li>
+          </ul>
+        </li>
+      </ul>
+    </td>
+    <td>
+      <img src="image-6.png" alt="IT Dashboard Screenshot" width="700"/>
+    </td>
+  </tr>
+</table>
+
+## 5.9 Sales Page
 <table>
   <tr>
     <td>
