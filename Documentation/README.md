@@ -8,21 +8,11 @@
 - [@Pbrown34](https://github.com/Pbrown34)  
 
 # Table of Contents
+    - [Project Contributors](#project-contributors)
 - [Table of Contents](#table-of-contents)
 - [1. Prerequisites](#1-prerequisites)
 - [2. Installation](#2-installation)
-    - [Step 1: Download the IMS Docker Bundle](#step-1-download-the-ims-docker-bundle)
-  - [](#)
-    - [Step 2: Extract the ZIP File](#step-2-extract-the-zip-file)
-    - [Step 3: Open PowerShell in the Project Directory](#step-3-open-powershell-in-the-project-directory)
-    - [Step 4: Ensure Docker Desktop Is Running in Linux Mode](#step-4-ensure-docker-desktop-is-running-in-linux-mode)
-    - [Step 5: Run the Installation Script](#step-5-run-the-installation-script)
 - [3. Uninstallation](#3-uninstallation)
-    - [Step 1: Locate `uninstall.ps1`](#step-1-locate-uninstallps1)
-    - [Step 2: Run the Script in PowerShell](#step-2-run-the-script-in-powershell)
-    - [Step 3: Manually Verify in Docker Desktop](#step-3-manually-verify-in-docker-desktop)
-  - [](#-1)
-    - [Done](#done)
 - [4. Quick Start](#4-quick-start)
 - [5. Feature Walkthrough](#5-feature-walkthrough)
   - [5.1 Login](#51-login)
@@ -71,6 +61,10 @@ Before installing or running the Inventory Management System (IMS), ensure the f
   For editing, running, and debugging the project.  
   [Download VS Code](https://code.visualstudio.com/)
 
+- **Powershell 7 (Recommended Terminal)**  
+  For running scripts.
+  [Download Powershell 7](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.5)
+
 - **GitHub Access**  
   - **Developer Repository**: [Delinquent-Pointer/IMS](https://github.com/Delinquent-Pointer/IMS)  
   - **Public Docker Showcase**: [IMS-Docker](https://github.com/Delinquent-Pointer/IMS-Docker)
@@ -81,102 +75,109 @@ Before installing or running the Inventory Management System (IMS), ensure the f
 
 # 2. Installation
 
-Follow these steps to install and launch the Inventory Management System (IMS) using the latest Docker bundle.
+<table>
+  <tr>
+    <td>
+      <b>Step 1: Download the IMS Docker Bundle</b><br><br>
+      - Visit the latest release on GitHub: <a href="https://github.com/Delinquent-Pointer/IMS-Docker/releases">IMS Docker Releases</a><br>
+      - Download the <code>.zip</code> file containing Docker images and setup scripts.
+    </td>
+    <td>
+      <img src="install_1_1.png" width="400"/>
+      <img src="install_1_2.png" width="400"/>
+    </td>
+  </tr>
 
----
+  <tr>
+    <td>
+      <b>Step 2: Extract the ZIP File</b><br><br>
+      - Right-click the downloaded archive and choose <b>Extract All</b>.<br>
+      - Extract to a preferred location (e.g., Desktop or Documents\IMS).
+    </td>
+    <td></td>
+  </tr>
 
-###  Step 1: Download the IMS Docker Bundle
+  <tr>
+    <td>
+      <b>Step 3: Open PowerShell in the Project Directory</b><br><br>
+      - Navigate into the extracted folder<br>
+      - Locate the folder containing <code>install.ps1</code><br>
+      - Right-click and choose <b>Open in Terminal</b>
+    </td>
+    <td>
+      <img src="install_3.png" width="400"/>
+    </td>
+  </tr>
 
-- Go to the latest release on GitHub:  
-  [IMS Docker Releases](https://github.com/Delinquent-Pointer/IMS-Docker/releases)
-- Download the `.zip` file containing the Docker images and setup scripts.
+  <tr>
+    <td>
+      <b>Step 4: Ensure Docker Desktop Is Running in Linux Mode</b><br><br>
+      - Launch Docker Desktop<br>
+      - Right-click the Docker tray icon and select <b>Switch to Linux containers</b> if needed
+    </td>
+    <td>
+      <img src="install_4.png" width="400"/>
+    </td>
+  </tr>
 
-![Step 1.1 - Download ZIP](install_1_1.png)
-![Step 1.2 - Download ZIP](install_1_2.png)
----
-
-###  Step 2: Extract the ZIP File
-
-- Right-click the downloaded archive and select **Extract All**
-- Choose a destination (e.g., your Desktop or `Documents\IMS`)
----
-
-###  Step 3: Open PowerShell in the Project Directory
-
-- Navigate to the extracted folder that contains `install.ps1` ...IMS_Docker_Offline -> offline-images
-- Right-click in the folder and choose **Open in Terminal** or **Open PowerShell window here**
-
-![Step 3 - Open PowerShell](install_3.png)
-
----
-
-###  Step 4: Ensure Docker Desktop Is Running in Linux Mode
-
-- Launch Docker Desktop from your Start menu or tray icon
-- Ensure its set to **Linux containers**
-  - Right-click the Docker icon in the taskbar  "Switch to Linux containers" (if needed)
-
-![Step 4 - Docker Linux Mode](install_4.png)
-
----
-
-###  Step 5: Run the Installation Script
-
-In PowerShell, type the following and press `Enter`:
-
-```powershell
-./install.ps1
-```
-![Step 5 - Docker Linux Mode](install_5.png)
+  <tr>
+    <td>
+      <b>Step 5: Run the Installation Script</b><br><br>
+      In PowerShell, enter:<br>
+      <code>./install.ps1</code><br><br>
+      This will load Docker images and start the IMS containers.
+    </td>
+    <td>
+      <img src="install_5.png" width="400"/>
+    </td>
+  </tr>
+</table>
 
 ---
 
 # 3. Uninstallation
 
-To remove the Inventory Management System (IMS) from your local environment, follow the steps below:
+<table>
+  <tr>
+    <td>
+      <b>Step 1: Locate <code>uninstall.ps1</code></b><br><br>
+      - Navigate to the same folder where <code>install.ps1</code> was run.<br>
+      - You should see a file named <code>uninstall.ps1</code>.
+    </td>
+    <td>
+      <img src="uninstall_1.png" width="400"/>
+    </td>
+  </tr>
 
----
+  <tr>
+    <td>
+      <b>Step 2: Run the Script in PowerShell</b><br><br>
+      - Open PowerShell in that directory<br>
+      - Enter:<br>
+      <code>./uninstall.ps1</code><br><br>
+      This will stop containers and remove related Docker images.
+    </td>
+    <td></td>
+  </tr>
 
-###  Step 1: Locate `uninstall.ps1`
+  <tr>
+    <td>
+      <b>Step 3: Manually Verify in Docker Desktop</b><br><br>
+      - Open Docker Desktop<br>
+      - Confirm IMS-related containers and images are removed<br>
+      - Delete anything left over
+    </td>
+    <td>
+      <img src="uninstall_2_1.png" width="400"/>
+      <img src="uninstall_2_2.png" width="400"/>
+    </td>
+  </tr>
 
-- Navigate to the same directory where you originally ran the installation script (`install.ps1`).
-- You should find a file named `uninstall.ps1` in that folder.
+  <tr>
+    <td colspan="2"><b>Done:</b> IMS has been fully removed. You may now delete the project folder.</td>
+  </tr>
+</table>
 
-> This script is responsible for stopping IMS Docker containers and images.
-
-![Step 1 - Locate uninstall.ps1](uninstall_1.png)
-
----
-
-###  Step 2: Run the Script in PowerShell
-
-- Open PowerShell in the same folder where `uninstall.ps1` is located.
-- Execute the following command:
-
-```powershell
-./uninstall.ps1
-```
-
-This will:
-- Stop and remove Docker containers used by IMS
-- Remove loaded Docker images for IMS and SQL Server
-
----
-###  Step 3: Manually Verify in Docker Desktop 
-
-You can verify the cleanup or remove any remaining containers/images manually:
-
-1. Open **Docker Desktop**
-2. Navigate to the **Containers** tab and confirm that IMS-related containers (e.g., `offline-images`) are removed
-3. Switch to the **Images** tab and remove any leftover IMS-related images
-
-![Step 3 - Locate uninstall.ps1](uninstall_2_1.png)
-![Step 3 - Docker Manual Cleanup](uninstall_2_2.png)
----
-
-###  Done
-
-Your system is now clean of IMS and ready for a fresh install or full removal. You may delete the extracted folder if no longer needed.
 
 # 4. Quick Start
 
