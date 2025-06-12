@@ -8,7 +8,6 @@
 - [@Pbrown34](https://github.com/Pbrown34)  
 
 # Table of Contents
-    - [Project Contributors](#project-contributors)
 - [Table of Contents](#table-of-contents)
 - [1. Prerequisites](#1-prerequisites)
 - [2. Installation](#2-installation)
